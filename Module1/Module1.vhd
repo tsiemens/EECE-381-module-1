@@ -6,7 +6,7 @@ USE ieee.std_logic_arith.all;
 
 USE ieee.std_logic_unsigned.all; 
 
-ENTITY lights IS
+ENTITY Module1 IS
 
    PORT (
 
@@ -51,11 +51,11 @@ ENTITY lights IS
 		SRAM_WE_N : OUT STD_LOGIC
 		);
 
-   END lights;
+   END Module1;
 
 
 
-ARCHITECTURE Structure OF lights IS
+ARCHITECTURE Structure OF Module1 IS
 
    COMPONENT nios_system PORT (
 

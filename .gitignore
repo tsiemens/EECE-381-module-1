@@ -17,12 +17,12 @@
 *.app
 
 # Directory
-/.qsys_edit
-/.sopc_builder
-/AMP
-/app_sofware
-/incremental_db
-/software
+*/.qsys_edit
+*/.sopc_builder
+*/AMP
+*/app_sofware
+*/incremental_db
+*/db
 
 # Quartus Files
 *.bak
