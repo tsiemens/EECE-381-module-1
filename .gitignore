@@ -15,3 +15,25 @@
 *.exe
 *.out
 *.app
+
+# Directory
+/.qsys_edit
+/.sopc_builder
+/AMP
+/app_sofware
+/incremental_db
+/software
+
+# Quartus Files
+*.bak
+*.rpt
+*.sopcinfo
+*.bsf
+*.html
+*.summary
+*.smsg
+*.jdi
+*.done
+*.pin
+*.sof
+*.cdf
