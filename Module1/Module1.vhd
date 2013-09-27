@@ -34,6 +34,8 @@ ENTITY Module1 IS
 		
 		LCD_ON, LCD_BLON, LCD_EN, LCD_RS, LCD_RW : out STD_LOGIC;
 		
+		PS2_CLK, PS2_DAT : inout STD_LOGIC;
+		
 		VGA_R:out std_logic_vector(9 downto 0);
 		VGA_G : out std_logic_vector(9 downto 0);
 		VGA_B : out std_logic_vector(9 downto 0);
@@ -98,6 +100,10 @@ ARCHITECTURE Structure OF Module1 IS
 		lcd_data_RS : out STD_LOGIC;
 		
 		lcd_data_RW : out STD_LOGIC;
+		
+		ps2_CLK : INOUT STD_LOGIC;
+		
+		ps2_DAT : INOUT STD_LOGIC;
 		
 		vga_controller_CLK : OUT STD_LOGIC;
 		
@@ -183,6 +189,10 @@ ARCHITECTURE Structure OF Module1 IS
 			lcd_data_RW => LCD_RW,
 			
 			lcd_data_BLON => LCD_BLON,
+			
+			ps2_CLK => PS2_CLK,
+			
+			ps2_DAT => PS2_DAT,
 			
 			vga_controller_CLK   => VGA_CLK,   -- vga_controller.CLK
          
