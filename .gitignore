@@ -16,7 +16,7 @@
 *.out
 *.app
 
-# Directory
+# Quartus Directory
 */.qsys_edit
 */.sopc_builder
 */AMP
@@ -37,3 +37,8 @@
 *.pin
 *.sof
 *.cdf
+
+#Eclipse Dirs
+/.metadata
+*/.metadata
+*/obj
