@@ -37,8 +37,12 @@
 *.pin
 *.sof
 *.cdf
+*.qws
 
 #Eclipse Dirs
+*.elf
+*.map
+*.objdump
 /.metadata
 */.metadata
 */obj
