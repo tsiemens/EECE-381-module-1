@@ -21,6 +21,7 @@
 */.sopc_builder
 */AMP
 */app_sofware
+*/nios_system
 */incremental_db
 */db
 
@@ -39,7 +40,7 @@
 *.cdf
 *.qws
 
-#Eclipse Dirs
+#Eclipse
 *.elf
 *.map
 *.objdump
@@ -47,4 +48,3 @@
 */.metadata
 */obj
 /Module1/software/module1_bsp
-/Module1/software/module1/obj
