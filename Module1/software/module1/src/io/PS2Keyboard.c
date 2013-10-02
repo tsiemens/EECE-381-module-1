@@ -73,7 +73,7 @@ int PS2Keyboard_readKey(alt_up_ps2_dev* keyboard, alt_u8* byte)
 }
 
 alt_up_ps2_dev* PS2Keyboard_init()
-		{
+{
 	alt_up_ps2_dev* device = alt_up_ps2_open_dev("/dev/ps2");
 	alt_up_ps2_dev* ps2 = device;
 
@@ -101,4 +101,4 @@ alt_up_ps2_dev* PS2Keyboard_init()
 	}
 
 	return device;
-		}
+}

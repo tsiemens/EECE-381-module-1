@@ -44,7 +44,8 @@
 *.elf
 *.map
 *.objdump
-/.metadata
-*/.metadata
-*/obj
-/Module1/software/module1_bsp
+.metadata
+.settings
+obj
+
+module1_bsp
