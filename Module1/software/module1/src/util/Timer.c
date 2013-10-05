@@ -33,6 +33,7 @@ int Timer_initTimestampTimer()
 	} else {
 		printf("Timestamp timer initialised.\n");
 		s_timestampTimerFreq = (double)alt_timestamp_freq();
+		printf("Timer freq: %0.1f Hz\n", s_timestampTimerFreq);
 	}
 
 	s_timestampTimerStatus = tsStatus;
@@ -67,7 +68,7 @@ Timer* Timer_new(double waitTimeMs)
  */
 void Timer_start(Timer* this)
 {
-	this->startTime = (long)alt_timestamp();
+	this->startTime = alt_timestamp();
 }
 
 /**
@@ -83,8 +84,8 @@ int Timer_isDone(Timer* this)
 		return 1;
 	}
 
-	int endTime = (long)alt_timestamp();
-	double timeTaken = ((endTime - this->startTime)/s_timestampTimerFreq)*1000;
+	alt_timestamp_type endTime = alt_timestamp();
+	double timeTaken = ((endTime - this->startTime)/s_timestampTimerFreq)*1000.0;
 
 	if (timeTaken < this->waitTimeMs) {
 		return 0;

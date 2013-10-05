@@ -8,10 +8,12 @@
 #ifndef TIMER_H_
 #define TIMER_H_
 
+#include "sys/alt_timestamp.h"
+
 typedef struct Timer
 {
-	// When the timer was started
-	long startTime;
+	// When the timer was started (32 or 64bit)
+	alt_timestamp_type startTime;
 
 	// How long the timer should run
 	double waitTimeMs;
