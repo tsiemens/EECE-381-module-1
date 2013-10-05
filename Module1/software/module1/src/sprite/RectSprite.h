@@ -21,8 +21,8 @@ typedef struct RectSprite
 	int colour;
 } RectSprite;
 
-RectSprite* RectSprite_new();
+RectSprite* RectSprite_alloc();
 
-RectSprite* RectSprite_constructor(RectSprite* this);
+RectSprite* RectSprite_init(RectSprite* this);
 
 #endif /* RECTSPRITE_H_ */

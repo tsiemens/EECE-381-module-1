@@ -19,7 +19,9 @@ typedef struct Timer
 	double waitTimeMs;
 } Timer;
 
-Timer* Timer_new(double waitTimeMs);
+Timer* Timer_alloc();
+
+Timer* Timer_init(Timer* this, double waitTimeMs);
 
 void Timer_start(Timer* this);
 

@@ -8,13 +8,14 @@
 #include "BaseSprite.h"
 #include <stdlib.h>
 
-BaseSprite* BaseSprite_new()
+BaseSprite* BaseSprite_alloc()
 {
 	BaseSprite *this = (BaseSprite *)malloc(sizeof(BaseSprite));
 	return this;
 }
 
-BaseSprite* BaseSprite_constructor(BaseSprite* this)
+// Constructor for BaseSprite
+BaseSprite* BaseSprite_init(BaseSprite* this)
 {
 	this->classType = 0;
 	this->height = 0;

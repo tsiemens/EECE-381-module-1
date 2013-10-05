@@ -10,15 +10,15 @@
 
 void RectSprite_draw(BaseSprite* super/*, VideoBuffer* */);
 
-RectSprite* RectSprite_new()
+RectSprite* RectSprite_alloc()
 {
 	RectSprite *this = (RectSprite *)malloc(sizeof(RectSprite));
 	return this;
 }
 
-RectSprite* RectSprite_constructor(RectSprite* this)
+RectSprite* RectSprite_init(RectSprite* this)
 {
-	BaseSprite_constructor(&this->baseSprite);
+	BaseSprite_init(&this->baseSprite);
 	// Set this instance of RectSprite
 	this->baseSprite.classType = RECTSPRITE_CLASS_TYPE;
 	this->baseSprite.draw = &RectSprite_draw;
@@ -34,4 +34,6 @@ RectSprite* RectSprite_constructor(RectSprite* this)
 void RectSprite_draw(BaseSprite* super/*, VideoBuffer* */)
 {
 	RectSprite* this = (RectSprite* )super;
+
+	// TODO Perform drawing here
 }

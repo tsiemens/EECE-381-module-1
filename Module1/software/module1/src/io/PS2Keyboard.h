@@ -36,7 +36,7 @@ typedef struct PS2Keyboard
 	alt_up_ps2_dev* keyboard;
 } PS2Keyboard;
 
-PS2Keyboard* PS2Keyboard_new();
+PS2Keyboard* PS2Keyboard_alloc_init();
 
 void PS2Keyboard_free(PS2Keyboard* this);
 

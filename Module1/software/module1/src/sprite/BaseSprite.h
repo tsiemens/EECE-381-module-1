@@ -27,14 +27,14 @@ typedef struct BaseSprite
 	 * A pure virtual function
 	 * This can be called from a 'subclass' like the the following example with RectSprite:
 	 *
-	 * RectSprite* rect = RectSprite_constructor(RectSprite_new());
+	 * RectSprite* rect = RectSprite_init(RectSprite_alloc());
 	 * rect->baseSprite.draw((BaseSprite*)rect);
 	 */
 	void (*draw)(struct BaseSprite* /*, VideoBuffer* */);
 } BaseSprite;
 
-BaseSprite* BaseSprite_new();
+BaseSprite* BaseSprite_alloc();
 
-BaseSprite* BaseSprite_constructor(BaseSprite* this);
+BaseSprite* BaseSprite_init(BaseSprite* this);
 
 #endif /* BASESPRITE_H_ */
