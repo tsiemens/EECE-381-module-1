@@ -4,7 +4,7 @@
  *  Created on: 2013-09-27
  */
 
-#import <stdio.h>
+#include <stdio.h>
 #include "system.h"
 #include "io.h"
 #include "util/Timer.h"
@@ -19,7 +19,7 @@ int main()
 	int hasQuit = 0;
 
 	// Timestamp timer setup
-	Timer* loopTimer = Timer_new(MAIN_LOOP_MIN_TIME_MS);
+	Timer* loopTimer = Timer_init(Timer_alloc(), MAIN_LOOP_MIN_TIME_MS);
 
 	// Init LEDs
 	unsigned char ledVals = 0;

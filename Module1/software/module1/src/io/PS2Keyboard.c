@@ -77,7 +77,7 @@ int PS2Keyboard_readKey(PS2Keyboard* this, alt_u8* byte)
 /**
  * Returns a new ps2 keyboard, which has been initialised
  */
-PS2Keyboard* PS2Keyboard_new()
+PS2Keyboard* PS2Keyboard_alloc_init()
 {
 	PS2Keyboard* this = NULL;
 	alt_up_ps2_dev* device = alt_up_ps2_open_dev("/dev/ps2_0");

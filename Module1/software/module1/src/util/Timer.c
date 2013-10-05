@@ -45,17 +45,27 @@ int Timer_initTimestampTimer()
  *
  * @param waitTimeMs : The time the timer should run for, in miliseconds
  */
-Timer* Timer_new(double waitTimeMs)
+Timer* Timer_alloc()
 {
 	Timer *this = (Timer *)malloc(sizeof(Timer));
+	return this;
+}
+
+/**
+ * Constructor for Timer
+ *
+ * @param waitTimeMs : The time the timer should run for, in miliseconds
+ */
+Timer* Timer_init(Timer* this, double waitTimeMs)
+{
 	this->startTime = 0;
 	this->waitTimeMs = waitTimeMs;
 
 	// If the global timer has not been initialised, do so.
 	if(s_timestampTimerStatus != 0) {
-			if (Timer_initTimestampTimer() != 0) {
-				return NULL;
-			}
+		if (Timer_initTimestampTimer() != 0) {
+			return NULL;
+		}
 	}
 
 	return this;
