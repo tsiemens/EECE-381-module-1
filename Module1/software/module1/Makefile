@@ -145,6 +145,9 @@ ELF := module1.elf
 C_SRCS += src/Module1Main.c
 C_SRCS += src/io/PS2Keyboard.c
 C_SRCS += src/util/Timer.c
+C_SRCS += src/io/SDCard.c
+C_SRCS += src/util/ArrayPtr.c
+C_SRCS += src/io/Audio.c
 CXX_SRCS :=
 ASM_SRCS :=
 
