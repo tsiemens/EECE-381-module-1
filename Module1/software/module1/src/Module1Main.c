@@ -4,7 +4,7 @@
  *  Created on: 2013-09-27
  */
 
-#import <stdio.h>
+#include <stdio.h>
 #include "system.h"
 #include "io.h"
 #include "util/Timer.h"
