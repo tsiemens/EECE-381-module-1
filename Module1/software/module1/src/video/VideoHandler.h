@@ -6,6 +6,7 @@
 #include "../sprite/RectSprite.h"
 #include "VideoLibrary.h"
 
+
 void VideoDemo();
 void VideoHandlerInit();
 void drawPixel(unsigned int color, unsigned int x, unsigned int y);
@@ -14,7 +15,7 @@ void printString(const char *ptr, unsigned int x,unsigned int y);
 void display();
 
 void drawSprite(RectSprite* rectSprite, int x0, int y0);
-int** fillMatrix(int** matrix);
+int** fillMatrix(int** matrix, int rows, int cols);
 
 
 

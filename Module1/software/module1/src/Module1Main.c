@@ -32,10 +32,9 @@ int main()
 	// Testing Video Functionality
 	VideoHandlerInit();
 	RectSprite* rect = RectSprite_init(RectSprite_alloc());
-	rect->baseSprite.height = 90;
-	rect->baseSprite.width = 90;
-	rect->colour = 0xFF6F;
-	drawSprite(rect, 0, 0);
+	rect->baseSprite.height = 20;
+	rect->baseSprite.width = 40;
+	RectSprite_draw(rect);
 
 	// MAIN PROGRAM LOOP
 	while(hasQuit == 0) {

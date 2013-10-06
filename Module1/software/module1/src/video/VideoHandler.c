@@ -118,30 +118,27 @@ void display()
 void drawSprite(RectSprite* rectSprite, int x0, int y0)
 {
 	int i, j;
-	fillMatrix(rectSprite->matrix);
-	printf("size: %i, %i", rectSprite->baseSprite.height, rectSprite->baseSprite.width);
-	for(j = 0; j < rectSprite->baseSprite.height; j++)
+	fillMatrix(rectSprite->matrix, rectSprite->baseSprite.height, rectSprite->baseSprite.width);
+	for(i = 0; i < rectSprite->baseSprite.height; i++)
 	{
-		for (i = 0; i < rectSprite->baseSprite.width; i++)
+		for (j = 0; j < rectSprite->baseSprite.width; j++)
 		{
-			printf("%04x\n", rectSprite->matrix[i][j]);
-			drawPixel(rectSprite->matrix[i][j], x0+i, y0+j);
+			drawPixel(rectSprite->matrix[i][j], x0+j, y0+i);
 		}
 	}
-
 	display();
 }
 
-// a temp function to fill in a matrix for testing purposes
-int** fillMatrix(int** matrix)
+// TODO: Remove this function, as it is just a temporary function to fill in a matrix for testing purposes
+int** fillMatrix(int** matrix, int rows, int cols)
 {
 	int i, j;
 
-	for(i=0; i<MAX_HEIGHT; i++)
+	for(i=0; i < rows; i++)
 	{
-		for(j=0; j < MAX_WIDTH; j++)
+		for(j=0; j < cols; j++)
 		{
-			if(j > 30 && j < 60)
+			if(j >= (cols/4) && j <= (3*cols/4))
 				matrix[i][j] = 0xFFFF;
 			else
 				matrix[i][j] = 0xF800;

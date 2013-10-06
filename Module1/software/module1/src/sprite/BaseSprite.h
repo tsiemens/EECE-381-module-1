@@ -17,8 +17,8 @@ typedef struct BaseSprite
 	int classType;
 
 	// The position of the sprite
-	float xPos;
-	float yPos;
+	int xPos;
+	int yPos;
 	// The size of the sprite
 	int width;
 	int height;
