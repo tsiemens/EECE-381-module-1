@@ -4,11 +4,12 @@
  * 	Created on: 2013-10-4
  * 	Author: Wesley Tsai
  *
- * 	This file abstracts dealing with writing to the forground/background video buffers.
+ * 	This file abstracts dealing with writing to the foreground/background video buffers.
  * 	It allows drawing and printing to the screen without any knowledge of buffers and addresses.
  *
- * 	How to: First call VideoHandlerInit(), then proceed to use the provided functions to draw to the screen.
- *
+ * 	How to: First call VideoHandlerInit(), then proceed to use the provided functions to draw to the background buffer.
+ * 			Finally, call display() to swap background buffer to the foreground.
+ *	Note: Clearing the character buffer requires manually calling clearChar().
  */
 
 #include <stdlib.h>
@@ -19,37 +20,16 @@ static VideoBuffer* Video;
 static CharBuffer* Character;
 
 /*
- * VideoDemo() contains what using the VideoHandler would look like in the main loop.
- * It should be removed in the final product.
- */
-void VideoDemo()
+void lzrPrty(unsigned char randomVal)
 {
-	//Initialize the VideoHandler
-	VideoHandlerInit();
-
-	// Draw a white line and purple line to the foreground buffer
-	drawLine(0, 0, 320, 240, 0xFFFF);
-	drawLine(0, 240, 320, 0, 0xF154);
-
-	// Write some text
-	printString("Nios II Hardware is so gud", 2,2);
-
-	drawPixel(31, 1, 1);
-	drawPixel(32, 2, 2);
-
-	display();
+	drawLine(randomVal%320, 0, 320, randomVal%240, 0xF22F-randomVal*10);
+	drawLine(randomVal*5%320, 240, 160, -randomVal%240, 0x15F-randomVal*20);
+	drawLine(-randomVal*2%320, 0, randomVal*5%320, randomVal%240, 0x78F-randomVal*10);
+	drawLine(320, 120, randomVal*2%320, randomVal*2%240, 0xA22F+randomVal*50);
+	Video_swapBuffers(Video);
+	while(Video_bufferIsSwapping(Video));
 }
-
-/*
- * Demo on how to draw to backbuffer and then switch buffers to create animation
- *
- */
-void VideoBufferSwapDemo(unsigned char randomVal)
-{
-	drawLine(0, 120, 50, 100+randomVal%100 , 0xFFFF-randomVal);
-	drawPixel(0xFFFF, randomVal, randomVal);
-	display();
-}
+*/
 
 /*
  * Intializes the static Video and Character buffers contained in this file
@@ -69,9 +49,7 @@ void VideoHandlerInit()
  */
 void drawPixel(unsigned int color, unsigned int x, unsigned int y)
 {
-	drawLine(x, y, x, y, color);
-	//Draw pixel hal function is not working
-	//Video_drawPixel(Video, color, x, y);
+	Video_drawPixel(Video, color, x, y);
 }
 
 /*
@@ -104,10 +82,17 @@ void printString(const char *ptr, unsigned int x,unsigned int y)
 }
 
 /*
+ * Clears the character buffer.
+ */
+void clearChar()
+{
+	Char_clearScreen(Character);
+}
+
+/*
  * Called at the end of the loop, after all the drawing to the background has finished.
  * Swaps buffer from background to foreground, and clears background in preparation for further drawing.
  */
-
 void display()
 {
 	Video_swapBuffers(Video);
