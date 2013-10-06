@@ -11,7 +11,16 @@ typedef struct ShortIntPtr {
 	int size;
 } ShortIntPtr;
 
-void ShortIntPtr_free(ShortIntPtr* this);
+typedef struct UnsignedCharPtr {
+	unsigned char* data;
+	int size;
+} UnsignedCharPtr;
+
+ShortIntPtr* ShortIntPtr_alloc(int data_size);
+void ShortIntPtr_free(ShortIntPtr * this);
+
+UnsignedCharPtr* UnsignedCharPtr_alloc(int data_size);
+void UnsignedCharPtr_free(UnsignedCharPtr * this);
 
 void ShortToIntCPY(short int* sibuf, unsigned int* uibuf, int size);
 

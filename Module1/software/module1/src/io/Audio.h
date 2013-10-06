@@ -12,18 +12,19 @@
 #include "../util/ArrayPtr.h"
 
 // Wrapper for the altera audio
-typedef struct Audio
-{
+typedef struct Audio {
 	// the audio device
 	alt_up_audio_dev* audio_dev;
 } Audio;
 
 void av_config_setup();
 Audio* audio_init();
-void Audio_free(Audio* this);
+void Audio_free(Audio * this);
 
-void audio_reset(Audio* this);
+void audio_reset(Audio * this);
 
 int audio_play_channel(Audio* this, unsigned int *buf, int len, int channel);
+int audio_play_r(Audio* this, unsigned int *buf, int len);
+int audio_play_l(Audio* this, unsigned int *buf, int len);
 
 #endif

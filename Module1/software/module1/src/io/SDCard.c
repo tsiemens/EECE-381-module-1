@@ -7,16 +7,19 @@
 #include <stdlib.h>
 #include "SDCard.h"
 
+/*
+ * Initialises the SD Card reader
+ *
+ * @return SDCard struct
+ */
 SDCard * sdcard_init() {
-	SDCard* this = NULL;
-	alt_up_sd_card_dev * device = NULL;
-	device = alt_up_sd_card_open_dev("/dev/sd_card");
+	SDCard* this = (SDCard *) malloc(sizeof(SDCard));
+	alt_up_sd_card_dev * device = alt_up_sd_card_open_dev("/dev/sd_card");
 	if (device != NULL) {
 		if (alt_up_sd_card_is_Present()) {
 			printf("SD Card: connected.\n");
 			if (alt_up_sd_card_is_FAT16()) {
 				printf("SD Card: FAT16 file system detected.\n");
-				this = (SDCard *) malloc(sizeof(SDCard));
 				this->sdcard_dev = device;
 			} else {
 				printf("Error: Unknown file system.\n");
@@ -28,27 +31,32 @@ SDCard * sdcard_init() {
 	return this;
 }
 
+/*
+ * free the memory allocated by SDCard struct
+ *
+ * @param this: the SDCard struct
+ */
 void sdcard_free(SDCard* this) {
 	free(this->sdcard_dev);
 	free(this);
+	return;
 }
 
-ShortIntPtr* sdcard_read_file(char* filename) {
+/*
+ * Reads the file in the SDCard, parse the data into 2 bytes
+ *
+ * @param filename: the name of the file to read on the SD Card
+ *
+ * @return UnsignedCharPtr: contains the data number of data
+ * 							read from the file
+ */
+UnsignedCharPtr* sdcard_read_file(char* filename) {
 	short int file_id;
 	int count = 0;
 	short int* data_temp;
 
-	ShortIntPtr* output;
-	output = (ShortIntPtr *) malloc(sizeof(ShortIntPtr));
-	if (output == NULL) {
-		printf("Error: ShortIntPtr Malloc\n");
-		return output;
-	}
-	output->data = malloc(ALLOC_SIZE * sizeof(short int));
-	if (output->data == NULL) {
-		printf("Error: ShortIntPtr data Malloc\n");
-		return output;
-	}
+	UnsignedCharPtr* output;
+	output = UnsignedCharPtr_alloc(ALLOC_SIZE);
 
 	file_id = alt_up_sd_card_fopen(filename, 0);
 	short temp = alt_up_sd_card_read(file_id);
@@ -57,8 +65,8 @@ ShortIntPtr* sdcard_read_file(char* filename) {
 		output->data[count] = temp;
 		count++;
 		if ((count % ALLOC_SIZE) == 0) {
-			data_temp = realloc(output->data, sizeof(output->data) + ALLOC_SIZE
-					* sizeof(short int));
+			data_temp = realloc(output->data, (count + ALLOC_SIZE)
+					* sizeof(unsigned char));
 			if (data_temp == NULL) {
 				printf("Error: SD Card Memory Realloc\n");
 				return output;
@@ -72,24 +80,22 @@ ShortIntPtr* sdcard_read_file(char* filename) {
 	return output;
 }
 
+/*
+ * Reads the file from SD Card, parse the data into 4 bytes
+ *
+ * @param filename: the name of the file to read from
+ *
+ * @return ShortIntPtr: the data in 4 bytes and the number of data
+ * 						read from file.
+ */
 ShortIntPtr* sdcard_read_audio(char* filename) {
 	short int file_id;
 	int count = 0;
 	short temp;
 	short int* data_temp;
 
-	ShortIntPtr* output;
-	output = (ShortIntPtr *) malloc(sizeof(ShortIntPtr));
-	if (output == NULL) {
-		printf("Error: ShortIntPtr Malloc\n");
-		return output;
-	}
+	ShortIntPtr* output = ShortIntPtr_alloc(AUDIO_ALLOC_SIZE);
 	output->size = 0;
-	output->data = malloc(AUDIO_ALLOC_SIZE * sizeof(short int));
-	if (output->data == NULL) {
-		printf("Error: ShortIntPtr data Malloc\n");
-		return output;
-	}
 
 	file_id = alt_up_sd_card_fopen(filename, 0);
 
@@ -102,8 +108,8 @@ ShortIntPtr* sdcard_read_audio(char* filename) {
 		output->data[count] = temp;
 		count++;
 		if ((count % AUDIO_ALLOC_SIZE) == 0) {
-			data_temp = realloc(output->data, sizeof(output->data)
-					+ AUDIO_ALLOC_SIZE * sizeof(short int));
+			data_temp = realloc(output->data, (count + AUDIO_ALLOC_SIZE)
+					* sizeof(short int));
 			if (data_temp == NULL) {
 				printf("Error: SD Card Memory Re-alloc\n");
 				return output;

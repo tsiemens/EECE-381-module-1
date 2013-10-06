@@ -148,6 +148,7 @@ C_SRCS += src/util/Timer.c
 C_SRCS += src/io/SDCard.c
 C_SRCS += src/util/ArrayPtr.c
 C_SRCS += src/io/Audio.c
+C_SRCS += src/demo.c
 CXX_SRCS :=
 ASM_SRCS :=
 

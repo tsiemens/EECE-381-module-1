@@ -9,16 +9,15 @@
 #include "../util/ArrayPtr.h"
 
 // Wrapper for the altera sdcard
-typedef struct SDCard
-{
+typedef struct SDCard {
 	// the sdcard device
 	alt_up_sd_card_dev* sdcard_dev;
 } SDCard;
 
 SDCard * sdcard_init();
-void sdcard_free(SDCard* this);
+void sdcard_free(SDCard * this);
 
-ShortIntPtr* sdcard_read_file(char* filename);
+UnsignedCharPtr* sdcard_read_file(char* filename);
 ShortIntPtr* sdcard_read_audio(char* filename);
 
 #define ALLOC_SIZE 128
