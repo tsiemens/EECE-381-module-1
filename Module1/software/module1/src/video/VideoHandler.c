@@ -115,37 +115,16 @@ void display()
 	Video_clearScreen(Video, BACKGROUND);
 }
 
-void drawSprite(RectSprite* rectSprite, int x0, int y0)
+void drawSprites(BaseSprite* sprites[], int numSprites)
 {
-	int i, j;
-	fillMatrix(rectSprite->matrix, rectSprite->baseSprite.height, rectSprite->baseSprite.width);
-	for(i = 0; i < rectSprite->baseSprite.height; i++)
+	int i;
+	for(i = 0; i < numSprites; i++)
 	{
-		for (j = 0; j < rectSprite->baseSprite.width; j++)
-		{
-			drawPixel(rectSprite->matrix[i][j], x0+j, y0+i);
-		}
+		printf("type: %i\n", (*sprites[i]).classType);
+		(*sprites[i]).draw(sprites[i]);
 	}
 	display();
 }
 
-// TODO: Remove this function, as it is just a temporary function to fill in a matrix for testing purposes
-int** fillMatrix(int** matrix, int rows, int cols)
-{
-	int i, j;
-
-	for(i=0; i < rows; i++)
-	{
-		for(j=0; j < cols; j++)
-		{
-			if(j >= (cols/4) && j <= (3*cols/4))
-				matrix[i][j] = 0xFFFF;
-			else
-				matrix[i][j] = 0xF800;
-		}
-	}
-
-	return matrix;
-}
 
 //TO DO: BACKGROUND BUFFER AND BUFFER SWITCHING

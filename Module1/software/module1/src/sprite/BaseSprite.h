@@ -11,14 +11,17 @@
 #ifndef BASESPRITE_H_
 #define BASESPRITE_H_
 
+#define RECTSPRITE_CLASS_TYPE 1
+#define IMGSPRITE_CLASS_TYPE 2
+
 typedef struct BaseSprite
 {
 	// The type of the sprite. This is set by the subclass.
 	int classType;
 
 	// The position of the sprite
-	int xPos;
-	int yPos;
+	float xPos;
+	float yPos;
 	// The size of the sprite
 	int width;
 	int height;
