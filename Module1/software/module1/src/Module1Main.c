@@ -9,6 +9,7 @@
 #include "io.h"
 #include "util/Timer.h"
 #include "io/PS2Keyboard.h"
+#include "video/VideoHandler.h"
 
 // Approx time per loop for 60 Hz
 #define MAIN_LOOP_MIN_TIME_MS 16
@@ -26,6 +27,7 @@ int main()
 	IOWR_8DIRECT(LEDS_BASE, 0, ledVals);
 
 	// TODO other initialisation
+	VideoDemo();
 
 	// MAIN PROGRAM LOOP
 	while(hasQuit == 0) {
@@ -34,6 +36,9 @@ int main()
 		// Debug lights (they increment each frame)
 		ledVals++;
 		IOWR_8DIRECT(LEDS_BASE, 0, ledVals);
+
+		// Debug Video by drawing and swapping buffers
+		VideoBufferSwapDemo(ledVals);
 
 		// TODO insert game logic here
 
