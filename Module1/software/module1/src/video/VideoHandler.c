@@ -115,4 +115,40 @@ void display()
 	Video_clearScreen(Video, BACKGROUND);
 }
 
+void drawSprite(RectSprite* rectSprite, int x0, int y0)
+{
+	int i, j;
+	fillMatrix(rectSprite->matrix);
+	printf("size: %i, %i", rectSprite->baseSprite.height, rectSprite->baseSprite.width);
+	for(j = 0; j < rectSprite->baseSprite.height; j++)
+	{
+		for (i = 0; i < rectSprite->baseSprite.width; i++)
+		{
+			printf("%04x\n", rectSprite->matrix[i][j]);
+			drawPixel(rectSprite->matrix[i][j], x0+i, y0+j);
+		}
+	}
+
+	display();
+}
+
+// a temp function to fill in a matrix for testing purposes
+int** fillMatrix(int** matrix)
+{
+	int i, j;
+
+	for(i=0; i<MAX_HEIGHT; i++)
+	{
+		for(j=0; j < MAX_WIDTH; j++)
+		{
+			if(j > 30 && j < 60)
+				matrix[i][j] = 0xFFFF;
+			else
+				matrix[i][j] = 0xF800;
+		}
+	}
+
+	return matrix;
+}
+
 //TO DO: BACKGROUND BUFFER AND BUFFER SWITCHING

@@ -9,6 +9,8 @@
 #include "io.h"
 #include "util/Timer.h"
 #include "io/PS2Keyboard.h"
+#include "video/VideoHandler.h"
+#include "sprite/RectSprite.h"
 
 // Approx time per loop for 60 Hz
 #define MAIN_LOOP_MIN_TIME_MS 16
@@ -28,7 +30,12 @@ int main()
 	// TODO other initialisation
 
 	// Testing Video Functionality
-	VideoDemo();
+	VideoHandlerInit();
+	RectSprite* rect = RectSprite_init(RectSprite_alloc());
+	rect->baseSprite.height = 90;
+	rect->baseSprite.width = 90;
+	rect->colour = 0xFF6F;
+	drawSprite(rect, 0, 0);
 
 	// MAIN PROGRAM LOOP
 	while(hasQuit == 0) {
@@ -41,7 +48,7 @@ int main()
 		// TODO insert game logic here
 
 		// Testing Video Functionality
-		VideoBufferSwapDemo(ledVals);
+//		VideoBufferSwapDemo(ledVals);
 
 		// Sleep if finished logic within frame interval
 		while (Timer_isDone(loopTimer) == 0) {}
