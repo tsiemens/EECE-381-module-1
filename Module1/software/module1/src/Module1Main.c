@@ -27,6 +27,9 @@ int main()
 
 	// TODO other initialisation
 
+	// Testing Video Functionality
+	VideoDemo();
+
 	// MAIN PROGRAM LOOP
 	while(hasQuit == 0) {
 		Timer_start(loopTimer);
@@ -36,6 +39,9 @@ int main()
 		IOWR_8DIRECT(LEDS_BASE, 0, ledVals);
 
 		// TODO insert game logic here
+
+		// Testing Video Functionality
+		VideoBufferSwapDemo(ledVals);
 
 		// Sleep if finished logic within frame interval
 		while (Timer_isDone(loopTimer) == 0) {}
