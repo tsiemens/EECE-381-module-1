@@ -12,6 +12,7 @@
 #include "video/VideoHandler.h"
 #include "sprite/RectSprite.h"
 #include "sprite/ImgSprite.h"
+#include "sprite/SpriteParser.h"
 
 // Approx time per loop for 60 Hz
 #define MAIN_LOOP_MIN_TIME_MS 16
@@ -37,8 +38,10 @@ int main()
 	rect->baseSprite.width = 40;
 	rect->colour = 0xFF6F;
 	ImgSprite* img = ImgSprite_init(ImgSprite_alloc());
-	img->baseSprite.height = 20;
-	img->baseSprite.width = 40;
+	SpriteParser_parse("test", img);
+
+	printf("\n\nIMG SPRITE: \nWidth: %i Height: %i \nColour1: %04x", img->baseSprite.width, img->baseSprite.height, img->matrix[0][0]);
+
 	img->baseSprite.xPos = 10;
 	img->baseSprite.yPos = 40;
 

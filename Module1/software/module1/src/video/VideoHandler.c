@@ -120,7 +120,6 @@ void drawSprites(BaseSprite* sprites[], int numSprites)
 	int i;
 	for(i = 0; i < numSprites; i++)
 	{
-		printf("type: %i\n", (*sprites[i]).classType);
 		(*sprites[i]).draw(sprites[i]);
 	}
 	display();
