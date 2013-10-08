@@ -94,12 +94,29 @@ int Timer_isDone(Timer* this)
 		return 1;
 	}
 
-	alt_timestamp_type endTime = alt_timestamp();
-	double timeTaken = ((endTime - this->startTime)/s_timestampTimerFreq)*1000.0;
+	double timeTaken = Timer_timeElapsed(this);
 
 	if (timeTaken < this->waitTimeMs) {
 		return 0;
 	} else {
 		return 1;
 	}
+}
+
+/**
+ * Returns the time elapsed since the timer was started.
+ *
+ * @param this
+ *
+ * @returns the time in milliseconds since the timer was started,
+ * 			or 0 if the timer has not been started
+ */
+double Timer_timeElapsed(Timer* this)
+{
+	if (this->startTime == 0) {
+		return 0.0;
+	}
+
+	alt_timestamp_type time = alt_timestamp();
+	return ((time - this->startTime)/s_timestampTimerFreq)*1000.0;
 }

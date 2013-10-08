@@ -66,9 +66,9 @@ CharBuffer* Char_New()
 /*
  * Draws pixel to Video Buffer. Abstracts messy HAL naming.
  */
-void Video_drawPixel(VideoBuffer *video_buffer, unsigned int color, unsigned int x, unsigned int y)
+void Video_drawPixel(VideoBuffer *video_buffer, unsigned int color,  unsigned int x, unsigned int y)
 {
-	alt_up_pixel_buffer_dma_draw(video_buffer -> pixel_buffer, color, x, y);
+	alt_up_pixel_buffer_dma_draw_hline(video_buffer -> pixel_buffer, x, x, y, color, BACKGROUND);
 }
 
 /*

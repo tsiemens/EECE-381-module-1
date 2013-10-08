@@ -27,4 +27,6 @@ void Timer_start(Timer* this);
 
 int Timer_isDone(Timer* this);
 
+double Timer_timeElapsed(Timer* this);
+
 #endif /* TIMER_H_ */

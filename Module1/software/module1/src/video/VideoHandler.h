@@ -6,13 +6,13 @@
 #include "../sprite/BaseSprite.h"
 #include "VideoLibrary.h"
 
-
 void VideoDemo();
 void VideoHandlerInit();
 void drawPixel(unsigned int color, unsigned int x, unsigned int y);
 void drawLine(int x0, int y0, int x1, int y1, int color);
 void printString(const char *ptr, unsigned int x,unsigned int y);
 void drawSprites(BaseSprite* sprites[], int numSprites);
+void clearChar();
 void display();
 
 
