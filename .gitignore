@@ -44,7 +44,11 @@
 *.elf
 *.map
 *.objdump
-/.metadata
-*/.metadata
-*/obj
-/Module1/software/module1_bsp
+.metadata
+.settings
+obj
+
+#Vim Backup Files
+.*~
+
+module1_bsp

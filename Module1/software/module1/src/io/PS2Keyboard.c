@@ -9,6 +9,7 @@
  *  which is preventing us from using a perfectly good keyboard.
  */
 
+#include <stdlib.h>
 #include <stdio.h>
 #include "io.h"
 #include "PS2Keyboard.h"
@@ -41,8 +42,9 @@ static alt_u8 keyMap[0x80] = {
  *
  * @return 0 = down key press, 1 = key release, -1 = error/empty buffer
  */
-int PS2Keyboard_readKey(alt_up_ps2_dev* keyboard, alt_u8* byte)
+int PS2Keyboard_readKey(PS2Keyboard* this, alt_u8* byte)
 {
+	alt_up_ps2_dev* keyboard = this->keyboard;
 	alt_u8 tempByte;
 	int status = alt_up_ps2_read_data_byte(keyboard, &tempByte);
 
@@ -51,11 +53,11 @@ int PS2Keyboard_readKey(alt_up_ps2_dev* keyboard, alt_u8* byte)
 		if (tempByte == 0xAA)
 		{
 			// AA means passed, should be ignored
-			return PS2Keyboard_readKey(keyboard, byte);
+			return PS2Keyboard_readKey(this, byte);
 		} else if (tempByte == 0xF0)
 		{
 			// F0 signifies an up key press, with next byte being that key
-			if (PS2Keyboard_readKey(keyboard, byte) == 0)
+			if (PS2Keyboard_readKey(this, byte) == 0)
 			{
 				return 1;
 			}
@@ -72,9 +74,13 @@ int PS2Keyboard_readKey(alt_up_ps2_dev* keyboard, alt_u8* byte)
 	return -1;
 }
 
-alt_up_ps2_dev* PS2Keyboard_init()
-		{
-	alt_up_ps2_dev* device = alt_up_ps2_open_dev("/dev/ps2");
+/**
+ * Returns a new ps2 keyboard, which has been initialised
+ */
+PS2Keyboard* PS2Keyboard_alloc_init()
+{
+	PS2Keyboard* this = NULL;
+	alt_up_ps2_dev* device = alt_up_ps2_open_dev("/dev/ps2_0");
 	alt_up_ps2_dev* ps2 = device;
 
 	if (device != NULL) {
@@ -96,9 +102,18 @@ alt_up_ps2_dev* PS2Keyboard_init()
 				ps2->device_type = PS2_KEYBOARD;
 			}
 		}
+
+		this = (PS2Keyboard *)malloc(sizeof(PS2Keyboard));
+		this->keyboard = device;
 	} else {
 		printf ("Error: could not open PS/2 device\n");
 	}
 
-	return device;
-		}
+	return this;
+}
+
+void PS2Keyboard_free(PS2Keyboard* this)
+{
+	free(this->keyboard);
+	free(this);
+}

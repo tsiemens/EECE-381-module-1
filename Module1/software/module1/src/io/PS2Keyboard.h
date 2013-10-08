@@ -9,6 +9,7 @@
 #define PS2KEYBOARD_H_
 
 #include "altera_up_avalon_ps2.h"
+#include "../util/Timer.h"
 
 #define KEY_ESC 0x1b
 #define KEY_BKSP 0x8
@@ -28,8 +29,17 @@
 #define KEY_LEFT 0x9c
 #define KEY_RIGHT 0x9d
 
-int PS2Keyboard_readKey(alt_up_ps2_dev* keyboard, alt_u8* byte);
+// Wrapper for the altera keyboard
+typedef struct PS2Keyboard
+{
+	// the keyboard
+	alt_up_ps2_dev* keyboard;
+} PS2Keyboard;
 
-alt_up_ps2_dev* PS2Keyboard_init();
+PS2Keyboard* PS2Keyboard_alloc_init();
+
+void PS2Keyboard_free(PS2Keyboard* this);
+
+int PS2Keyboard_readKey(PS2Keyboard* this, alt_u8* byte);
 
 #endif /* PS2KEYBOARD_H_ */
