@@ -10,14 +10,11 @@
 
 #include "BaseSprite.h"
 
-#define RECTSPRITE_CLASS_TYPE 1;
-
 typedef struct RectSprite
 {
 	// The super class. This MUST be the first element in the struct
 	// in order to permit error free casting between super and subclasses
 	BaseSprite baseSprite;
-
 	int colour;
 } RectSprite;
 
