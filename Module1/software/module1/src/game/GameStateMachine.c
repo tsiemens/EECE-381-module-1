@@ -6,8 +6,22 @@
  */
 
 #include "GameStateMachine.h"
+#include "../io/PS2Keyboard.h"
 #include <stdlib.h>
 #include <stdio.h>
+
+void GameStateMachine_ProcessKey(GameStateMachine* this, char key, int isUpEvent);
+void GameStateMachine_PerformLogic(GameStateMachine* this);
+void GameStateMachine_StartProcessKey(GameStateMachine* this, char key, int isUpEvent);
+void GameStateMachine_PlayingProcessKey(GameStateMachine* this, char key, int isUpEvent);
+void GameStateMachine_PausedProcessKey(GameStateMachine* this, char key, int isUpEvent);
+void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, char key, int isUpEvent);
+void GameStateMachine_GameOverProcessKey(GameStateMachine* this, char key, int isUpEvent);
+void GameStateMachine_StartPerformLogic(GameStateMachine* this);
+void GameStateMachine_PlayingPerformLogic(GameStateMachine* this);
+void GameStateMachine_PausedPerformLogic(GameStateMachine* this);
+void GameStateMachine_MainMenuPerformLogic(GameStateMachine* this);
+void GameStateMachine_GameOverPerformLogic(GameStateMachine* this);
 
 GameStateMachine* GameStateMachine_alloc()
 {
@@ -25,13 +39,13 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 
 void performFrameLogic(GameStateMachine* this){
 
-	char readKey;
-	int keyStatus = PS2Keyboard_readKey(keyboard, &readKey);
+	alt_u8 readKey;
+	int keyStatus = PS2Keyboard_readKey(this->keyboard, &readKey);
 
 	while(keyStatus >= 0)
 	{
-		GameStateMachine_ProcessKey(this, readKey, status);
-		keyStatus = PS2Keyboard_readKey(keyboard, &readKey);
+		GameStateMachine_ProcessKey(this, (char)readKey, keyStatus);
+		keyStatus = PS2Keyboard_readKey(this->keyboard, &readKey);
 	}
 
 	GameStateMachine_PerformLogic(this);
@@ -44,7 +58,7 @@ void performFrameLogic(GameStateMachine* this){
 	{
 		// draw game sprites, then draw menu sprite
 	}
-	else
+	else // MENU
 	{
 		// draw main menu sprites
 	}

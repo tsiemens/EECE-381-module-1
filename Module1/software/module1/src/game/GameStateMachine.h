@@ -24,6 +24,6 @@ typedef struct GameStateMachine
 } GameStateMachine;
 
 GameStateMachine* GameStateMachine_alloc();
-GameStateMachine* GameStateMachine_init(GameStateMachine* this);
+GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* keyboard);
 
 #endif /* GAMESTATEMACHINE_H_ */

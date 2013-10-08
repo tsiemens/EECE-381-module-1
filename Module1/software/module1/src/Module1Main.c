@@ -37,6 +37,7 @@ int main()
 
 	// VIDEO DEMO. TO BE REMOVED.
 	printString("EECE 381. Shooting Game Project", 2,2);
+	char debugFreqStr[10];
 
 	// MAIN PROGRAM LOOP
 	while (hasQuit == 0) {
@@ -59,6 +60,9 @@ int main()
 
 		// Swap buffers and clear background buffer
 		display();
+
+		sprintf(debugFreqStr, "FPS:%2.1f", 1000/Timer_timeElapsed(loopTimer));
+		printString(debugFreqStr, 70, 0);
 	}
 
 	return 0;
