@@ -33,6 +33,7 @@ int Timer_initTimestampTimer()
 	} else {
 		printf("Timestamp timer initialised.\n");
 		s_timestampTimerFreq = (double)alt_timestamp_freq();
+		printf("Timer freq: %0.1f Hz\n", s_timestampTimerFreq);
 	}
 
 	s_timestampTimerStatus = tsStatus;
@@ -44,17 +45,27 @@ int Timer_initTimestampTimer()
  *
  * @param waitTimeMs : The time the timer should run for, in miliseconds
  */
-Timer* Timer_new(double waitTimeMs)
+Timer* Timer_alloc()
 {
 	Timer *this = (Timer *)malloc(sizeof(Timer));
+	return this;
+}
+
+/**
+ * Constructor for Timer
+ *
+ * @param waitTimeMs : The time the timer should run for, in miliseconds
+ */
+Timer* Timer_init(Timer* this, double waitTimeMs)
+{
 	this->startTime = 0;
 	this->waitTimeMs = waitTimeMs;
 
 	// If the global timer has not been initialised, do so.
 	if(s_timestampTimerStatus != 0) {
-			if (Timer_initTimestampTimer() != 0) {
-				return NULL;
-			}
+		if (Timer_initTimestampTimer() != 0) {
+			return NULL;
+		}
 	}
 
 	return this;
@@ -67,7 +78,7 @@ Timer* Timer_new(double waitTimeMs)
  */
 void Timer_start(Timer* this)
 {
-	this->startTime = (long)alt_timestamp();
+	this->startTime = alt_timestamp();
 }
 
 /**
@@ -83,12 +94,29 @@ int Timer_isDone(Timer* this)
 		return 1;
 	}
 
-	int endTime = (long)alt_timestamp();
-	double timeTaken = ((endTime - this->startTime)/s_timestampTimerFreq)*1000;
+	double timeTaken = Timer_timeElapsed(this);
 
 	if (timeTaken < this->waitTimeMs) {
 		return 0;
 	} else {
 		return 1;
 	}
+}
+
+/**
+ * Returns the time elapsed since the timer was started.
+ *
+ * @param this
+ *
+ * @returns the time in milliseconds since the timer was started,
+ * 			or 0 if the timer has not been started
+ */
+double Timer_timeElapsed(Timer* this)
+{
+	if (this->startTime == 0) {
+		return 0.0;
+	}
+
+	alt_timestamp_type time = alt_timestamp();
+	return ((time - this->startTime)/s_timestampTimerFreq)*1000.0;
 }
