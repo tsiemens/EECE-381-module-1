@@ -11,6 +11,8 @@
 #include "io/PS2Keyboard.h"
 #include "io/SDCard.h"
 #include "io/Audio.h"
+#include "video/VideoHandler.h"
+#include "video/VideoLibrary.h"
 #include "util/ArrayPtr.h"
 
 // Approx time per loop for 60 Hz

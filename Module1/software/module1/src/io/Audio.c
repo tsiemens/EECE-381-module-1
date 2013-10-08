@@ -72,3 +72,12 @@ int audio_play(Audio* this, unsigned int *buf, int len) {
 	return alt_up_audio_write_fifo(this->audio_dev, buf, len,
 			ALT_UP_AUDIO_RIGHT);
 }
+
+int audio_play_r(Audio* this, unsigned int *buf, int len) {
+	return alt_up_audio_write_fifo(this->audio_dev, buf, len,
+			ALT_UP_AUDIO_RIGHT);
+}
+
+int audio_play_l(Audio* this, unsigned int *buf, int len) {
+	return alt_up_audio_write_fifo(this->audio_dev, buf, len, ALT_UP_AUDIO_LEFT);
+}
