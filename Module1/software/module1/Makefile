@@ -153,6 +153,8 @@ C_SRCS += src/sprite/BaseSprite.c
 C_SRCS += src/sprite/RectSprite.c
 C_SRCS += src/video/VideoHandler.c
 C_SRCS += src/video/VideoLibrary.c
+C_SRCS += src/sprite/ImgSprite.c
+C_SRCS += src/sprite/SpriteParser.c
 CXX_SRCS :=
 ASM_SRCS :=
 

@@ -11,6 +11,9 @@
 #ifndef BASESPRITE_H_
 #define BASESPRITE_H_
 
+#define RECTSPRITE_CLASS_TYPE 1
+#define IMGSPRITE_CLASS_TYPE 2
+
 typedef struct BaseSprite
 {
 	// The type of the sprite. This is set by the subclass.
@@ -36,5 +39,9 @@ typedef struct BaseSprite
 BaseSprite* BaseSprite_alloc();
 
 BaseSprite* BaseSprite_init(BaseSprite* this);
+
+void BaseSprite_setSize(BaseSprite* this, int width, int height);
+
+void BaseSprite_setPosition(BaseSprite* this, float xPos, float yPos);
 
 #endif /* BASESPRITE_H_ */

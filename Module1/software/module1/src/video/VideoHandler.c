@@ -100,4 +100,15 @@ void display()
 	Video_clearScreen(Video, BACKGROUND);
 }
 
+void drawSprites(BaseSprite* sprites[], int numSprites)
+{
+	int i;
+	for(i = 0; i < numSprites; i++)
+	{
+		(*sprites[i]).draw(sprites[i]);
+	}
+	display();
+}
+
+
 //TO DO: BACKGROUND BUFFER AND BUFFER SWITCHING
