@@ -9,7 +9,7 @@
 #include "io/Audio.h"
 #include "util/ArrayPtr.h"
 
-int demo_sd_audio() {
+void demo_sd_audio() {
 
 	// test sd card
 	SDCard* sd_card = sdcard_init();
@@ -27,18 +27,32 @@ int demo_sd_audio() {
 	Audio* audioDev = audio_init();
 	int begin = 0;
 	int end = 0;
-	unsigned int audio_output[128];
+	int buffer_size = 128;
+	unsigned int audio_output[buffer_size];
+	unsigned int audio_output_2[buffer_size];
+
+	int i;
+	for (i = 0; i < buffer_size; i++) {
+		if (i % 2 == 0) {
+			audio_output_2[i] = 0x7FFF;
+		} else {
+			audio_output_2[i] = 0x8000;
+		}
+	}
+
 	while (end < test2->size) {
 		begin = end;
-		if (test2->size < 128) {
+		if (test2->size < buffer_size) {
 			end = test2->size;
-		} else if (((test2->size) - end) < 128) {
+		} else if (((test2->size) - end) < buffer_size) {
 			end = test2->size;
 		} else {
-			end += 128;
+			end += buffer_size;
 		}
 		ShortToIntCPY(&(test2->data[begin]), audio_output, end - begin);
-		audio_play(audioDev, audio_output, end - begin);
+		//audio_play(audioDev, audio_output_2, end - begin);
+		audio_play_r(audioDev, audio_output_2, end - begin);
+		audio_play_l(audioDev, audio_output, end - begin);
 		int k = 0;
 		for (k = 0; k < 12800; k++) {
 		}
@@ -49,6 +63,4 @@ int demo_sd_audio() {
 
 	sdcard_free(sd_card);
 	sd_card = NULL;
-
-	return 0;
 }
