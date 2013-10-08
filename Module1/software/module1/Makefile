@@ -149,6 +149,10 @@ C_SRCS += src/io/SDCard.c
 C_SRCS += src/util/ArrayPtr.c
 C_SRCS += src/io/Audio.c
 C_SRCS += src/demo.c
+C_SRCS += src/sprite/BaseSprite.c
+C_SRCS += src/sprite/RectSprite.c
+C_SRCS += src/video/VideoHandler.c
+C_SRCS += src/video/VideoLibrary.c
 CXX_SRCS :=
 ASM_SRCS :=
 
