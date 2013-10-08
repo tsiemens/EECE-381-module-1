@@ -9,12 +9,16 @@
 #include "io.h"
 #include "util/Timer.h"
 #include "io/PS2Keyboard.h"
+#include "io/SDCard.h"
+#include "io/Audio.h"
+#include "util/ArrayPtr.h"
 
 // Approx time per loop for 60 Hz
 #define MAIN_LOOP_MIN_TIME_MS 16
 
 int main()
 {
+
 	// INITIALISATION
 	int hasQuit = 0;
 
@@ -34,7 +38,7 @@ int main()
 	printString("EECE 381. Shooting Game Project", 2,2);
 
 	// MAIN PROGRAM LOOP
-	while(hasQuit == 0) {
+	while (hasQuit == 0) {
 		Timer_start(loopTimer);
 
 		// Debug lights (they increment each frame)
@@ -49,7 +53,8 @@ int main()
 		drawPixel(0xFFFF, 160, (ledVals*2)%240);
 
 		// Sleep if finished logic within frame interval
-		while (Timer_isDone(loopTimer) == 0) {}
+		while (Timer_isDone(loopTimer) == 0) {
+		}
 
 		// Swap buffers and clear background buffer
 		display();
