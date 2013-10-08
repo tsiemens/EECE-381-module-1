@@ -144,6 +144,7 @@ ELF := module1.elf
 # Paths to C, C++, and assembly source files.
 C_SRCS += src/Module1Main.c
 C_SRCS += src/io/PS2Keyboard.c
+C_SRCS += src/game/GameStateMachine.c
 CXX_SRCS :=
 ASM_SRCS :=
 
