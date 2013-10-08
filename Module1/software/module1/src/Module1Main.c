@@ -9,16 +9,18 @@
 #include "io.h"
 #include "util/Timer.h"
 #include "io/PS2Keyboard.h"
+#include "io/SDCard.h"
+#include "io/Audio.h"
 #include "video/VideoHandler.h"
-#include "sprite/RectSprite.h"
-#include "sprite/ImgSprite.h"
-#include "sprite/SpriteParser.h"
+#include "video/VideoLibrary.h"
+#include "util/ArrayPtr.h"
 
 // Approx time per loop for 60 Hz
 #define MAIN_LOOP_MIN_TIME_MS 16
 
 int main()
 {
+
 	// INITIALISATION
 	int hasQuit = 0;
 
@@ -31,21 +33,14 @@ int main()
 
 	// TODO other initialisation
 
-	// Testing Video Functionality
-//	DEN'S DEMO CODE
+	// Video and Character handler init
 	VideoHandlerInit();
-	RectSprite* rect = RectSprite_init(RectSprite_alloc());
-	BaseSprite_setSize((BaseSprite*)rect, 50, 50);
-	rect->colour = 0x9012;
-	ImgSprite* img = ImgSprite_init(ImgSprite_alloc());
-	SpriteParser_parse("test", img);
-	BaseSprite_setPosition((BaseSprite*)img, 100, 0);
-	BaseSprite* arr[] = { (BaseSprite*)rect, (BaseSprite*)img };
-	drawSprites(arr, 2);
-//	END DEN'S DEMO CODE
+
+	// VIDEO DEMO. TO BE REMOVED.
+	printString("EECE 381. Shooting Game Project", 2,2);
 
 	// MAIN PROGRAM LOOP
-	while(hasQuit == 0) {
+	while (hasQuit == 0) {
 		Timer_start(loopTimer);
 
 		// Debug lights (they increment each frame)
@@ -54,14 +49,17 @@ int main()
 
 		// TODO insert game logic here
 
-		// Testing Video Functionality
-//		VideoBufferSwapDemo(ledVals);
+		// VIDEO DEMO. TO BE REMOVED.
+		// Creates animation by having varying values every loop
+		drawLine(319, 120, (ledVals*2)%319, (ledVals*2)%239, 0xA22F+ledVals*50);
+		drawPixel(0xFFFF, 160, (ledVals*2)%240);
 
 		// Sleep if finished logic within frame interval
-		while (Timer_isDone(loopTimer) == 0) {}
+		while (Timer_isDone(loopTimer) == 0) {
+		}
 
-		// TODO Swap buffers
-
+		// Swap buffers and clear background buffer
+		display();
 	}
 
 	return 0;
