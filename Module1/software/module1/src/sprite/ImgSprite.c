@@ -27,35 +27,13 @@ ImgSprite* ImgSprite_init(ImgSprite* this)
 	return this;
 }
 
-// TODO: Remove this function, as it is just a temporary function to fill in a matrix for testing purposes
-int** fillMatrix(int** matrix, int rows, int cols)
-{
-	int i, j;
-
-	for(i=0; i < rows; i++)
-	{
-		for(j=0; j < cols; j++)
-		{
-			if(j >= (cols/4) && j <= (3*cols/4))
-				matrix[i][j] = 0xFFFF;
-			else
-				matrix[i][j] = 0xF800;
-		}
-	}
-
-	return matrix;
-}
-
 /**
  * Draws the rectangle sprite on the video buffer
  */
 void ImgSprite_draw(BaseSprite* super/*, VideoBuffer* */)
 {
 	ImgSprite* this = (ImgSprite* )super;
-
 	int i, j;
-	fillMatrix(this->matrix, this->baseSprite.height, this->baseSprite.width);
-
 	for(i = 0; i < this->baseSprite.height; i++)
 	{
 		for (j = 0; j < this->baseSprite.width; j++)

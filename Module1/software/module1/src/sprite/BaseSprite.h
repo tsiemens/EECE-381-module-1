@@ -40,4 +40,8 @@ BaseSprite* BaseSprite_alloc();
 
 BaseSprite* BaseSprite_init(BaseSprite* this);
 
+void BaseSprite_setSize(BaseSprite* this, int width, int height);
+
+void BaseSprite_setPosition(BaseSprite* this, float xPos, float yPos);
+
 #endif /* BASESPRITE_H_ */

@@ -32,21 +32,17 @@ int main()
 	// TODO other initialisation
 
 	// Testing Video Functionality
+//	DEN'S DEMO CODE
 	VideoHandlerInit();
 	RectSprite* rect = RectSprite_init(RectSprite_alloc());
-	rect->baseSprite.height = 10;
-	rect->baseSprite.width = 40;
-	rect->colour = 0xFF6F;
+	BaseSprite_setSize((BaseSprite*)rect, 50, 50);
+	rect->colour = 0x9012;
 	ImgSprite* img = ImgSprite_init(ImgSprite_alloc());
 	SpriteParser_parse("test", img);
-
-	printf("\n\nIMG SPRITE: \nWidth: %i Height: %i \nColour1: %04x", img->baseSprite.width, img->baseSprite.height, img->matrix[0][0]);
-
-	img->baseSprite.xPos = 10;
-	img->baseSprite.yPos = 40;
-
-	BaseSprite* arr[] = {&(rect->baseSprite), &(img->baseSprite)};
+	BaseSprite_setPosition((BaseSprite*)img, 100, 0);
+	BaseSprite* arr[] = { (BaseSprite*)rect, (BaseSprite*)img };
 	drawSprites(arr, 2);
+//	END DEN'S DEMO CODE
 
 	// MAIN PROGRAM LOOP
 	while(hasQuit == 0) {
