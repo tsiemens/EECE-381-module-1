@@ -13,12 +13,16 @@
 #include "io/Audio.h"
 #include "video/VideoHandler.h"
 #include "util/ArrayPtr.h"
+#include "sprite/ImgSprite.h"
+#include "sprite/SpriteParser.h"
+#include "game/GameStateMachine.h"
 
 // Approx time per loop for 60 Hz
 #define MAIN_LOOP_MIN_TIME_MS 16
 
 int main()
 {
+
 
 	// INITIALISATION
 	int hasQuit = 0;
@@ -35,8 +39,10 @@ int main()
 	// Video and Character handler init
 	VideoHandlerInit();
 
-	// VIDEO DEMO. TO BE REMOVED.
-	printString("EECE 381. Shooting Game Project", 2,2);
+	// ImgSprite stuff
+
+	GameStateMachine* stateMachine = GameStateMachine_init(GameStateMachine_alloc(), PS2Keyboard_alloc_init());
+
 	char debugFreqStr[10];
 
 	// MAIN PROGRAM LOOP
@@ -48,17 +54,13 @@ int main()
 		IOWR_8DIRECT(LEDS_BASE, 0, ledVals);
 
 		// TODO insert game logic here
-
-		// VIDEO DEMO. TO BE REMOVED.
-		// Creates animation by having varying values every loop
-		drawLine(319, 120, (ledVals*2)%319, (ledVals*2)%239, 0xA22F+ledVals*50);
-		drawPixel(0xFFFF, 160, (ledVals*2)%240);
-
+		GameStateMachine_performFrameLogic(stateMachine);
 		// Sleep if finished logic within frame interval
 		while (Timer_isDone(loopTimer) == 0) {
 		}
 
 		// Swap buffers and clear background buffer
+
 		display();
 
 		sprintf(debugFreqStr, "FPS:%2.1f", 1000/Timer_timeElapsed(loopTimer));

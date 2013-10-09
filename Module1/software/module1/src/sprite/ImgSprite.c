@@ -6,7 +6,9 @@
  */
 
 #include "ImgSprite.h"
+#include "../video/VideoHandler.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 
 void ImgSprite_draw(BaseSprite* super/*, VideoBuffer* */);
@@ -23,7 +25,6 @@ ImgSprite* ImgSprite_init(ImgSprite* this)
 	// Set this instance of ImgSprite
 	this->baseSprite.classType = IMGSPRITE_CLASS_TYPE;
 	this->baseSprite.draw = &ImgSprite_draw;
-	this->matrix = malloc(sizeof(int)*MAX_HEIGHT*MAX_WIDTH);
 	return this;
 }
 
@@ -34,12 +35,10 @@ void ImgSprite_draw(BaseSprite* super/*, VideoBuffer* */)
 {
 	ImgSprite* this = (ImgSprite* )super;
 	int i, j;
-	for(i = 0; i < this->baseSprite.height; i++)
-	{
-		for (j = 0; j < this->baseSprite.width; j++)
-		{
-			drawPixel(this->matrix[i][j], (int)this->baseSprite.xPos + j, (int)this->baseSprite.yPos + i);
+		for (i = 0; i < this->baseSprite.height; i++) {
+			for (j = 0; j < this->baseSprite.width; j++) {
+				drawPixel((*this->colours)[(i * this->baseSprite.height) + j], (int)this->baseSprite.xPos + j, (int)this->baseSprite.yPos +i);
+			}
 		}
-	}
 }
 
