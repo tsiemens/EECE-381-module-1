@@ -101,7 +101,6 @@ void display()
 	Video_swapBuffers(Video);
 	while(Video_bufferIsSwapping(Video));
 	Video_clearScreen(Video, BACKGROUND);
-	//Char_clearScreen(Character);
 }
 
 void drawSprites(BaseSprite* sprites[], int numSprites)
