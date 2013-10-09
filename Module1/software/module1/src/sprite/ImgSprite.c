@@ -6,7 +6,9 @@
  */
 
 #include "ImgSprite.h"
+#include "../video/VideoHandler.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 
 void ImgSprite_draw(BaseSprite* super/*, VideoBuffer* */);
@@ -38,8 +40,10 @@ void ImgSprite_draw(BaseSprite* super/*, VideoBuffer* */)
 	{
 		for (j = 0; j < this->baseSprite.width; j++)
 		{
+			printf("%04x ", this->matrix[i][j]);
 			drawPixel(this->matrix[i][j], (int)this->baseSprite.xPos + j, (int)this->baseSprite.yPos + i);
 		}
+		printf("\n");
 	}
 }
 

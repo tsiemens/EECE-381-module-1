@@ -61,7 +61,7 @@ void convertToMatrix(int pixelArray[], int width, int height, int** matrix) {
 	int i, j;
 	for (i = 0; i < height; i++) {
 		for (j = 0; j < width; j++) {
-			matrix[i][j] = pixelArray[(j * height) + i];
+			matrix[i][j] = pixelArray[(i * height) + j];
 			printf("%04x ", matrix[i][j] );
 		}
 		printf("\n");
