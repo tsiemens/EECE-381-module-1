@@ -49,6 +49,7 @@
 obj
 
 #Vim Backup Files
-.*~
+*~
+*.swp
 
 module1_bsp
