@@ -102,12 +102,12 @@ void display()
 
 void drawSprites(BaseSprite* sprites[], int numSprites)
 {
+//	printf("drawing sprite of size: %i x %i", ((*sprites[0]).width), ((*sprites[0]).height));
 	int i;
 	for(i = 0; i < numSprites; i++)
 	{
 		(*sprites[i]).draw(sprites[i]);
 	}
-	display();
 }
 
 

@@ -7,16 +7,19 @@
 
 #include "GameStateMachine.h"
 #include "../io/PS2Keyboard.h"
+#include "../video/VideoHandler.h"
+#include "../sprite/ImgSprite.h"
+#include "../sprite/RectSprite.h"
+#include "../sprite/SpriteParser.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-void GameStateMachine_ProcessKey(GameStateMachine* this, char key, int isUpEvent);
-void GameStateMachine_PerformLogic(GameStateMachine* this);
-void GameStateMachine_StartProcessKey(GameStateMachine* this, char key, int isUpEvent);
-void GameStateMachine_PlayingProcessKey(GameStateMachine* this, char key, int isUpEvent);
-void GameStateMachine_PausedProcessKey(GameStateMachine* this, char key, int isUpEvent);
-void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, char key, int isUpEvent);
-void GameStateMachine_GameOverProcessKey(GameStateMachine* this, char key, int isUpEvent);
+void GameStateMachine_ProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
+void GameStateMachine_StartProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
+void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
+void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
+void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
+void GameStateMachine_GameOverProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_StartPerformLogic(GameStateMachine* this);
 void GameStateMachine_PlayingPerformLogic(GameStateMachine* this);
 void GameStateMachine_PausedPerformLogic(GameStateMachine* this);
@@ -32,12 +35,23 @@ GameStateMachine* GameStateMachine_alloc()
 // Constructor for GameStateMachine
 GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* keyboard)
 {
-	this->state = START;
+	//TODO: un-ghetto this
+	this->state = PLAYING;
 	this->keyboard = keyboard;
+	ImgSprite* img = ImgSprite_init(ImgSprite_alloc());
+	SpriteParser_parse("play", img);
+	BaseSprite_setPosition((BaseSprite*)img, 150, 200);
+	RectSprite* rect = RectSprite_init(RectSprite_alloc());
+	rect->colour = 0xFFFF;
+	BaseSprite_setSize((BaseSprite*)rect, 20, 10);
+	BaseSprite_setPosition((BaseSprite*)rect, 150, 200);
+	this->sprites = malloc(sizeof(BaseSprite*));
+	(*this->sprites)[0] = (BaseSprite*)img;
+	printf("returning\n");
 	return this;
 }
 
-void performFrameLogic(GameStateMachine* this){
+void GameStateMachine_performFrameLogic(GameStateMachine* this){
 
 	alt_u8 readKey;
 	int keyStatus = PS2Keyboard_readKey(this->keyboard, &readKey);
@@ -47,12 +61,12 @@ void performFrameLogic(GameStateMachine* this){
 		GameStateMachine_ProcessKey(this, (char)readKey, keyStatus);
 		keyStatus = PS2Keyboard_readKey(this->keyboard, &readKey);
 	}
-
 	GameStateMachine_PerformLogic(this);
 
 	if(this->state == PLAYING)
 	{
-		// draw game sprites
+		BaseSprite* arr = *(this->sprites);
+		drawSprites(arr, 1);
 	}
 	else if (this->state == PAUSED)
 	{
@@ -64,7 +78,7 @@ void performFrameLogic(GameStateMachine* this){
 	}
 }
 
-void GameStateMachine_ProcessKey(GameStateMachine* this, char key, int isUpEvent)
+void GameStateMachine_ProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
 	switch( this->state )
 	{
@@ -100,27 +114,40 @@ void GameStateMachine_PerformLogic(GameStateMachine* this)
 	}
 }
 
-void GameStateMachine_StartProcessKey(GameStateMachine* this, char key, int isUpEvent)
+void GameStateMachine_StartProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
 
 }
 
-void GameStateMachine_PlayingProcessKey(GameStateMachine* this, char key, int isUpEvent)
+void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
+{
+	BaseSprite* sprite = (*this->sprites)[0];
+	if(isUpEvent == 0)
+	{
+		if(key == KEY_LEFT) {
+			sprite->xPos -= 10;
+			if ( sprite->xPos < 0)
+				sprite->xPos = 0;
+		}
+		else if(key == KEY_RIGHT) {
+			sprite->xPos += 10;
+			if ( (sprite->xPos + sprite->width) >= 320)
+				sprite->xPos = 319 - sprite->width;
+		}
+	}
+}
+
+void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
 
 }
 
-void GameStateMachine_PausedProcessKey(GameStateMachine* this, char key, int isUpEvent)
+void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
 
 }
 
-void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, char key, int isUpEvent)
-{
-
-}
-
-void GameStateMachine_GameOverProcessKey(GameStateMachine* this, char key, int isUpEvent)
+void GameStateMachine_GameOverProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
 
 }
