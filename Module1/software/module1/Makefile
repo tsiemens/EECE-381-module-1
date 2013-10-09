@@ -144,7 +144,6 @@ ELF := module1.elf
 # Paths to C, C++, and assembly source files.
 C_SRCS += src/Module1Main.c
 C_SRCS += src/io/PS2Keyboard.c
-C_SRCS += src/game/GameStateMachine.c
 C_SRCS += src/util/Timer.c
 C_SRCS += src/io/SDCard.c
 C_SRCS += src/util/ArrayPtr.c
@@ -156,7 +155,9 @@ C_SRCS += src/video/VideoHandler.c
 C_SRCS += src/video/VideoLibrary.c
 C_SRCS += src/sprite/ImgSprite.c
 C_SRCS += src/sprite/SpriteParser.c
-CXX_SRCS :=
+C_SRCS += .metadata/.plugins/org.eclipse.cdt.make.core/specs.c
+C_SRCS += src/sprite/AlphaSprite.c
+CXX_SRCS := .metadata/.plugins/org.eclipse.cdt.make.core/specs.cpp
 ASM_SRCS :=
 
 

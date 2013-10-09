@@ -13,6 +13,7 @@ void drawLine(int x0, int y0, int x1, int y1, int color);
 void printString(const char *ptr, unsigned int x,unsigned int y);
 void drawSprites(BaseSprite* sprites[], int numSprites);
 void clearChar();
+void drawRect(int x0, int y0, int x1, int y1, int color);
 void display();
 
 

@@ -34,6 +34,8 @@ RectSprite* RectSprite_init(RectSprite* this)
 void RectSprite_draw(BaseSprite* super/*, VideoBuffer* */)
 {
 	RectSprite* this = (RectSprite* )super;
+	drawRect(this->baseSprite.xPos, this->baseSprite.yPos, this->baseSprite.xPos+this->baseSprite.width, this->baseSprite.yPos+this->baseSprite.height, 0xFFFF);
+	/*
 	int i, j;
 	for(j = 0; j < this->baseSprite.height;j++)
 	{
@@ -41,5 +43,5 @@ void RectSprite_draw(BaseSprite* super/*, VideoBuffer* */)
 		{
 			drawPixel(this->colour, (int)this->baseSprite.xPos + i, (int) this->baseSprite.yPos+j);
 		}
-	}
+	}*/
 }

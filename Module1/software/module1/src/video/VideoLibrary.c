@@ -11,6 +11,7 @@
 #include "altera_up_avalon_video_pixel_buffer_dma.h"
 #include "altera_up_avalon_video_character_buffer_with_dma.h"
 #include "VideoLibrary.h"
+#include <stdlib.h>
 
 /*
  * Instantiates a new pointer to the VideoBuffer.
@@ -175,6 +176,11 @@ void Video_clearScreen(VideoBuffer *video_buffer, int backbuffer)
 void Video_drawLine(VideoBuffer* video_buffer, int x0, int y0, int x1, int y1, int color, int backbuffer)
 {
 	alt_up_pixel_buffer_dma_draw_line(video_buffer -> pixel_buffer, x0, y0, x1, y1, color, backbuffer);
+}
+
+void Video_drawRect(VideoBuffer *video_buffer, int x0, int y0, int x1, int y1, int color, int backbuffer)
+{
+	alt_up_pixel_buffer_dma_draw_rectangle(video_buffer->pixel_buffer, x0, y0, x1, y1, color, backbuffer);
 }
 
 void Char_clearScreen(CharBuffer* char_buffer)
