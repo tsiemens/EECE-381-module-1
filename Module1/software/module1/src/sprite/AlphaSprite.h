@@ -17,6 +17,9 @@ typedef struct AlphaSprite
 	BaseSprite baseSprite;
 	char* string;
 	void (*setString)(struct AlphaSprite*, char* string);
+	int prev_x;
+	int prev_y;
+	char* prev_str;
 } AlphaSprite;
 
 AlphaSprite* AlphaSprite_alloc();
