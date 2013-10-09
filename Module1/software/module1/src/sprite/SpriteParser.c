@@ -4,8 +4,8 @@
 #include <stdio.h>
 
 // Declarations of Helper Functions:
-int* convertToInt(unsigned char buffer[], int start);
-int* convertToPixel(unsigned char char_h, unsigned char char_l);
+int convertToInt(unsigned char buffer[], int start);
+int convertToPixel(unsigned char char_h, unsigned char char_l);
 void getColourArray(unsigned char buffer[], int size, int pixelArray[]);
 int* getColourMatrix(const char* filePath);
 void convertToMatrix(int pixelArray[], int width, int height, int** matrix);
@@ -23,15 +23,15 @@ void SpriteParser_parse(const char* filePath, ImgSprite* sprite) {
 	UnsignedCharPtr* img_data = sdcard_read_file(filePath);
 	int bytesread = img_data->size;
 	printf("SD Card: Read %s %d bytes\n", filePath, img_data->size);
-	int width = (*convertToInt(img_data->data, 0));
-	int height = (*convertToInt(img_data->data, 4));
-	printf("size: %i x %i\n\n", width, height);
+	int width = convertToInt(img_data->data, 0);
+	int height = convertToInt(img_data->data, 4);
+	printf("size: %d x %d\n\n", width, height);
 
 	//	GET/SET SPRITE DIMENSIONS:
-	BaseSprite_setSize(sprite, (*convertToInt(img_data->data, 0)), (*convertToInt(img_data->data, 4)));
+	BaseSprite_setSize((BaseSprite*)sprite, convertToInt(img_data->data, 0), convertToInt(img_data->data, 4));
 
 	//	GET PIXELS:
-	unsigned char pixelArray[(bytesread - 8)];
+	int pixelArray[(bytesread - 8)];
 	getColourArray(img_data->data, (bytesread - 8), pixelArray);
 	convertToMatrix(pixelArray, width, height, sprite->matrix);
 
@@ -47,7 +47,7 @@ void SpriteParser_parse(const char* filePath, ImgSprite* sprite) {
 void getColourArray(unsigned char buffer[], int size, int pixelArray[]) {
 	int i;
 	for (i = 8; i < (size - 1); i = i + 2) {
-		pixelArray[i / 2] = (*convertToPixel(buffer[1 + i], buffer[i]));
+		pixelArray[i / 2] = convertToPixel(buffer[1 + i], buffer[i]);
 		printf("%04x ", pixelArray[i / 2]);
 	}
 }
@@ -58,7 +58,7 @@ void getColourArray(unsigned char buffer[], int size, int pixelArray[]) {
  * 	@param int** matrix = the 2d array/matrix
  */
 void convertToMatrix(int pixelArray[], int width, int height, int** matrix) {
-	printf("\n\nMATRIX: %i by %i\n", width, height);
+	printf("\n\nMATRIX: %d by %d\n", width, height);
 	int i, j;
 	for (i = 0; i < height; i++) {
 		for (j = 0; j < width; j++) {
@@ -74,10 +74,11 @@ void convertToMatrix(int pixelArray[], int width, int height, int** matrix) {
  * 	@param buffer[] = takes in the size buffer of bytes to read from
  * 	@param start = indicates which index to start converting (if width, 0; if height, 4)
  */
-int* convertToInt(unsigned char buffer[], int start) {
+int convertToInt(unsigned char buffer[], int start) {
 	// assuming little endian
 	unsigned char val[] = { buffer[3 + start], buffer[2 + start], buffer[1 + start], buffer[start] };
-	return (int*) val;
+	int intVal = *((int*)val);
+	return intVal;
 }
 
 /*
@@ -85,8 +86,9 @@ int* convertToInt(unsigned char buffer[], int start) {
  * 	@param char_h = the high byte
  * 	@param char_l = the low byte
  */
-int* convertToPixel(unsigned char char_h, unsigned char char_l) {
+int convertToPixel(unsigned char char_h, unsigned char char_l) {
 	unsigned char val[] = { char_h, char_l, 0, 0 };
-	return (int*) val;
+	int intVal = *((int*)val);
+	return intVal;
 }
 
