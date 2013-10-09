@@ -16,7 +16,6 @@ int* getColourMatrix(const char* filePath);
  */
 void SpriteParser_parse(const char* filePath, ImgSprite* sprite) {
 
-	//	UNTESTED CODE TO BE TESTED WHEN MERGED AND CAN WORK WITH SD CARD STUFF
 	//	GET FILE DATA:
 	SDCard* sd_card = sdcard_init();
 	UnsignedCharPtr* img_data = sdcard_read_file(filePath);
