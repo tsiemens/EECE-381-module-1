@@ -13,6 +13,7 @@
 
 #define RECTSPRITE_CLASS_TYPE 1
 #define IMGSPRITE_CLASS_TYPE 2
+#define ALPHASPRITE_CLASS_TYPE 3
 
 typedef struct BaseSprite
 {

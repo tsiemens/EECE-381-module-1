@@ -3,6 +3,8 @@
  *
  *  Created on: 2013-10-08
  *  Author: Wesley Tsai
+ *
+ *  Reminder that the character buffer is an 80x60 Array
  */
 
 #include "AlphaSprite.h"
@@ -36,5 +38,5 @@ void AlphaSprite_setString(AlphaSprite* this, char* string)
 void AlphaSprite_draw(BaseSprite* super)
 {
 	AlphaSprite* this = (AlphaSprite*) super;
-	printString(this->string, this->baseSprite.xPos, this->baseSprite.yPos);
+	printString(this->string, (unsigned int)this->baseSprite.xPos, (unsigned int)this->baseSprite.yPos);
 }
