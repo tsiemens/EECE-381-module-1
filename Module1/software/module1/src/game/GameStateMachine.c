@@ -175,6 +175,9 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 			if ( (sprite->xPos + sprite->width) >= 320)
 				sprite->xPos = 319 - sprite->width;
 		}
+		else if(key == KEY_ESC) {
+			this->state = MAIN_MENU;
+		}
 	}
 }
 
@@ -198,7 +201,7 @@ void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int
 			selSprite->yPos = MENU_SELECTOR_NEWGAME_YPOS;
 			newGameSelected = true;
 		}
-		else if(key == KEY_CTRL && newGameSelected == true) {
+		else if(key == '\n' && newGameSelected == true) {
 			//clearChar() to be replaced by clearing individual strings
 			clearChar();
 			this->state = PLAYING;
