@@ -156,6 +156,7 @@ C_SRCS += src/video/VideoHandler.c
 C_SRCS += src/video/VideoLibrary.c
 C_SRCS += src/sprite/ImgSprite.c
 C_SRCS += src/sprite/SpriteParser.c
+C_SRCS += src/sprite/SpriteArrayList.c
 CXX_SRCS :=
 ASM_SRCS :=
 
