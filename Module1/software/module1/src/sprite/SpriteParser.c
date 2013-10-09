@@ -6,9 +6,8 @@
 // Declarations of Helper Functions:
 int convertToInt(unsigned char buffer[], int start);
 int convertToPixel(unsigned char char_h, unsigned char char_l);
-void getColourArray(unsigned char buffer[], int size, int pixelArray[]);
+void getColourArray(unsigned char buffer[], int size, int (*pixelArray)[]);
 int* getColourMatrix(const char* filePath);
-void convertToMatrix(int pixelArray[], int width, int height, int** matrix);
 
 /*
  * 	Parses image at file path into the ImgSprite
@@ -31,9 +30,9 @@ void SpriteParser_parse(const char* filePath, ImgSprite* sprite) {
 	BaseSprite_setSize((BaseSprite*)sprite, convertToInt(img_data->data, 0), convertToInt(img_data->data, 4));
 
 	//	GET PIXELS:
-	int pixelArray[(bytesread - 8)];
+	int (*pixelArray)[] = malloc(sizeof(int)*(bytesread - 8));
 	getColourArray(img_data->data, bytesread, pixelArray);
-	convertToMatrix(pixelArray, width, height, sprite->matrix);
+	sprite->colours = pixelArray;
 
 }
 /* ------------------------------ PRIVATE HELPER METHODS ------------------------------ */
@@ -44,29 +43,13 @@ void SpriteParser_parse(const char* filePath, ImgSprite* sprite) {
  * 	@param size = size of buffer
  * 	@param pixelArray[] = is populated with pixel information
  */
-void getColourArray(unsigned char buffer[], int size, int pixelArray[]) {
+void getColourArray(unsigned char buffer[], int size, int (*pixelArray)[]) {
 	int i;
 	for (i = 8; i < (size - 1); i = i + 2) {
-		pixelArray[i / 2 - 4] = convertToPixel(buffer[1 + i], buffer[i]);
+		(*pixelArray)[i / 2 - 4] = convertToPixel(buffer[1 + i], buffer[i]);
 	}
 }
 
-/*
- * 	Converts a 1d array into a 2d array/matrix
- * 	@param pixelArray[] = the 1d array
- * 	@param int** matrix = the 2d array/matrix
- */
-void convertToMatrix(int pixelArray[], int width, int height, int** matrix) {
-	printf("\n\nMATRIX: %d by %d\n", width, height);
-	int i, j;
-	for (i = 0; i < height; i++) {
-		for (j = 0; j < width; j++) {
-			matrix[i][j] = pixelArray[(i * height) + j];
-			printf("%04x ", matrix[i][j] );
-		}
-		printf("\n");
-	}
-}
 
 /*
  * 	Converts 4 bytes into a 32bit integer -- assumes little endian

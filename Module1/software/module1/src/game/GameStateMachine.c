@@ -56,19 +56,16 @@ void GameStateMachine_performFrameLogic(GameStateMachine* this){
 	alt_u8 readKey;
 	int keyStatus = PS2Keyboard_readKey(this->keyboard, &readKey);
 
-	printf("in perform frame logic\n");
 	while(keyStatus >= 0)
 	{
 		GameStateMachine_ProcessKey(this, (char)readKey, keyStatus);
 		keyStatus = PS2Keyboard_readKey(this->keyboard, &readKey);
 	}
-
 	GameStateMachine_PerformLogic(this);
 
 	if(this->state == PLAYING)
 	{
 		BaseSprite* arr = *(this->sprites);
-		printf("in perform frame logic, state playing\n");
 		drawSprites(arr, 1);
 	}
 	else if (this->state == PAUSED)
