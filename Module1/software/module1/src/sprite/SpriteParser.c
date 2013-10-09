@@ -6,12 +6,7 @@
 // Declarations of Helper Functions:
 int convertToInt(unsigned char buffer[], int start);
 int convertToPixel(unsigned char char_h, unsigned char char_l);
-<<<<<<< HEAD
 void getColourArray(unsigned char buffer[], int size, int (*pixelArray)[]);
-=======
-void getColourArray(unsigned char buffer[], int size, int pixelArray[]);
->>>>>>> 33ed243ee3d6a198f679aedd91c74ac70bc2fcf6
-int* getColourMatrix(const char* filePath);
 
 /*
  * 	Parses image at file path into the ImgSprite
