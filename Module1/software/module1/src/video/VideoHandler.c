@@ -107,7 +107,6 @@ void drawSprites(BaseSprite* sprites[], int numSprites)
 	{
 		(*sprites[i]).draw(sprites[i]);
 	}
-	display();
 }
 
 
