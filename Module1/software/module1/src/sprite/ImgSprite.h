@@ -18,7 +18,7 @@ typedef struct ImgSprite
 	// in order to permit error free casting between super and subclasses
 	BaseSprite baseSprite;
 
-	int** matrix;
+	int (*colours)[];
 } ImgSprite;
 
 ImgSprite* ImgSprite_alloc();
