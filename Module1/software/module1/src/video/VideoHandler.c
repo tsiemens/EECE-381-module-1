@@ -19,7 +19,6 @@
 static VideoBuffer* Video;
 static CharBuffer* Character;
 
-/*
 void lzrPrty(unsigned char randomVal)
 {
 	drawLine(randomVal%320, 0, 320, randomVal%240, 0xF22F-randomVal*10);
@@ -29,7 +28,6 @@ void lzrPrty(unsigned char randomVal)
 	Video_swapBuffers(Video);
 	while(Video_bufferIsSwapping(Video));
 }
-*/
 
 /*
  * Intializes the static Video and Character buffers contained in this file
@@ -81,6 +79,11 @@ void printString(const char *ptr, unsigned int x,unsigned int y)
 	Char_printString(Character, ptr, x, y);
 }
 
+void drawRect(int x0, int y0, int x1, int y1, int color)
+{
+	Video_drawRect(Video, x0, y0, x1, y1, color, BACKGROUND);
+}
+
 /*
  * Clears the character buffer.
  */
@@ -102,13 +105,10 @@ void display()
 
 void drawSprites(BaseSprite* sprites[], int numSprites)
 {
+//	printf("drawing sprite of size: %i x %i", ((*sprites[0]).width), ((*sprites[0]).height));
 	int i;
 	for(i = 0; i < numSprites; i++)
 	{
 		(*sprites[i]).draw(sprites[i]);
 	}
-	display();
 }
-
-
-//TO DO: BACKGROUND BUFFER AND BUFFER SWITCHING
