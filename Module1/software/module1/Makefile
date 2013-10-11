@@ -156,9 +156,9 @@ C_SRCS += src/video/VideoLibrary.c
 C_SRCS += src/sprite/ImgSprite.c
 C_SRCS += src/sprite/SpriteParser.c
 C_SRCS += src/sprite/SpriteArrayList.c
-C_SRCS += .metadata/.plugins/org.eclipse.cdt.make.core/specs.c
 C_SRCS += src/sprite/AlphaSprite.c
-CXX_SRCS := .metadata/.plugins/org.eclipse.cdt.make.core/specs.cpp
+C_SRCS += src/game/GameStateMachine.c
+CXX_SRCS :=
 ASM_SRCS :=
 
 
