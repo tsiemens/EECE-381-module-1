@@ -10,6 +10,7 @@
 
 #include "../io/PS2Keyboard.h"
 #include "../sprite/BaseSprite.h"
+#include "../sprite/SpriteArrayList.h"
 
 typedef enum {START, MAIN_MENU, PLAYING, PAUSED, GAME_OVER} GameStateE;
 
@@ -19,9 +20,8 @@ typedef struct GameStateMachine
 	GameStateE state;
 
 	PS2Keyboard* keyboard;
-	BaseSprite* (*gameSprites)[];
-	BaseSprite* (*menuSprites)[4];
-	// TODO Sprite arrays
+	SpriteArrayList* gameSprites;
+	SpriteArrayList* menuSprites;
 
 } GameStateMachine;
 

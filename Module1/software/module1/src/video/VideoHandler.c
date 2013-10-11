@@ -103,12 +103,14 @@ void display()
 	Video_clearScreen(Video, BACKGROUND);
 }
 
-void drawSprites(BaseSprite* sprites[], int numSprites)
+void VideoHandler_drawSprites(SpriteArrayList* spriteArray)
 {
 //	printf("drawing sprite of size: %i x %i", ((*sprites[0]).width), ((*sprites[0]).height));
 	int i;
-	for(i = 0; i < numSprites; i++)
+	BaseSprite* sprite;
+	for(i = 0; i <= spriteArray->last; i++)
 	{
-		(*sprites[i]).draw(sprites[i]);
+		sprite = SpriteArrayList_getAt(spriteArray, i);
+		sprite->draw(sprite);
 	}
 }

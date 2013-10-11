@@ -12,6 +12,10 @@
 #include "altera_up_avalon_video_character_buffer_with_dma.h"
 #include "VideoLibrary.h"
 #include <stdlib.h>
+#include "io.h"
+
+int draw_pixel_fast(alt_up_pixel_buffer_dma_dev *pixel_buffer,
+		unsigned int color, unsigned int x, unsigned int y, int backbuffer);
 
 /*
  * Instantiates a new pointer to the VideoBuffer.
@@ -69,7 +73,7 @@ CharBuffer* Char_New()
  */
 void Video_drawPixel(VideoBuffer *video_buffer, unsigned int color,  unsigned int x, unsigned int y)
 {
-	alt_up_pixel_buffer_dma_draw_hline(video_buffer -> pixel_buffer, x, x, y, color, BACKGROUND);
+	draw_pixel_fast(video_buffer -> pixel_buffer, color, x, y, BACKGROUND);
 }
 
 /*
@@ -186,4 +190,32 @@ void Video_drawRect(VideoBuffer *video_buffer, int x0, int y0, int x1, int y1, i
 void Char_clearScreen(CharBuffer* char_buffer)
 {
 	alt_up_char_buffer_clear(char_buffer->char_buffer);
+}
+
+/* This funcion draws a pixel to the background buffer, and assumes:
+ * 1. Your pixel buffer DMA is set to CONSECUTIVE
+ * 2. The resolution is 320x240
+ * 3. x and y are within the screen (0,0)->(319, 239)
+ * 4. You are using 16-bit color
+ *
+ * DO NOT USE THIS FUNCTION IF ANY OF THE ABOVE ARE NOT GUARANATEED, OR YOU
+ * MAY WRITE TO INVALID MEMORY LOCATIONS, CRASHING YOUR PROGRAM, OR
+ * CAUSING UNEXPECTED BEHAVIOR.
+ */
+int draw_pixel_fast(alt_up_pixel_buffer_dma_dev *pixel_buffer,
+		unsigned int color, unsigned int x, unsigned int y, int backbuffer) {
+	unsigned int bufferAddr;
+	if (backbuffer == 1)
+		bufferAddr = pixel_buffer->back_buffer_start_address;
+	else
+		bufferAddr = pixel_buffer->buffer_start_address;
+
+	unsigned int addr;
+
+	addr = ((x & pixel_buffer->x_coord_mask) << 1);
+	addr += (((y & pixel_buffer->y_coord_mask) * 320) << 1);
+
+	IOWR_16DIRECT(bufferAddr, addr, color);
+
+	return 0;
 }
