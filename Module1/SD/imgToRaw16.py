@@ -10,7 +10,6 @@ import math
 
 argumentError = "Requires argumens: [source image file] [name of output raw16 (with extension)]"
 imageError = "Input file must be a readable image"
-outputError = "Output file must end in the extension .raw16"
 
 if len(sys.argv) < 2:
     sys.exit(argumentError)
@@ -20,9 +19,6 @@ if sys.argv[0].endswith(".py"):
     startIndex = 1;
     if len(sys.argv) < 3:
         sys.exit(argumentError)
-
-if not sys.argv[startIndex + 1].endswith(".raw16"):
-    sys.exit(outputError)
 
 image = Image.open(sys.argv[startIndex])
 if image == None:
