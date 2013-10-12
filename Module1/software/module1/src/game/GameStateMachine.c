@@ -48,8 +48,11 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 	rect->colour = 0xFFFF;
 	BaseSprite_setSize((BaseSprite*)rect, 20, 10);
 	BaseSprite_setPosition((BaseSprite*)rect, 150, 200);
-	this->gameSprites = malloc(sizeof(BaseSprite*));
-	(*this->gameSprites)[0] = (BaseSprite*)img;
+
+	this->menuSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 4);
+
+	this->gameSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 1);
+	SpriteArrayList_insert(this->gameSprites, (BaseSprite*)img, 0);
 	printf("returning\n");
 
 	menuInit(this);
@@ -85,10 +88,10 @@ void menuInit(GameStateMachine* this)
 
 
 	//menuSprites array to be made dynamic (if possible)
-	(*this->menuSprites)[0] = (BaseSprite*)menuOuterFrame;
-	(*this->menuSprites)[1] = (BaseSprite*)menuStartAlpha;
-	(*this->menuSprites)[2] = (BaseSprite*)menuContinueAlpha;
-	(*this->menuSprites)[3] = (BaseSprite*)menuSelectorFrame;
+	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)menuOuterFrame, 0);
+	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)menuStartAlpha, 1);
+	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)menuContinueAlpha, 2);
+	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)menuSelectorFrame, 3);
 }
 
 void GameStateMachine_performFrameLogic(GameStateMachine* this){
@@ -105,8 +108,7 @@ void GameStateMachine_performFrameLogic(GameStateMachine* this){
 
 	if(this->state == PLAYING)
 	{
-		BaseSprite* arr = *(this->gameSprites);
-		drawSprites(arr, 1);
+		VideoHandler_drawSprites(this->gameSprites);
 	}
 	else if (this->state == PAUSED)
 	{
@@ -114,8 +116,7 @@ void GameStateMachine_performFrameLogic(GameStateMachine* this){
 	}
 	else // MENU
 	{
-		BaseSprite* arr = *(this->menuSprites);
-		drawSprites(arr, 4);
+		VideoHandler_drawSprites(this->menuSprites);
 	}
 }
 
@@ -162,7 +163,7 @@ void GameStateMachine_StartProcessKey(GameStateMachine* this, alt_u8 key, int is
 
 void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
-	BaseSprite* sprite = (*this->gameSprites)[0];
+	BaseSprite* sprite = SpriteArrayList_getAt(this->gameSprites, 0);
 	if(isUpEvent == 0)
 	{
 		if(key == KEY_LEFT) {
@@ -190,7 +191,7 @@ void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int
 {
 	static bool newGameSelected;
 
-	BaseSprite* selSprite = (*this->menuSprites)[3];
+	BaseSprite* selSprite = SpriteArrayList_getAt(this->menuSprites, 3);
 	if(isUpEvent == 0)
 	{
 		if(key == KEY_DOWN) {
