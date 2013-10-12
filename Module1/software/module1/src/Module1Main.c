@@ -23,7 +23,6 @@
 int main()
 {
 
-
 	// INITIALISATION
 	int hasQuit = 0;
 

@@ -9,6 +9,12 @@
 #include "io/Audio.h"
 #include "util/ArrayPtr.h"
 
+void demo_sd_image() {
+	SDCard* sd_card = sdcard_init();
+	UnsignedCharPtr* image_data = sdcard_read_file_w_size("play");
+	printf("SD Card: Read play %d bytes\n", image_data->size);
+}
+
 void demo_sd_audio() {
 
 	// test sd card
