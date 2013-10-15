@@ -12,7 +12,7 @@
 #include "../sprite/BaseSprite.h"
 #include "../sprite/SpriteArrayList.h"
 
-typedef enum {START, MAIN_MENU, PLAYING, PAUSED, GAME_OVER} GameStateE;
+typedef enum {START, MAIN_MENU, INSTRUCTIONS, PLAYING, PAUSED, GAME_OVER} GameStateE;
 
 typedef struct GameStateMachine
 {
@@ -22,7 +22,7 @@ typedef struct GameStateMachine
 	PS2Keyboard* keyboard;
 	SpriteArrayList* gameSprites;
 	SpriteArrayList* menuSprites;
-
+	SpriteArrayList* instructionSprites;
 } GameStateMachine;
 
 GameStateMachine* GameStateMachine_alloc();
