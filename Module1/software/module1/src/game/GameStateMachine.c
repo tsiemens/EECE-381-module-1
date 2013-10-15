@@ -44,13 +44,7 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 	ImgSprite* img = ImgSprite_init(ImgSprite_alloc());
 	SpriteParser_parse("play", img);
 	BaseSprite_setPosition((BaseSprite*)img, 150, 200);
-	RectSprite* rect = RectSprite_init(RectSprite_alloc());
-	rect->colour = 0xFFFF;
-	BaseSprite_setSize((BaseSprite*)rect, 20, 10);
-	BaseSprite_setPosition((BaseSprite*)rect, 150, 200);
-
 	this->menuSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 4);
-
 	this->gameSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 1);
 	SpriteArrayList_insert(this->gameSprites, (BaseSprite*)img, 0);
 	printf("returning\n");
@@ -63,35 +57,34 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 void menuInit(GameStateMachine* this)
 {
 	RectSprite* menuOuterFrame = RectSprite_init(RectSprite_alloc());
-	menuOuterFrame->baseSprite.xPos = MENUFRAME_XPOS;
-	menuOuterFrame->baseSprite.yPos = MENUFRAME_YPOS;
-	menuOuterFrame->baseSprite.width = MENUFRAME_WIDTH;
-	menuOuterFrame->baseSprite.height = MENUFRAME_HEIGHT;
+	BaseSprite_setSize((BaseSprite*)menuOuterFrame, MENUFRAME_WIDTH, MENUFRAME_HEIGHT);
+	BaseSprite_setPosition((BaseSprite*)menuOuterFrame, MENUFRAME_XPOS, MENUFRAME_YPOS);
 	menuOuterFrame->colour = MENUFRAME_COLOR;
 
 	AlphaSprite* menuStartAlpha = AlphaSprite_init(AlphaSprite_alloc());
-	menuStartAlpha->baseSprite.xPos = MENUITEM_START_XPOS;
-	menuStartAlpha->baseSprite.yPos = MENUITEM_START_YPOS;
+	BaseSprite_setPosition((BaseSprite*)menuStartAlpha, MENUITEM_START_XPOS, MENUITEM_START_YPOS);
 	menuStartAlpha->setString(menuStartAlpha, "New Game");
 
 	AlphaSprite* menuContinueAlpha = AlphaSprite_init(AlphaSprite_alloc());
-	menuContinueAlpha->baseSprite.xPos = MENUITEM_START_XPOS;
-	menuContinueAlpha->baseSprite.yPos = MENUITEM_CONTINUE_YPOS;
+	BaseSprite_setPosition((BaseSprite*)menuContinueAlpha, MENUITEM_START_XPOS, MENUITEM_CONTINUE_YPOS);
 	menuContinueAlpha->setString(menuContinueAlpha, "Continue");
 
 	RectSprite* menuSelectorFrame = RectSprite_init(RectSprite_alloc());
-	menuSelectorFrame->baseSprite.xPos = MENU_SELECTOR_XPOS;
-	menuSelectorFrame->baseSprite.yPos = MENU_SELECTOR_CONTINUE_YPOS;
-	menuSelectorFrame->baseSprite.width = MENU_SELECTOR_WIDTH;
-	menuSelectorFrame->baseSprite.height = MENU_SELECTOR_HEIGHT;
+	BaseSprite_setSize((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_WIDTH, MENU_SELECTOR_HEIGHT);
+	BaseSprite_setPosition((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_XPOS, MENU_SELECTOR_CONTINUE_YPOS);
 	menuSelectorFrame->colour = MENU_SELECTOR_COLOR;
 
+	ImgSprite* menu = ImgSprite_init(ImgSprite_alloc());
+	SpriteParser_parse("title", menu);
+	BaseSprite_setPosition((BaseSprite*)menu, 90, 0);
 
 	//menuSprites array to be made dynamic (if possible)
 	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)menuOuterFrame, 0);
 	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)menuStartAlpha, 1);
 	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)menuContinueAlpha, 2);
 	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)menuSelectorFrame, 3);
+	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)menu, 4);
+
 }
 
 void GameStateMachine_performFrameLogic(GameStateMachine* this){
