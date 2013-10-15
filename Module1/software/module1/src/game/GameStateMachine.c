@@ -38,11 +38,15 @@ GameStateMachine* GameStateMachine_alloc()
 // Constructor for GameStateMachine
 GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* keyboard)
 {
-	//TODO: un-ghetto this
 	this->state = MAIN_MENU;
 	this->keyboard = keyboard;
+	this->frameTimer = Timer_init(Timer_alloc(), 0);
+	this->lastFrameDuration = 0;
+
+	//TODO: un-ghetto this
 	ImgSprite* img = ImgSprite_init(ImgSprite_alloc());
 	SpriteParser_parse("play", img);
+	((BaseSprite*)img)->spriteId = PLAYER_SPRITE_ID;
 	BaseSprite_setPosition((BaseSprite*)img, 150, 200);
 	RectSprite* rect = RectSprite_init(RectSprite_alloc());
 	rect->colour = 0xFFFF;
@@ -53,7 +57,6 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 
 	this->gameSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 1);
 	SpriteArrayList_insert(this->gameSprites, (BaseSprite*)img, 0);
-	printf("returning\n");
 
 	menuInit(this);
 
@@ -94,7 +97,10 @@ void menuInit(GameStateMachine* this)
 	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)menuSelectorFrame, 3);
 }
 
-void GameStateMachine_performFrameLogic(GameStateMachine* this){
+void GameStateMachine_performFrameLogic(GameStateMachine* this)
+{
+	this->lastFrameDuration = Timer_timeElapsed(this->frameTimer);
+	Timer_start(this->frameTimer);
 
 	alt_u8 readKey;
 	int keyStatus = PS2Keyboard_readKey(this->keyboard, &readKey);
@@ -163,21 +169,30 @@ void GameStateMachine_StartProcessKey(GameStateMachine* this, alt_u8 key, int is
 
 void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
-	BaseSprite* sprite = SpriteArrayList_getAt(this->gameSprites, 0);
+	BaseSprite* playerSprite = SpriteArrayList_getWithId(this->gameSprites, PLAYER_SPRITE_ID);
 	if(isUpEvent == 0)
 	{
-		if(key == KEY_LEFT) {
-			sprite->xPos -= 10;
-			if ( sprite->xPos < 0)
-				sprite->xPos = 0;
-		}
-		else if(key == KEY_RIGHT) {
-			sprite->xPos += 10;
-			if ( (sprite->xPos + sprite->width) >= 320)
-				sprite->xPos = 319 - sprite->width;
+		if (playerSprite != NULL && (key == KEY_LEFT || key == KEY_RIGHT)){
+			if(key == KEY_LEFT) {
+				playerSprite->xVel += -PLAYER_SPEED;
+			}
+			else {
+				playerSprite->xVel += PLAYER_SPEED;
+			}
 		}
 		else if(key == KEY_ESC) {
 			this->state = MAIN_MENU;
+		}
+	}
+	else if (isUpEvent == 1)
+	{
+		if (playerSprite != NULL && (key == KEY_LEFT || key == KEY_RIGHT)){
+			if(key == KEY_LEFT) {
+				playerSprite->xVel += PLAYER_SPEED;
+			}
+			else {
+				playerSprite->xVel += -PLAYER_SPEED;
+			}
 		}
 	}
 }
@@ -222,7 +237,19 @@ void GameStateMachine_StartPerformLogic(GameStateMachine* this)
 
 void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 {
-
+	// Updating player position (finalization)
+	BaseSprite* playerSprite = SpriteArrayList_getWithId(this->gameSprites, PLAYER_SPRITE_ID);
+	if (playerSprite != NULL){
+		if (playerSprite->xVel > PLAYER_SPEED)
+			playerSprite->xVel = PLAYER_SPEED;
+		else if (playerSprite->xVel < -PLAYER_SPEED)
+			playerSprite->xVel = -PLAYER_SPEED;
+		BaseSprite_updatePos(playerSprite, this->lastFrameDuration);
+		if ( (playerSprite->xPos + playerSprite->width) >= 320)
+			playerSprite->xPos = 319 - playerSprite->width;
+		else if ( playerSprite->xPos < 0 )
+			playerSprite->xPos = 0;
+	}
 }
 
 void GameStateMachine_PausedPerformLogic(GameStateMachine* this)

@@ -12,6 +12,12 @@
 #include "../sprite/BaseSprite.h"
 #include "../sprite/SpriteArrayList.h"
 
+#define PLAYER_SPEED 0.3
+
+#define PLAYER_SPRITE_ID 1
+#define PLAYER_LASER_SPRITE_ID 2
+#define ENEMY_SPRITE_ID 3
+
 typedef enum {START, MAIN_MENU, PLAYING, PAUSED, GAME_OVER} GameStateE;
 
 typedef struct GameStateMachine
@@ -22,6 +28,9 @@ typedef struct GameStateMachine
 	PS2Keyboard* keyboard;
 	SpriteArrayList* gameSprites;
 	SpriteArrayList* menuSprites;
+
+	Timer* frameTimer;
+	double lastFrameDuration;
 
 } GameStateMachine;
 
