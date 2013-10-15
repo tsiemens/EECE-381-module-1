@@ -41,19 +41,20 @@ GameStateMachine* GameStateMachine_alloc()
 GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* keyboard)
 {
 	//TODO: un-ghetto this
-	this->state = PLAYING;
+	this->state = INSTRUCTIONS;
 	this->keyboard = keyboard;
 	ImgSprite* img = ImgSprite_init(ImgSprite_alloc());
 	SpriteParser_parse("play", img);
 	BaseSprite_setPosition((BaseSprite*)img, 150, 200);
 	this->menuSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 5);
-	this->instructionSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 8);
+	this->instructionSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 9);
 	this->gameSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 1);
 	SpriteArrayList_insert(this->gameSprites, (BaseSprite*)img, 0);
+
 	printf("returning\n");
 
 //	menuInit(this);
-//	instructionsInit(this);
+	instructionsInit(this);
 
 	return this;
 }
@@ -88,19 +89,24 @@ void instructionsInit(GameStateMachine* this)
 	BaseSprite_setPosition((BaseSprite*)instructionsAlpha5, INSTRUCTIONITEM_TEXT_XPOS, INSTRUCTIONITEM_TITLE_YPOS+CHAR_TO_PIXEL_HEIGHT*5);
 	instructionsAlpha5->setString(instructionsAlpha5, "lasers to use different operators. Good luck!");
 
+	AlphaSprite* instructionsAlpha6 = AlphaSprite_init(AlphaSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)instructionsAlpha6, INSTRUCTIONITEM_TITLE_XPOS, INSTRUCTIONITEM_TITLE_YPOS+CHAR_TO_PIXEL_HEIGHT*6);
+	instructionsAlpha6->setString(instructionsAlpha6, "<            >");
+
 	AlphaSprite* instructionsBackToMenu= AlphaSprite_init(AlphaSprite_alloc());
-	BaseSprite_setPosition((BaseSprite*)instructionsBackToMenu, INSTRUCTIONITEM_ESC_XPOS, MENUITEM_CONTINUE_YPOS);
+	BaseSprite_setPosition((BaseSprite*)instructionsBackToMenu, INSTRUCTIONITEM_ESC_XPOS, MENUITEM_CONTINUE_YPOS+CHAR_TO_PIXEL_HEIGHT*2);
 	instructionsAlpha5->setString(instructionsBackToMenu, "Press ESC to return to menu");
 
 
-	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)menu, 0);
-	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)instructionsTitleAlpha, 1);
-	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)instructionsAlpha, 2);
-	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)instructionsAlpha2, 3);
-	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)instructionsAlpha3, 4);
-	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)instructionsAlpha4, 5);
-	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)instructionsAlpha5, 6);
-	SpriteArrayList_insert(this->menuSprites, (BaseSprite*)instructionsBackToMenu, 7);
+	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)menu, 0);
+	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)instructionsTitleAlpha, 1);
+	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)instructionsAlpha, 2);
+	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)instructionsAlpha2, 3);
+	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)instructionsAlpha3, 4);
+	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)instructionsAlpha4, 5);
+	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)instructionsAlpha5, 6);
+	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)instructionsAlpha6, 7);
+	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)instructionsBackToMenu, 8);
 }
 
 void menuInit(GameStateMachine* this)
@@ -155,6 +161,10 @@ void GameStateMachine_performFrameLogic(GameStateMachine* this){
 	else if (this->state == PAUSED)
 	{
 		// draw game sprites, then draw menu sprite
+	}
+	else if (this->state == INSTRUCTIONS)
+	{
+		VideoHandler_drawSprites(this->instructionSprites);
 	}
 	else // MENU
 	{
@@ -258,7 +268,11 @@ void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int
 
 GameStateMachine_InstructionsProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
-
+	if (key == KEY_ESC)
+	{
+		clearChar();
+		this->state = MAIN_MENU;
+	}
 }
 
 void GameStateMachine_GameOverProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
