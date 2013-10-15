@@ -34,6 +34,16 @@ BaseSprite* SpriteArrayList_getAt(SpriteArrayList* this, int index)
 		return NULL;
 }
 
+BaseSprite* SpriteArrayList_getWithId(SpriteArrayList* this, int id)
+{
+	int i;
+	for(i=0; i <= this->last; i++)
+	{
+		if((this->sprites[i])->spriteId = id)
+			return this->sprites[i];
+	}
+}
+
 void SpriteArrayList_removeAtIndex(SpriteArrayList* this, int index)
 {
 	int i;

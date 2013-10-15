@@ -20,9 +20,17 @@ typedef struct BaseSprite
 	// The type of the sprite. This is set by the subclass.
 	int classType;
 
+	// The id of the sprite
+	int spriteId;
+
 	// The position of the sprite
 	float xPos;
 	float yPos;
+
+	// The velocity of the sprite in px/ms
+	float xVel;
+	float yVel;
+
 	// The size of the sprite
 	int width;
 	int height;
@@ -44,5 +52,7 @@ BaseSprite* BaseSprite_init(BaseSprite* this);
 void BaseSprite_setSize(BaseSprite* this, int width, int height);
 
 void BaseSprite_setPosition(BaseSprite* this, float xPos, float yPos);
+
+void BaseSprite_updatePos(BaseSprite* this, double timeElapsed);
 
 #endif /* BASESPRITE_H_ */
