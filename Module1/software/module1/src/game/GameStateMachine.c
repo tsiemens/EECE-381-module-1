@@ -41,7 +41,7 @@ GameStateMachine* GameStateMachine_alloc()
 GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* keyboard)
 {
 	//TODO: un-ghetto this
-	this->state = INSTRUCTIONS;
+	this->state = MAIN_MENU;
 	this->keyboard = keyboard;
 	ImgSprite* img = ImgSprite_init(ImgSprite_alloc());
 	SpriteParser_parse("play", img);
@@ -53,7 +53,7 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 
 	printf("returning\n");
 
-//	menuInit(this);
+	menuInit(this);
 	instructionsInit(this);
 
 	return this;
@@ -71,27 +71,27 @@ void instructionsInit(GameStateMachine* this)
 
 	AlphaSprite* instructionsAlpha = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)instructionsAlpha, INSTRUCTIONITEM_TEXT_XPOS, INSTRUCTIONITEM_TITLE_YPOS+CHAR_TO_PIXEL_HEIGHT);
-	instructionsAlpha->setString(instructionsAlpha, "You are on a journey to Planet Math. Your goal is to");
+	instructionsAlpha->setString(instructionsAlpha, INSTRUCTIONITEM_P1_L1);
 
 	AlphaSprite* instructionsAlpha2 = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)instructionsAlpha2, INSTRUCTIONITEM_TEXT_XPOS, INSTRUCTIONITEM_TITLE_YPOS+CHAR_TO_PIXEL_HEIGHT*2);
-	instructionsAlpha2->setString(instructionsAlpha2, "eat an exact amount of space burgers. Too few and");
+	instructionsAlpha2->setString(instructionsAlpha2, INSTRUCTIONITEM_P1_L2);
 
 	AlphaSprite* instructionsAlpha3 = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)instructionsAlpha3, INSTRUCTIONITEM_TEXT_XPOS, INSTRUCTIONITEM_TITLE_YPOS+CHAR_TO_PIXEL_HEIGHT*3);
-	instructionsAlpha3->setString(instructionsAlpha3, "you won't make it. Too many, you will fall asleep.");
+	instructionsAlpha3->setString(instructionsAlpha3, INSTRUCTIONITEM_P1_L3);
 
 	AlphaSprite* instructionsAlpha4 = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)instructionsAlpha4, INSTRUCTIONITEM_TEXT_XPOS, INSTRUCTIONITEM_TITLE_YPOS+CHAR_TO_PIXEL_HEIGHT*4);
-	instructionsAlpha4->setString(instructionsAlpha4, "Grab the burger with desired number & use different");
+	instructionsAlpha4->setString(instructionsAlpha4, INSTRUCTIONITEM_P1_L4);
 
 	AlphaSprite* instructionsAlpha5 = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)instructionsAlpha5, INSTRUCTIONITEM_TEXT_XPOS, INSTRUCTIONITEM_TITLE_YPOS+CHAR_TO_PIXEL_HEIGHT*5);
-	instructionsAlpha5->setString(instructionsAlpha5, "lasers to use different operators. Good luck!");
+	instructionsAlpha5->setString(instructionsAlpha5, INSTRUCTIONITEM_P1_L5);
 
-	AlphaSprite* instructionsAlpha6 = AlphaSprite_init(AlphaSprite_alloc());
-	BaseSprite_setPosition((BaseSprite*)instructionsAlpha6, INSTRUCTIONITEM_TITLE_XPOS, INSTRUCTIONITEM_TITLE_YPOS+CHAR_TO_PIXEL_HEIGHT*6);
-	instructionsAlpha6->setString(instructionsAlpha6, "<            >");
+	AlphaSprite* instructionsAlphaRight = AlphaSprite_init(AlphaSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)instructionsAlphaRight, INSTRUCTIONITEM_TITLE_XPOS+5, INSTRUCTIONITEM_TITLE_YPOS+CHAR_TO_PIXEL_HEIGHT*6);
+	instructionsAlphaRight->setString(instructionsAlphaRight, ">");
 
 	AlphaSprite* instructionsBackToMenu= AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)instructionsBackToMenu, INSTRUCTIONITEM_ESC_XPOS, MENUITEM_CONTINUE_YPOS+CHAR_TO_PIXEL_HEIGHT*2);
@@ -105,7 +105,7 @@ void instructionsInit(GameStateMachine* this)
 	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)instructionsAlpha3, 4);
 	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)instructionsAlpha4, 5);
 	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)instructionsAlpha5, 6);
-	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)instructionsAlpha6, 7);
+	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)instructionsAlphaRight, 7);
 	SpriteArrayList_insert(this->instructionSprites, (BaseSprite*)instructionsBackToMenu, 8);
 }
 
@@ -118,11 +118,11 @@ void menuInit(GameStateMachine* this)
 
 	AlphaSprite* menuStartAlpha = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)menuStartAlpha, MENUITEM_START_XPOS, MENUITEM_START_YPOS);
-	menuStartAlpha->setString(menuStartAlpha, "New Game");
+	menuStartAlpha->setString(menuStartAlpha, "Start");
 
 	AlphaSprite* menuContinueAlpha = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)menuContinueAlpha, MENUITEM_START_XPOS, MENUITEM_CONTINUE_YPOS);
-	menuContinueAlpha->setString(menuContinueAlpha, "Continue");
+	menuContinueAlpha->setString(menuContinueAlpha, "Instructions");
 
 	RectSprite* menuSelectorFrame = RectSprite_init(RectSprite_alloc());
 	BaseSprite_setSize((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_WIDTH, MENU_SELECTOR_HEIGHT);
@@ -245,33 +245,75 @@ void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int i
 
 void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
-	static bool newGameSelected;
+	static bool startSelected;
 
 	BaseSprite* selSprite = SpriteArrayList_getAt(this->menuSprites, 3);
 	if(isUpEvent == 0)
 	{
 		if(key == KEY_DOWN) {
 			selSprite->yPos = MENU_SELECTOR_CONTINUE_YPOS;
-			newGameSelected = false;
+			startSelected = false;
 		}
 		else if(key == KEY_UP) {
 			selSprite->yPos = MENU_SELECTOR_NEWGAME_YPOS;
-			newGameSelected = true;
+			startSelected = true;
 		}
-		else if(key == '\n' && newGameSelected == true) {
+		else if(key == '\n' && startSelected == true) {
 			//clearChar() to be replaced by clearing individual strings
 			clearChar();
 			this->state = PLAYING;
+		}
+		else if(key == '\n' && startSelected == false) {
+			clearChar();
+			this->state = INSTRUCTIONS;
 		}
 	}
 }
 
 GameStateMachine_InstructionsProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
-	if (key == KEY_ESC)
+	static bool onSecondPage;
+	if(isUpEvent == 0)
 	{
-		clearChar();
-		this->state = MAIN_MENU;
+		if (key == KEY_ESC)
+		{
+			clearChar();
+			this->state = MAIN_MENU;
+		}
+		else if(key == KEY_RIGHT && onSecondPage == false)
+		{
+			onSecondPage = true;
+			BaseSprite* line1 = SpriteArrayList_getAt(this->instructionSprites, 2);
+			((AlphaSprite*)line1)->setString(((AlphaSprite*)line1), "Aim your spaceship under the falling burgers and shoot");
+			BaseSprite* line2 = SpriteArrayList_getAt(this->instructionSprites, 3);
+			((AlphaSprite*)line2)->setString(((AlphaSprite*)line2), "them down with an OPERATION LASER. You can see what");
+			BaseSprite* line3 = SpriteArrayList_getAt(this->instructionSprites, 4);
+			((AlphaSprite*)line3)->setString(((AlphaSprite*)line3), "key uses which operation at the top of the screen when");
+			BaseSprite* line4 = SpriteArrayList_getAt(this->instructionSprites, 5);
+			((AlphaSprite*)line4)->setString(((AlphaSprite*)line4), "playing. The current and maximum amounts of burgers is");
+			BaseSprite* line5 = SpriteArrayList_getAt(this->instructionSprites, 6);
+			((AlphaSprite*)line5)->setString(((AlphaSprite*)line5), "also shown at the top. Good luck!");
+			BaseSprite* left = SpriteArrayList_getAt(this->instructionSprites, 7);
+			((AlphaSprite*)left)->setString(((AlphaSprite*)left), "<");
+			clearChar();
+		}
+		else if(key == KEY_LEFT && onSecondPage == true)
+		{
+			onSecondPage = false;
+			BaseSprite* line1 = SpriteArrayList_getAt(this->instructionSprites, 2);
+			((AlphaSprite*)line1)->setString(((AlphaSprite*)line1), INSTRUCTIONITEM_P1_L1);
+			BaseSprite* line2 = SpriteArrayList_getAt(this->instructionSprites, 3);
+			((AlphaSprite*)line2)->setString(((AlphaSprite*)line2), INSTRUCTIONITEM_P1_L2);
+			BaseSprite* line3 = SpriteArrayList_getAt(this->instructionSprites, 4);
+			((AlphaSprite*)line3)->setString(((AlphaSprite*)line3), INSTRUCTIONITEM_P1_L3);
+			BaseSprite* line4 = SpriteArrayList_getAt(this->instructionSprites, 5);
+			((AlphaSprite*)line4)->setString(((AlphaSprite*)line4), INSTRUCTIONITEM_P1_L4);
+			BaseSprite* line5 = SpriteArrayList_getAt(this->instructionSprites, 6);
+			((AlphaSprite*)line5)->setString(((AlphaSprite*)line5), INSTRUCTIONITEM_P1_L5);
+			BaseSprite* left = SpriteArrayList_getAt(this->instructionSprites, 7);
+			((AlphaSprite*)left)->setString(((AlphaSprite*)left), ">");
+			clearChar();
+		}
 	}
 }
 
