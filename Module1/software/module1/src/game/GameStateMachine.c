@@ -13,6 +13,7 @@
 #include "../sprite/RectSprite.h"
 #include "../sprite/AlphaSprite.h"
 #include "../sprite/SpriteParser.h"
+#include "../sprite/SpriteFactory.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -43,20 +44,11 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 	this->frameTimer = Timer_init(Timer_alloc(), 0);
 	this->lastFrameDuration = 0;
 
-	//TODO: un-ghetto this
-	ImgSprite* img = ImgSprite_init(ImgSprite_alloc());
-	SpriteParser_parse("play", img);
-	((BaseSprite*)img)->spriteId = PLAYER_SPRITE_ID;
-	BaseSprite_setPosition((BaseSprite*)img, 150, 200);
-	RectSprite* rect = RectSprite_init(RectSprite_alloc());
-	rect->colour = 0xFFFF;
-	BaseSprite_setSize((BaseSprite*)rect, 20, 10);
-	BaseSprite_setPosition((BaseSprite*)rect, 150, 200);
+	ImgSprite* playerSprite = SpriteFactory_GeneratePlayerSprite();
 
 	this->menuSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 4);
-
 	this->gameSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 1);
-	SpriteArrayList_insert(this->gameSprites, (BaseSprite*)img, 0);
+	SpriteArrayList_insert(this->gameSprites, (BaseSprite*)playerSprite, 0);
 
 	menuInit(this);
 
