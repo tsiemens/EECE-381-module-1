@@ -64,7 +64,7 @@ char* AlphaSprite_EmptyString(char* string)
 
 	char* prev_str = (char*)malloc(sizeof(char)*(i+1));
 
-	prev_str[i+1] = '\0';
+	prev_str[i] = '\0';
 
 	for(j = 0; j < i; j++)
 		prev_str[j] = ' ';
