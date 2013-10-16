@@ -42,12 +42,12 @@ void AlphaSprite_draw(BaseSprite* super)
 	AlphaSprite* this = (AlphaSprite*) super;
 
 	//Erase previous string
-	AlphaSprite_Clear(this);
+	//AlphaSprite_Clear(this);
 
 	//Assign previous values
 	this->prev_x = this->baseSprite.xPos;
 	this->prev_y = this->baseSprite.yPos;
-	this->prev_str = AlphaSprite_EmptyString(this->string);
+	//this->prev_str = AlphaSprite_EmptyString(this->string);
 	//Print current string
 	printString(this->string, (unsigned int)this->baseSprite.xPos, (unsigned int)this->baseSprite.yPos);
 }
