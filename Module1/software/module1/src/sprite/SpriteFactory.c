@@ -9,7 +9,7 @@
  * REQUIRES: SD card inserted containing "play.bmp"
  * EFFECTS: Returns a pointer to an initialized player sprite
  */
-ImgSprite* SpriteFactory_GeneratePlayerSprite()
+ImgSprite* SpriteFactory_generatePlayerSprite()
 {
 	//Load the player image from the SD card
 	ImgSprite* playerSprite = ImgSprite_init(ImgSprite_alloc());
@@ -25,7 +25,7 @@ ImgSprite* SpriteFactory_GeneratePlayerSprite()
  * REQUIRES: SD card inserted containing enemy images
  * EFFECTS: Returns a pointer to an initialized enemy sprite
  */
-ImgSprite* SpriteFactory_GenerateEnemySprite()
+ImgSprite* SpriteFactory_generateEnemySprite()
 {
 }
 
@@ -33,7 +33,14 @@ ImgSprite* SpriteFactory_GenerateEnemySprite()
  *
  *
  */
-ImgSprite* SpriteFactory_GenerateLaserSprite()
+RectSprite* SpriteFactory_generateLaserSprite(BaseSprite* player, int colour)
 {
-
+	RectSprite* laserSprite = RectSprite_init(RectSprite_alloc());
+	((BaseSprite*)laserSprite)->spriteId = PLAYER_LASER_SPRITE_ID;
+	laserSprite->baseSprite.width = 1;
+	laserSprite->baseSprite.height = player->yPos - 1;
+	laserSprite->baseSprite.xPos = player->xPos + (player->width/2) - 1;
+	laserSprite->baseSprite.yPos = 0;
+	laserSprite->colour = colour;
+	return laserSprite;
 }
