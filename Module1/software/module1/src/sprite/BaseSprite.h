@@ -11,6 +11,8 @@
 #ifndef BASESPRITE_H_
 #define BASESPRITE_H_
 
+#include "../util/Timer.h"
+
 #define RECTSPRITE_CLASS_TYPE 1
 #define IMGSPRITE_CLASS_TYPE 2
 #define ALPHASPRITE_CLASS_TYPE 3
@@ -35,6 +37,9 @@ typedef struct BaseSprite
 	int width;
 	int height;
 
+	// A multi purpose timer for tracking animations
+	Timer* animTimer;
+
 	/**
 	 * A pure virtual function
 	 * This can be called from a 'subclass' like the the following example with RectSprite:
@@ -54,5 +59,7 @@ void BaseSprite_setSize(BaseSprite* this, int width, int height);
 void BaseSprite_setPosition(BaseSprite* this, float xPos, float yPos);
 
 void BaseSprite_updatePos(BaseSprite* this, double timeElapsed);
+
+void BaseSprite_free(BaseSprite* this);
 
 #endif /* BASESPRITE_H_ */

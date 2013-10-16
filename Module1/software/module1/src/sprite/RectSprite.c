@@ -28,6 +28,12 @@ RectSprite* RectSprite_init(RectSprite* this)
 	return this;
 }
 
+void RectSprite_free(RectSprite* this)
+{
+	BaseSprite_free((BaseSprite*)this);
+	free(this);
+}
+
 /**
  * Draws the rectangle sprite on the video buffer
  */
