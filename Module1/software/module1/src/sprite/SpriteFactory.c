@@ -13,7 +13,7 @@ ImgSprite* SpriteFactory_generatePlayerSprite()
 {
 	//Load the player image from the SD card
 	ImgSprite* playerSprite = ImgSprite_init(ImgSprite_alloc());
-	SpriteParser_parse("play", playerSprite);
+	SpriteParser_parse("player", playerSprite);
 
 	//Assign sprite properties;
 	((BaseSprite*)playerSprite)->spriteId = PLAYER_SPRITE_ID;
@@ -23,10 +23,25 @@ ImgSprite* SpriteFactory_generatePlayerSprite()
 
 /*
  * REQUIRES: SD card inserted containing enemy images
- * EFFECTS: Returns a pointer to an initialized enemy sprite
+ * EFFECTS: Returns a pointer to an initialized enemy sprite based on the value given.
+ * 			Returns null if value not 1 <= value <= 10
  */
-ImgSprite* SpriteFactory_generateEnemySprite()
+ImgSprite* SpriteFactory_generateEnemySprite(int value)
 {
+	char* image;
+	if (value < 1 || value > 10)
+		return NULL;
+
+
+
+	//Load the enemy image from the SD card
+	ImgSprite* sprite = ImgSprite_init(ImgSprite_alloc());
+	SpriteParser_parse("player", sprite);
+
+	//Assign sprite properties;
+	((BaseSprite*)sprite)->spriteId = PLAYER_SPRITE_ID;
+	BaseSprite_setPosition((BaseSprite*)sprite, 150, 200);
+	return sprite;
 }
 
 /*
