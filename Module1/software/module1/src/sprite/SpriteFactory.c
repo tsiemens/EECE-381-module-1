@@ -13,7 +13,7 @@ ImgSprite* SpriteFactory_generatePlayerSprite()
 {
 	//Load the player image from the SD card
 	ImgSprite* playerSprite = ImgSprite_init(ImgSprite_alloc());
-	SpriteParser_parse("play", playerSprite);
+	SpriteParser_parse("player", playerSprite);
 
 	//Assign sprite properties;
 	((BaseSprite*)playerSprite)->spriteId = PLAYER_SPRITE_ID;

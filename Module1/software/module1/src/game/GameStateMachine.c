@@ -14,6 +14,7 @@
 #include "../sprite/AlphaSprite.h"
 #include "../sprite/SpriteParser.h"
 #include "../sprite/SpriteFactory.h"
+#include "../audio/AudioHandler.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -265,6 +266,9 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 				laserColour = 0x07E0; // Mult
 			else if (key == '4')
 				laserColour = 0xF81F; // Div
+
+			// set audio to play shooting effects
+			AudioHandler_playShoot();
 
 			laserSprite = SpriteFactory_generateLaserSprite(player, laserColour);
 			laserSprite->baseSprite.animTimer = Timer_init(Timer_alloc(), LASER_DURATION);

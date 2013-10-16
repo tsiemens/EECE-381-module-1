@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "VideoHandler.h"
+#include "../audio/AudioHandler.h"
 
 static VideoBuffer* Video;
 static CharBuffer* Character;
@@ -99,7 +100,11 @@ void clearChar()
 void display()
 {
 	Video_swapBuffers(Video);
-	while(Video_bufferIsSwapping(Video));
+	while(Video_bufferIsSwapping(Video)) {
+		// output audio
+		// game loop loops too slow for audio to sound smoothly
+		AudioHandler_play();
+	}
 	Video_clearScreen(Video, BACKGROUND);
 }
 

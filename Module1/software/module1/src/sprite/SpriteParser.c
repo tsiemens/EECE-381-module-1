@@ -16,7 +16,6 @@ void getColourArray(unsigned char buffer[], int size, int (*pixelArray)[]);
 void SpriteParser_parse(const char* filePath, ImgSprite* sprite) {
 
 	//	GET FILE DATA:
-	SDCard* sd_card = sdcard_init();
 	UnsignedCharPtr* img_data = sdcard_read_file_w_size(filePath);
 	int bytesread = img_data->size;
 	printf("SD Card: Read %s %d bytes\n", filePath, img_data->size);

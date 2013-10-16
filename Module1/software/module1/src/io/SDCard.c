@@ -125,7 +125,7 @@ UnsignedCharPtr* sdcard_read_file_w_size(char* filename) {
 		height += ((int) height_bytes[p]) * offset;
 	}
 
-	int count_total = 2*(width * height) + 8;
+	int count_total = 2 * (width * height) + 8;
 
 	while (count < count_total) {
 		output->data[count] = temp;
@@ -146,18 +146,19 @@ UnsignedCharPtr* sdcard_read_file_w_size(char* filename) {
 	return output;
 }
 
-/*
- * Reads the file from SD Card, parse the data into 4 bytes
+/* Reads the file from SD Card, parse the data into 4 bytes
+ * wave files are little endian
  *
  * @param filename: the name of the file to read from
  *
  * @return ShortIntPtr: the data in 4 bytes and the number of data
  * 						read from file.
  */
+
 ShortIntPtr* sdcard_read_audio(char* filename) {
 	short int file_id;
 	int count = 0;
-	short temp;
+	short int temp;
 	short int* data_temp;
 
 	ShortIntPtr* output = ShortIntPtr_alloc(AUDIO_ALLOC_SIZE);
@@ -168,7 +169,7 @@ ShortIntPtr* sdcard_read_audio(char* filename) {
 	char byte_before = alt_up_sd_card_read(file_id);
 	char byte_after = alt_up_sd_card_read(file_id);
 
-	temp = ((unsigned char) byte_before << 8) | (unsigned char) byte_after;
+	temp = ((unsigned char) byte_after << 8) | (unsigned char) byte_before;
 
 	while (temp != -1) {
 		output->data[count] = temp;
@@ -184,7 +185,8 @@ ShortIntPtr* sdcard_read_audio(char* filename) {
 		}
 		byte_before = alt_up_sd_card_read(file_id);
 		byte_after = alt_up_sd_card_read(file_id);
-		temp = ((unsigned char) byte_before << 8) | (unsigned char) byte_after;
+
+		temp = ((unsigned char) byte_after << 8) | (unsigned char) byte_before;
 	}
 	alt_up_sd_card_fclose(file_id);
 	output->size = count;
