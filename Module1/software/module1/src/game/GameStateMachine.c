@@ -184,6 +184,9 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 		clearChar();
 		this->state = MAIN_MENU;
 	}
+	else if(key == 'e') {
+		SpriteArrayList_insert(this->gameSprites, SpriteFactory_generateEnemySprite(21, 5), this->gameSprites->size);
+	}
 }
 
 void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
@@ -304,6 +307,18 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 			RectSprite_free((RectSprite*)laserSprite);
 		} else {
 			laserSprite->xPos = playerSprite->xPos + (playerSprite->width/2) - 1;
+		}
+	}
+	BaseSprite* enemySprite;
+	int i;
+	for(i=0; i <= this->gameSprites->last; i++){
+		enemySprite = SpriteArrayList_getAt(this->gameSprites, i);
+		if (enemySprite != NULL && enemySprite->spriteId > ENEMY_SPRITE_ID_BASE){
+			BaseSprite_updatePos(enemySprite, this->lastFrameDuration);
+
+			// TODO check if hit shield
+			if ( (enemySprite->yPos + enemySprite->height) >= 240)
+				enemySprite->yPos = 239 - enemySprite->height;
 		}
 	}
 }

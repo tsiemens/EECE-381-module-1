@@ -14,10 +14,16 @@ RectSprite* SpriteFactory_generateLaserSprite(BaseSprite* player, int colour);
 SpriteArrayList* SpriteFactory_generateInstructions();
 SpriteArrayList* SpriteFactory_generateScoreBar();
 SpriteArrayList* SpriteFactory_generateMainMenu();
+char intToChar(int val);
 
 #define PLAYER_SPRITE_ID 1
 #define PLAYER_LASER_SPRITE_ID 2
 #define ENEMY_SPRITE_ID_BASE 10
+
+/****************ENEMY GENERATION****************/
+#define ENEMY_COL_WIDTH 32
+#define ENEMY_COLS 10
+#define ENEMY_SPEED 0.05
 
 /****************CHAR AND PIXEL CONVERSIONS****************/
 #define CHAR_TO_PIXEL_HEIGHT ((float)SCREEN_HEIGHT/CHARBUFFER_HEIGHT)
@@ -77,7 +83,7 @@ typedef enum {
 } InstuctionPage;
 
 /****************SCOREBAR DEFINITIONS****************/
-#define SCOREBAR_TOP_PADDING CHAR_TO_PIXEL_HEIGHT + 10
+#define SCOREBAR_TOP_PADDING CHAR_TO_PIXEL_HEIGHT + 2
 #define SCOREBAR_SPACING 2
 #define SCOREBAR_WORD_WIDTH 8
 #define SCOREBAR_VAL_WIDTH 3

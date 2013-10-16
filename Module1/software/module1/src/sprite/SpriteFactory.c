@@ -1,4 +1,5 @@
 #include "SpriteFactory.h"
+#include <stdlib.h>
 
 /*
  * REQUIRES: SD card inserted containing "play"
@@ -21,22 +22,42 @@ ImgSprite* SpriteFactory_generatePlayerSprite()
  * EFFECTS: Returns a pointer to an initialized enemy sprite based on the value given.
  * 			Returns null if value not 1 <= value <= 10
  */
-ImgSprite* SpriteFactory_generateEnemySprite(int value)
+ImgSprite* SpriteFactory_generateEnemySprite(int value, int col)
 {
-	char* image;
-	if (value < 1 || value > 10)
-		return NULL;
+	char* image = "enemy ";
 
-
+	if(value == 10)
+		image[5] = intToChar(0);
+	else
+		image[5] = intToChar(value);
 
 	//Load the enemy image from the SD card
 	ImgSprite* sprite = ImgSprite_init(ImgSprite_alloc());
-	SpriteParser_parse("player", sprite);
+	SpriteParser_parse(image, sprite);
 
 	//Assign sprite properties;
-	((BaseSprite*)sprite)->spriteId = PLAYER_SPRITE_ID;
-	BaseSprite_setPosition((BaseSprite*)sprite, 150, 200);
+	((BaseSprite*)sprite)->spriteId = ENEMY_SPRITE_ID_BASE + value;
+	BaseSprite_setPosition((BaseSprite*)sprite, col*ENEMY_COL_WIDTH, 0);
+	sprite->baseSprite.yVel = ENEMY_SPEED;
+	sprite->baseSprite.xVel = 0;
 	return sprite;
+}
+
+char intToChar(int val)
+{
+	switch(val) {
+		case 0: return '0';
+		case 1: return '1';
+		case 2: return '2';
+		case 3: return '3';
+		case 4: return '4';
+		case 5: return '5';
+		case 6: return '6';
+		case 7: return '7';
+		case 8: return '8';
+		case 9: return '9';
+		default: return '\0';
+	}
 }
 
 /*
@@ -182,7 +203,7 @@ SpriteArrayList* SpriteFactory_generateScoreBar()
 
 	RectSprite* scorebarUnderline = RectSprite_init(RectSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)scorebarUnderline, 0, SCOREBAR_TOP_PADDING);
-	BaseSprite_setSize((BaseSprite*)scorebarUnderline, CHAR_TO_PIXEL_WIDTH*(SCOREBAR_LEVEL_VAL_XPOS+SCOREBAR_VAL_WIDTH), 2);
+	BaseSprite_setSize((BaseSprite*)scorebarUnderline, CHAR_TO_PIXEL_WIDTH*(SCOREBAR_LEVEL_VAL_XPOS+SCOREBAR_VAL_WIDTH), CHAR_TO_PIXEL_HEIGHT*2);
 	scorebarUnderline->colour = SCOREBAR_COLOR;
 
 	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarCurrentWord, 0);
