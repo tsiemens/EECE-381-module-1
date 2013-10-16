@@ -14,7 +14,7 @@
 
 #define PLAYER_SPEED 0.3
 
-typedef enum {START, MAIN_MENU, PLAYING, PAUSED, GAME_OVER} GameStateE;
+typedef enum {START, MAIN_MENU, INSTRUCTIONS, PLAYING, PAUSED, GAME_OVER} GameStateE;
 
 typedef struct GameStateMachine
 {
@@ -24,7 +24,7 @@ typedef struct GameStateMachine
 	PS2Keyboard* keyboard;
 	SpriteArrayList* gameSprites;
 	SpriteArrayList* menuSprites;
-
+	SpriteArrayList* instructionSprites;
 	Timer* frameTimer;
 	double lastFrameDuration;
 
