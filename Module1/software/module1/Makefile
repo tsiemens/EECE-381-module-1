@@ -158,6 +158,7 @@ C_SRCS += src/sprite/SpriteParser.c
 C_SRCS += src/sprite/SpriteArrayList.c
 C_SRCS += src/sprite/AlphaSprite.c
 C_SRCS += src/game/GameStateMachine.c
+C_SRCS += src/sprite/SpriteFactory.c
 CXX_SRCS :=
 ASM_SRCS :=
 

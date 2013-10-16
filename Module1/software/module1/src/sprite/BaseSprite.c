@@ -26,6 +26,8 @@ BaseSprite* BaseSprite_init(BaseSprite* this)
 	this->xVel = 0.0;
 	this->yVel = 0.0;
 
+	this->animTimer = NULL;
+
 	// draw is pure virtual in the base
 	this->draw = 0;
 
@@ -55,4 +57,12 @@ void BaseSprite_updatePos(BaseSprite* this, double timeElapsed)
 {
 	this->xPos += timeElapsed * this->xVel;
 	this->yPos += timeElapsed * this->yVel;
+}
+
+void BaseSprite_free(BaseSprite* this)
+{
+	if (this->animTimer != NULL)
+	{
+		free(this->animTimer);
+	}
 }

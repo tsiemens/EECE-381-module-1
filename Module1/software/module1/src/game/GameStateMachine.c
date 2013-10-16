@@ -18,6 +18,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define LASER_DURATION 200
+
 void GameStateMachine_ProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_StartProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
@@ -44,10 +46,10 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 	this->frameTimer = Timer_init(Timer_alloc(), 0);
 	this->lastFrameDuration = 0;
 
-	ImgSprite* playerSprite = SpriteFactory_GeneratePlayerSprite();
+	ImgSprite* playerSprite = SpriteFactory_generatePlayerSprite();
 
 	this->menuSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 4);
-	this->gameSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 1);
+	this->gameSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 2);
 	SpriteArrayList_insert(this->gameSprites, (BaseSprite*)playerSprite, 0);
 
 	menuInit(this);
@@ -161,31 +163,55 @@ void GameStateMachine_StartProcessKey(GameStateMachine* this, alt_u8 key, int is
 
 void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
-	BaseSprite* playerSprite = SpriteArrayList_getWithId(this->gameSprites, PLAYER_SPRITE_ID);
-	if(isUpEvent == 0)
+	if(key == KEY_LEFT || key == KEY_RIGHT)
 	{
-		if (playerSprite != NULL && (key == KEY_LEFT || key == KEY_RIGHT)){
-			if(key == KEY_LEFT) {
-				playerSprite->xVel += -PLAYER_SPEED;
+		BaseSprite* playerSprite = SpriteArrayList_getWithId(this->gameSprites, PLAYER_SPRITE_ID);
+		if (playerSprite != NULL)
+		{
+			if(isUpEvent == 0)
+			{
+				if(key == KEY_LEFT) {
+					playerSprite->xVel += -PLAYER_SPEED;
+				}
+				else {
+					playerSprite->xVel += PLAYER_SPEED;
+				}
 			}
-			else {
-				playerSprite->xVel += PLAYER_SPEED;
+			else if (isUpEvent == 1)
+			{
+				if(key == KEY_LEFT) {
+					playerSprite->xVel += PLAYER_SPEED;
+				}
+				else {
+					playerSprite->xVel += -PLAYER_SPEED;
+				}
 			}
-		}
-		else if(key == KEY_ESC) {
-			this->state = MAIN_MENU;
 		}
 	}
-	else if (isUpEvent == 1)
+	else if(key == '1' || key == '2' || key == '3' || key == '4')
 	{
-		if (playerSprite != NULL && (key == KEY_LEFT || key == KEY_RIGHT)){
-			if(key == KEY_LEFT) {
-				playerSprite->xVel += PLAYER_SPEED;
-			}
-			else {
-				playerSprite->xVel += -PLAYER_SPEED;
-			}
+		RectSprite* laserSprite = (RectSprite*)SpriteArrayList_getWithId(this->gameSprites, PLAYER_LASER_SPRITE_ID);
+		if (laserSprite == NULL && isUpEvent == 0 /* && check if key enabled*/)
+		{
+			BaseSprite* player = SpriteArrayList_getWithId(this->gameSprites, PLAYER_SPRITE_ID);
+			int laserColour = 0;
+			if (key == '1')
+				laserColour = 0x07FF; // Add
+			else if (key == '2')
+				laserColour = 0xF800; // Subtract
+			else if (key == '3')
+				laserColour = 0x07E0; // Mult
+			else if (key == '4')
+				laserColour = 0xF81F; // Div
+
+			laserSprite = SpriteFactory_generateLaserSprite(player, laserColour);
+			laserSprite->baseSprite.animTimer = Timer_init(Timer_alloc(), LASER_DURATION);
+			Timer_start(laserSprite->baseSprite.animTimer);
+			SpriteArrayList_insert(this->gameSprites, (BaseSprite*)laserSprite, this->gameSprites->last + 1);
 		}
+	}
+	else if(key == KEY_ESC && isUpEvent == 0) {
+			this->state = MAIN_MENU;
 	}
 }
 
@@ -241,6 +267,16 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 			playerSprite->xPos = 319 - playerSprite->width;
 		else if ( playerSprite->xPos < 0 )
 			playerSprite->xPos = 0;
+	}
+	BaseSprite* laserSprite = SpriteArrayList_getWithId(this->gameSprites, PLAYER_LASER_SPRITE_ID);
+	if (laserSprite != NULL)
+	{
+		if (Timer_isDone(laserSprite->animTimer) == 1){
+			SpriteArrayList_removeObject(this->gameSprites, laserSprite);
+			RectSprite_free((RectSprite*)laserSprite);
+		} else {
+			laserSprite->xPos = playerSprite->xPos + (playerSprite->width/2) - 1;
+		}
 	}
 }
 

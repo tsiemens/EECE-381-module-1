@@ -22,4 +22,6 @@ RectSprite* RectSprite_alloc();
 
 RectSprite* RectSprite_init(RectSprite* this);
 
+void RectSprite_free(RectSprite* this);
+
 #endif /* RECTSPRITE_H_ */
