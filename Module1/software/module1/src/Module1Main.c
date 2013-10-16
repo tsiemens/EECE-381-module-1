@@ -59,7 +59,6 @@ int main()
 		}
 
 		// Swap buffers and clear background buffer
-
 		display();
 
 		sprintf(debugFreqStr, "FPS:%2.1f", 1000/Timer_timeElapsed(loopTimer));
