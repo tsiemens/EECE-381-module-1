@@ -12,6 +12,8 @@
 #include "../sprite/BaseSprite.h"
 #include "../sprite/SpriteArrayList.h"
 
+#define PLAYER_SPEED 0.3
+
 typedef enum {START, MAIN_MENU, INSTRUCTIONS, PLAYING, PAUSED, GAME_OVER} GameStateE;
 
 typedef struct GameStateMachine
@@ -23,6 +25,9 @@ typedef struct GameStateMachine
 	SpriteArrayList* gameSprites;
 	SpriteArrayList* menuSprites;
 	SpriteArrayList* instructionSprites;
+	Timer* frameTimer;
+	double lastFrameDuration;
+
 } GameStateMachine;
 
 GameStateMachine* GameStateMachine_alloc();

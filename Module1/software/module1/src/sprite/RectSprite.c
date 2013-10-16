@@ -28,20 +28,17 @@ RectSprite* RectSprite_init(RectSprite* this)
 	return this;
 }
 
+void RectSprite_free(RectSprite* this)
+{
+	BaseSprite_free((BaseSprite*)this);
+	free(this);
+}
+
 /**
  * Draws the rectangle sprite on the video buffer
  */
 void RectSprite_draw(BaseSprite* super/*, VideoBuffer* */)
 {
 	RectSprite* this = (RectSprite* )super;
-	drawRect(this->baseSprite.xPos, this->baseSprite.yPos, this->baseSprite.xPos+this->baseSprite.width, this->baseSprite.yPos+this->baseSprite.height, 0xFFFF);
-	/*
-	int i, j;
-	for(j = 0; j < this->baseSprite.height;j++)
-	{
-		for(i=0; i < this->baseSprite.width; i++)
-		{
-			drawPixel(this->colour, (int)this->baseSprite.xPos + i, (int) this->baseSprite.yPos+j);
-		}
-	}*/
+	drawRect(this->baseSprite.xPos, this->baseSprite.yPos, this->baseSprite.xPos+this->baseSprite.width, this->baseSprite.yPos+this->baseSprite.height, this->colour);
 }
