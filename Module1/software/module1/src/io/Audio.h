@@ -23,8 +23,10 @@ void Audio_free(Audio * this);
 
 void audio_reset(Audio * this);
 
-int audio_play_channel(Audio* this, unsigned int *buf, int len, int channel);
+int audio_play(Audio* this, unsigned int *buf, int len);
 int audio_play_r(Audio* this, unsigned int *buf, int len);
 int audio_play_l(Audio* this, unsigned int *buf, int len);
+
+int audio_check_buffer(Audio* this);
 
 #endif

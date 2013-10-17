@@ -44,6 +44,8 @@ typedef struct GameStateMachine
 
 GameStateMachine* GameStateMachine_alloc();
 GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* keyboard);
+void menuInit(GameStateMachine* this);
+void GameStateMachine_performFrameLogic(GameStateMachine* this);
 void GameStateMachine_PerformLogic(GameStateMachine* this);
 void GameStateMachine_ProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_StartProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
@@ -58,7 +60,6 @@ void GameStateMachine_PausedPerformLogic(GameStateMachine* this);
 void GameStateMachine_MainMenuPerformLogic(GameStateMachine* this);
 void GameStateMachine_InstructionsPerformLogic(GameStateMachine* this);
 void GameStateMachine_GameOverPerformLogic(GameStateMachine* this);
-
 
 
 

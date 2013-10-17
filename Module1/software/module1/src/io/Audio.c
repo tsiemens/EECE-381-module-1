@@ -36,6 +36,7 @@ Audio* audio_init() {
 	} else {
 		printf("Error: could not open audio\n");
 	}
+
 	return this;
 }
 
@@ -80,4 +81,8 @@ int audio_play_r(Audio* this, unsigned int *buf, int len) {
 
 int audio_play_l(Audio* this, unsigned int *buf, int len) {
 	return alt_up_audio_write_fifo(this->audio_dev, buf, len, ALT_UP_AUDIO_LEFT);
+}
+
+int audio_check_buffer(Audio* this) {
+	return alt_up_audio_write_fifo_space(this->audio_dev, ALT_UP_AUDIO_LEFT);
 }
