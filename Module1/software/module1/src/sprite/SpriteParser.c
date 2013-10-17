@@ -2,6 +2,7 @@
 #include "../io/SDCard.h"
 #include "../util/ArrayPtr.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 // Declarations of Helper Functions:
 int convertToInt(unsigned char buffer[], int start);
@@ -24,12 +25,14 @@ void SpriteParser_parse(const char* filePath, ImgSprite* sprite) {
 	printf("size: %d x %d\n\n", width, height);
 
 	//	GET/SET SPRITE DIMENSIONS:
-	BaseSprite_setSize((BaseSprite*)sprite, convertToInt(img_data->data, 0), convertToInt(img_data->data, 4));
+	BaseSprite_setSize((BaseSprite*)sprite, width, height);
 
 	//	GET PIXELS:
-	int (*pixelArray)[] = malloc(sizeof(int)*(bytesread - 8));
+	int (*pixelArray)[] = malloc(sizeof(int)*(width*height));
 	getColourArray(img_data->data, bytesread, pixelArray);
 	sprite->colours = pixelArray;
+	sprite->baseSprite.width = width;
+	sprite->baseSprite.height = height;
 
 }
 /* ------------------------------ PRIVATE HELPER METHODS ------------------------------ */

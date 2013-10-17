@@ -37,7 +37,7 @@ void ImgSprite_draw(BaseSprite* super/*, VideoBuffer* */)
 	int i, j;
 		for (i = 0; i < this->baseSprite.height; i++) {
 			for (j = 0; j < this->baseSprite.width; j++) {
-				drawPixel((*this->colours)[(i * this->baseSprite.height) + j], (int)this->baseSprite.xPos + j, (int)this->baseSprite.yPos +i);
+				drawPixel((*this->colours)[(i * this->baseSprite.width) + j], (unsigned int)this->baseSprite.xPos + j, (unsigned int)this->baseSprite.yPos +i);
 			}
 		}
 }

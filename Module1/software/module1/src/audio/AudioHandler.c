@@ -91,7 +91,7 @@ void AudioHandler_play() {
  */
 
 void AudioHandler_playShoot() {
-	playing = SHOOT;
+	playing = MENU;
 	begin = 0;
 	end = 0;
 }
