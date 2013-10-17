@@ -6,15 +6,6 @@
  */
 
 #include "GameStateMachine.h"
-#include "MenuDefinitions.h"
-#include "../io/PS2Keyboard.h"
-#include "../video/VideoHandler.h"
-#include "../sprite/ImgSprite.h"
-#include "../sprite/RectSprite.h"
-#include "../sprite/AlphaSprite.h"
-#include "../sprite/SpriteParser.h"
-#include "../sprite/SpriteFactory.h"
-#include "../audio/AudioHandler.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,8 +21,11 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 {
 	this->state = MAIN_MENU;
 	this->keyboard = keyboard;
-
-	this->menuSprites = SpriteFactory_generateMainMenu();
+	this->menuSprites = SpriteFactory_generateMenu(1);
+	this->pausedSprites = SpriteFactory_generateMenu(0);
+	this->level = 1;
+	this->current = 0;
+	this->target = 0;
 	this->scorebarSprites = SpriteFactory_generateScoreBar();
 	this->instructionSprites = SpriteFactory_generateInstructions();
 
@@ -42,6 +36,8 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 
 	ImgSprite* playerSprite = SpriteFactory_generatePlayerSprite();
 	SpriteArrayList_insert(this->gameSprites, (BaseSprite*)playerSprite, 0);
+
+	//EnemyHandler_init();
 
 	return this;
 }
@@ -68,7 +64,7 @@ void GameStateMachine_performFrameLogic(GameStateMachine* this)
 	}
 	else if (this->state == PAUSED)
 	{
-		// draw game sprites, then draw menu sprite
+		VideoHandler_drawSprites(this->pausedSprites);
 	}
 	else if (this->state == INSTRUCTIONS)
 	{
@@ -194,15 +190,42 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 	}
 	else if(key == KEY_ESC && isUpEvent == 0) {
 		clearChar();
-		this->state = MAIN_MENU;
+		this->state = PAUSED;
 	}
 	else if(key == 'e') {
-		SpriteArrayList_insert(this->gameSprites, SpriteFactory_generateEnemySprite(21, 5), this->gameSprites->size);
+		SpriteArrayList_insert(this->gameSprites, SpriteFactory_generateEnemySprite(21, 5), 0);
 	}
 }
 
 void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
+	static MenuSelection pauseMenuSelection = SEL_RESUME;
+	BaseSprite* selSprite = SpriteArrayList_getAt(this->pausedSprites, 3);
+
+	if(isUpEvent == 0)
+	{
+		if(key == KEY_DOWN)
+		{
+			pauseMenuSelection = SEL_QUIT;
+			selSprite->yPos = MENU_SELECTOR_CONTINUE_YPOS;
+
+		}
+		else if(key == KEY_UP)
+		{
+			pauseMenuSelection = SEL_RESUME;
+			selSprite->yPos = MENU_SELECTOR_NEWGAME_YPOS;
+		}
+		else if(key == '\n' && pauseMenuSelection == SEL_RESUME)
+		{
+			clearChar();
+			this->state = PLAYING;
+		}
+		else if(key == '\n' && pauseMenuSelection == SEL_QUIT)
+		{
+			clearChar();
+			this->state = MAIN_MENU;
+		}
+	}
 
 }
 
@@ -328,9 +351,22 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 		if (enemySprite != NULL && enemySprite->spriteId > ENEMY_SPRITE_ID_BASE){
 			BaseSprite_updatePos(enemySprite, this->lastFrameDuration);
 
-			// TODO check if hit shield
-			if ( (enemySprite->yPos + enemySprite->height) >= 240)
-				enemySprite->yPos = 239 - enemySprite->height;
+			// Check if shield hits, if so, remove and perform operation on value
+			if (laserSprite->xPos > enemySprite->xPos && laserSprite->xPos < (enemySprite->xPos + enemySprite->width) ) {
+				//TODO: EnemyHandler_shot(enemySprite);
+				enemySprite->animTimer = Timer_init(Timer_alloc(), ENEMY_SHOT_DURATION);
+			}
+			// Removes enemy sprite if moved to the very bottom
+			if ( (enemySprite->yPos + enemySprite->height) >= 240) {;
+				//TODO: EnemyHandler_notifyEnemyDestroyed(BaseSprite* ememySprite);
+				enemySprite->animTimer = Timer_init(Timer_alloc(), ENEMY_SHOT_DURATION);
+			}
+
+			// Check for timer duration, destroy enemy if times up
+			if (Timer_isDone(enemySprite->animTimer) == 1) {
+				SpriteArrayList_removeObject(this->gameSprites, enemySprite);
+				ImgSprite_free((ImgSprite*)enemySprite);
+			}
 		}
 	}
 }

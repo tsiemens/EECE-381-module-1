@@ -13,7 +13,7 @@ ImgSprite* SpriteFactory_generateEnemySprite();
 RectSprite* SpriteFactory_generateLaserSprite(BaseSprite* player, int colour);
 SpriteArrayList* SpriteFactory_generateInstructions();
 SpriteArrayList* SpriteFactory_generateScoreBar();
-SpriteArrayList* SpriteFactory_generateMainMenu();
+SpriteArrayList* SpriteFactory_generateMenu(int isMainMenu);
 char intToChar(int val);
 
 #define PLAYER_SPRITE_ID 1
@@ -61,7 +61,9 @@ char intToChar(int val);
 
 typedef enum {
 	SEL_NEWGAME,
-	SEL_INSTRUCTIONS
+	SEL_INSTRUCTIONS,
+	SEL_RESUME,
+	SEL_QUIT
 } MenuSelection;
 
 /****************INSTRUCTIONS DEFINITIONS****************/
