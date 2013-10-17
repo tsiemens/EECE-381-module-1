@@ -39,6 +39,3 @@
 #define INSTRUCTIONITEM_P1_L3 "you won't make it. Too many, you will fall asleep."
 #define INSTRUCTIONITEM_P1_L4 "Grab the burger with desired number & use different"
 #define INSTRUCTIONITEM_P1_L5 "lasers to use different operators. Good luck!"
-typedef int bool;
-#define true 1
-#define false 0

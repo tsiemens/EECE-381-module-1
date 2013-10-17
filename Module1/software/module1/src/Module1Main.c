@@ -10,7 +10,7 @@
 #include "util/Timer.h"
 #include "io/PS2Keyboard.h"
 #include "io/SDCard.h"
-#include "io/Audio.h"
+#include "audio/AudioHandler.h"
 #include "video/VideoHandler.h"
 #include "util/ArrayPtr.h"
 #include "sprite/ImgSprite.h"
@@ -35,8 +35,13 @@ int main()
 
 	// TODO other initialisation
 
+	// SD Card init
+	sdcard_init();
+
 	// Video and Character handler init
 	VideoHandlerInit();
+	// Audio handler init
+	AudioHandlerInit();
 
 	// ImgSprite stuff
 
@@ -48,21 +53,34 @@ int main()
 	while (hasQuit == 0) {
 		Timer_start(loopTimer);
 
+		AudioHandler_play();
+
 		// Debug lights (they increment each frame)
 		ledVals++;
 		IOWR_8DIRECT(LEDS_BASE, 0, ledVals);
 
+		AudioHandler_play();
+
 		// TODO insert game logic here
 		GameStateMachine_performFrameLogic(stateMachine);
+
+		AudioHandler_play();
+
 		// Sleep if finished logic within frame interval
 		while (Timer_isDone(loopTimer) == 0) {
+			AudioHandler_play();
 		}
 
 		// Swap buffers and clear background buffer
 		display();
 
+		AudioHandler_play();
+
 		sprintf(debugFreqStr, "FPS:%2.1f", 1000/Timer_timeElapsed(loopTimer));
 		printString(debugFreqStr, 70, 0);
+
+		AudioHandler_play();
+
 	}
 
 	return 0;
