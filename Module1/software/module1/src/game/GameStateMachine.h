@@ -38,6 +38,8 @@ typedef struct GameStateMachine
 
 	SpriteArrayList* scorebarSprites;
 
+	SpriteArrayList* pausedSprites;
+
 	Timer* frameTimer;
 	double lastFrameDuration;
 
