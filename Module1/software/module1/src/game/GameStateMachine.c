@@ -31,7 +31,9 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 	this->state = MAIN_MENU;
 	this->keyboard = keyboard;
 
-	this->menuSprites = SpriteFactory_generateMainMenu();
+
+	this->menuSprites = SpriteFactory_generateMenu(1);
+	this->pausedSprites = SpriteFactory_generateMenu(0);
 	this->scorebarSprites = SpriteFactory_generateScoreBar();
 	this->instructionSprites = SpriteFactory_generateInstructions();
 
@@ -68,7 +70,7 @@ void GameStateMachine_performFrameLogic(GameStateMachine* this)
 	}
 	else if (this->state == PAUSED)
 	{
-		// draw game sprites, then draw menu sprite
+		VideoHandler_drawSprites(this->pausedSprites);
 	}
 	else if (this->state == INSTRUCTIONS)
 	{
@@ -194,7 +196,7 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 	}
 	else if(key == KEY_ESC && isUpEvent == 0) {
 		clearChar();
-		this->state = MAIN_MENU;
+		this->state = PAUSED;
 	}
 	else if(key == 'e') {
 		SpriteArrayList_insert(this->gameSprites, SpriteFactory_generateEnemySprite(21, 5), this->gameSprites->size);
@@ -203,6 +205,33 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 
 void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
+	static MenuSelection pauseMenuSelection = SEL_RESUME;
+	BaseSprite* selSprite = SpriteArrayList_getAt(this->pausedSprites, 3);
+
+	if(isUpEvent == 0)
+	{
+		if(key == KEY_DOWN)
+		{
+			pauseMenuSelection = SEL_QUIT;
+			selSprite->yPos = MENU_SELECTOR_CONTINUE_YPOS;
+
+		}
+		else if(key == KEY_UP)
+		{
+			pauseMenuSelection = SEL_RESUME;
+			selSprite->yPos = MENU_SELECTOR_NEWGAME_YPOS;
+		}
+		else if(key == '\n' && pauseMenuSelection == SEL_RESUME)
+		{
+			clearChar();
+			this->state = PLAYING;
+		}
+		else if(key == '\n' && pauseMenuSelection == SEL_QUIT)
+		{
+			clearChar();
+			this->state = MAIN_MENU;
+		}
+	}
 
 }
 
