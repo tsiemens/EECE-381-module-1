@@ -86,10 +86,13 @@ void Timer_start(Timer* this)
  *
  * @param this
  *
- * @return 1 if the timer has finished (or was never started), 0 otherwise.
+ * @return 1 if the timer has finished (or was never started), 0 otherwise or if (Timer* this) is null.
  */
 int Timer_isDone(Timer* this)
 {
+	if (this == NULL)
+		return 0;
+
 	if (this->startTime == 0) {
 		return 1;
 	}
