@@ -187,6 +187,11 @@ void Video_drawRect(VideoBuffer *video_buffer, int x0, int y0, int x1, int y1, i
 	alt_up_pixel_buffer_dma_draw_rectangle(video_buffer->pixel_buffer, x0, y0, x1, y1, color, backbuffer);
 }
 
+void Video_drawBox(VideoBuffer *video_buffer, int x0, int y0, int x1, int y1, int color, int backbuffer)
+{
+	alt_up_pixel_buffer_dma_draw_box(video_buffer->pixel_buffer, x0, y0, x1, y1, color, backbuffer);
+}
+
 void Char_clearScreen(CharBuffer* char_buffer)
 {
 	alt_up_char_buffer_clear(char_buffer->char_buffer);

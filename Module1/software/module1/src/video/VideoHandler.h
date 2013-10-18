@@ -12,6 +12,8 @@ void VideoHandlerInit();
 void drawPixel(unsigned int color, unsigned int x, unsigned int y);
 void drawLine(int x0, int y0, int x1, int y1, int color);
 void printString(const char *ptr, unsigned int x,unsigned int y);
+void drawRect(int x0, int y0, int x1, int y1, int color);
+void drawBox(int x0, int y0, int x1, int y1, int color);
 void VideoHandler_drawSprites(SpriteArrayList* spriteArray);
 void clearChar();
 void drawRect(int x0, int y0, int x1, int y1, int color);

@@ -39,6 +39,10 @@ int Video_backBufferAddress(VideoBuffer *video_buffer, unsigned int new_address)
 
 int Video_bufferIsSwapping(VideoBuffer *video_buffer);
 
+void Video_drawRect(VideoBuffer *video_buffer, int x0, int y0, int x1, int y1, int color, int backbuffer);
+
+void Video_drawBox(VideoBuffer *video_buffer, int x0, int y0, int x1, int y1, int color, int backbuffer);
+
 void Video_clearScreen(VideoBuffer *video_buffer, int backbuffer);
 
 void Video_drawLine(VideoBuffer* video_buffer, int x0, int y0, int x1, int y1, int color, int backbuffer);

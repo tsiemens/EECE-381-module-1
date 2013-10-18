@@ -16,11 +16,12 @@ typedef struct RectSprite
 	// in order to permit error free casting between super and subclasses
 	BaseSprite baseSprite;
 	int colour;
+	int isFilledRect;
 } RectSprite;
 
 RectSprite* RectSprite_alloc();
 
-RectSprite* RectSprite_init(RectSprite* this);
+RectSprite* RectSprite_init(RectSprite* this, int isFilledRect);
 
 void RectSprite_free(RectSprite* this);
 

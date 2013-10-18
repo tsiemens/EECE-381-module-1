@@ -78,7 +78,7 @@ char intToChar(int val)
  */
 RectSprite* SpriteFactory_generateLaserSprite(BaseSprite* player, int colour)
 {
-	RectSprite* laserSprite = RectSprite_init(RectSprite_alloc());
+	RectSprite* laserSprite = RectSprite_init(RectSprite_alloc(), 0);
 	((BaseSprite*)laserSprite)->spriteId = PLAYER_LASER_SPRITE_ID;
 	laserSprite->baseSprite.width = 1;
 	laserSprite->baseSprite.height = player->yPos - 1;
@@ -97,7 +97,7 @@ SpriteArrayList* SpriteFactory_generateMenu(int isMainMenu)
 {
 	SpriteArrayList* menuSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 5);
 
-	RectSprite* menuOuterFrame = RectSprite_init(RectSprite_alloc());
+	RectSprite* menuOuterFrame = RectSprite_init(RectSprite_alloc(), 0);
 	BaseSprite_setSize((BaseSprite*)menuOuterFrame, MENUFRAME_WIDTH, MENUFRAME_HEIGHT);
 	BaseSprite_setPosition((BaseSprite*)menuOuterFrame, MENUFRAME_XPOS, MENUFRAME_YPOS);
 	menuOuterFrame->colour = MENUFRAME_COLOR;
@@ -108,7 +108,7 @@ SpriteArrayList* SpriteFactory_generateMenu(int isMainMenu)
 	AlphaSprite* menuOption2 = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)menuOption2, MENUITEM_START_XPOS, MENUITEM_OPTION_2_YPOS);
 
-	RectSprite* menuSelectorFrame = RectSprite_init(RectSprite_alloc());
+	RectSprite* menuSelectorFrame = RectSprite_init(RectSprite_alloc(), 0);
 	BaseSprite_setSize((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_WIDTH, MENU_SELECTOR_HEIGHT);
 	BaseSprite_setPosition((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_XPOS, MENU_SELECTOR_OPTION_1_YPOS);
 	menuSelectorFrame->colour = MENU_SELECTOR_COLOR;
@@ -124,6 +124,8 @@ SpriteArrayList* SpriteFactory_generateMenu(int isMainMenu)
 	}
 	else
 	{
+		menuOuterFrame->isFilledRect = 1;
+		menuOuterFrame->colour = MENU_PAUSE_BACKGROUND;
 		menuOption1->setString(menuOption1, "Resume");
 		menuOption2->setString(menuOption2, "Quit Game");
 		BaseSprite_setPosition((BaseSprite*)menu, 119, 110);
@@ -180,7 +182,7 @@ SpriteArrayList* SpriteFactory_generateLevelMenu()
 	addHard->setString(multiplyHard, "Hard");
 
 	// SELECTOR
-	RectSprite* levelSelectFrame = RectSprite_init(RectSprite_alloc());
+	RectSprite* levelSelectFrame = RectSprite_init(RectSprite_alloc(), 0);
 	BaseSprite_setSize((BaseSprite*)levelSelectFrame, MENU_SELECTOR_WIDTH, MENU_SELECTOR_HEIGHT);
 	BaseSprite_setPosition((BaseSprite*)levelSelectFrame, LEVELMENU_SELECTOR_XPOS, LEVELMENU_SELECTOR_EASY_YPOS);
 	levelSelectFrame->colour = MENU_SELECTOR_COLOR;
@@ -307,7 +309,7 @@ SpriteArrayList* SpriteFactory_generateScoreBar()
 	//scorebarMulHint->setString(scorebarLevelWord, SCOREBAR_MUL_HINT_STRING);
 	scorebarMulHint->baseSprite.spriteId = SCOREBAR_MUL_HINT_ID;
 
-	RectSprite* scorebarUnderline = RectSprite_init(RectSprite_alloc());
+	RectSprite* scorebarUnderline = RectSprite_init(RectSprite_alloc(), 0);
 	BaseSprite_setPosition((BaseSprite*)scorebarUnderline, 3, SCOREBAR_TOP_PADDING);
 	BaseSprite_setSize((BaseSprite*)scorebarUnderline, SCREEN_WIDTH - 4, CHAR_TO_PIXEL_HEIGHT*2);
 	scorebarUnderline->colour = SCOREBAR_COLOR;

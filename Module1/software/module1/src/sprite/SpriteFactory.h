@@ -73,6 +73,7 @@ char intToChar(int val);
 #define MENU_SELECTOR_WIDTH 55
 #define MENU_SELECTOR_HEIGHT 8
 #define MENU_SELECTOR_COLOR 0xFFFF
+#define MENU_PAUSE_BACKGROUND 0x03CF
 
 typedef enum {
 	SEL_NEWGAME,

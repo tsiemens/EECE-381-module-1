@@ -85,6 +85,11 @@ void drawRect(int x0, int y0, int x1, int y1, int color)
 	Video_drawRect(Video, x0, y0, x1, y1, color, BACKGROUND);
 }
 
+void drawBox(int x0, int y0, int x1, int y1, int color)
+{
+	Video_drawBox(Video, x0, y0, x1, y1, color, BACKGROUND);
+}
+
 /*
  * Clears the character buffer.
  */

@@ -18,13 +18,14 @@ RectSprite* RectSprite_alloc()
 	return this;
 }
 
-RectSprite* RectSprite_init(RectSprite* this)
+RectSprite* RectSprite_init(RectSprite* this, int isFilledRect)
 {
 	BaseSprite_init(&this->baseSprite);
 	// Set this instance of RectSprite
 	this->baseSprite.classType = RECTSPRITE_CLASS_TYPE;
 	this->baseSprite.draw = &RectSprite_draw;
 	this->colour = 0;
+	this->isFilledRect = isFilledRect;
 	return this;
 }
 
@@ -40,5 +41,8 @@ void RectSprite_free(RectSprite* this)
 void RectSprite_draw(BaseSprite* super/*, VideoBuffer* */)
 {
 	RectSprite* this = (RectSprite* )super;
-	drawRect(this->baseSprite.xPos, this->baseSprite.yPos, this->baseSprite.xPos+this->baseSprite.width, this->baseSprite.yPos+this->baseSprite.height, this->colour);
+	if(this->isFilledRect == 0)
+		drawRect(this->baseSprite.xPos, this->baseSprite.yPos, this->baseSprite.xPos+this->baseSprite.width, this->baseSprite.yPos+this->baseSprite.height, this->colour);
+	else
+		drawBox((this->baseSprite.xPos, this->baseSprite.yPos, this->baseSprite.xPos+this->baseSprite.width, this->baseSprite.yPos+this->baseSprite.height, this->colour);
 }
