@@ -266,7 +266,9 @@ SpriteArrayList* SpriteFactory_generateScoreBar()
 	scorebarCurrentWord->setString(scorebarCurrentWord, SCOREBAR_CURRENT_STRING);
 
 	char* currentString = (char*)malloc(sizeof(char)*3);
-	currentString = "  ";
+	currentString[0] = ' ';
+	currentString[1] = ' ';
+	currentString[2] = ' ';
 	AlphaSprite* scorebarCurrentVal = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)scorebarCurrentVal, SCOREBAR_CURRENT_VAL_XPOS, SCOREBAR_WORD_YPOS);
 	scorebarCurrentVal->setString(scorebarCurrentVal, currentString);
@@ -277,7 +279,9 @@ SpriteArrayList* SpriteFactory_generateScoreBar()
 	scorebarTargetWord->setString(scorebarTargetWord, SCOREBAR_TARGET_STRING);
 
 	char* targetString = (char*)malloc(sizeof(char)*3);
-	targetString = " ";
+	targetString[0] = ' ';
+	targetString[1] = ' ';
+	targetString[2] = ' ';
 	AlphaSprite* scorebarTargetVal = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)scorebarTargetVal, SCOREBAR_TARGET_VAL_XPOS, SCOREBAR_WORD_YPOS);
 	scorebarTargetVal->setString(scorebarTargetVal, targetString);
@@ -288,15 +292,26 @@ SpriteArrayList* SpriteFactory_generateScoreBar()
 	scorebarLevelWord->setString(scorebarLevelWord, SCOREBAR_LEVEL_STRING);
 
 	char* levelString = (char*)malloc(sizeof(char)*3);
-	levelString = "";
+	levelString[0] = ' ';
+	levelString[1] = ' ';
+	levelString[2] = ' ';
 	AlphaSprite* scorebarLevelVal = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)scorebarLevelVal, SCOREBAR_LEVEL_VAL_XPOS, SCOREBAR_WORD_YPOS);
 	scorebarLevelVal->setString(scorebarLevelVal, levelString);
 	scorebarLevelVal->baseSprite.spriteId = SCOREBAR_LEVEL_ID;
 
+	AlphaSprite* scorebarAddHint = AlphaSprite_init(AlphaSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)scorebarAddHint, SCOREBAR_ADD_HINT_XPOS, SCOREBAR_WORD_YPOS);
+	scorebarAddHint->setString(scorebarAddHint, SCOREBAR_ADD_HINT_STRING);
+
+	AlphaSprite* scorebarMulHint = AlphaSprite_init(AlphaSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)scorebarMulHint, SCOREBAR_MUL_HINT_XPOS, SCOREBAR_WORD_YPOS);
+	//scorebarMulHint->setString(scorebarLevelWord, SCOREBAR_MUL_HINT_STRING);
+	scorebarMulHint->baseSprite.spriteId = SCOREBAR_MUL_HINT_ID;
+
 	RectSprite* scorebarUnderline = RectSprite_init(RectSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)scorebarUnderline, 3, SCOREBAR_TOP_PADDING);
-	BaseSprite_setSize((BaseSprite*)scorebarUnderline, CHAR_TO_PIXEL_WIDTH*(SCOREBAR_LEVEL_VAL_XPOS+SCOREBAR_VAL_WIDTH), CHAR_TO_PIXEL_HEIGHT*2);
+	BaseSprite_setSize((BaseSprite*)scorebarUnderline, SCREEN_WIDTH - 4, CHAR_TO_PIXEL_HEIGHT*2);
 	scorebarUnderline->colour = SCOREBAR_COLOR;
 
 	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarCurrentWord, 0);
@@ -305,7 +320,9 @@ SpriteArrayList* SpriteFactory_generateScoreBar()
 	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarTargetVal, 3);
 	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarLevelWord, 4);
 	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarLevelVal, 5);
-	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarUnderline, 6);
+	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarAddHint, 6);
+	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarMulHint, 7);
+	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarUnderline, 8);
 
 	return scorebarSprites;
 }

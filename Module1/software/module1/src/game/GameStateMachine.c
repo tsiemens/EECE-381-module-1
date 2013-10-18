@@ -180,7 +180,7 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 			}
 		}
 	}
-	else if(key == '1' || key == '2' || key == '3' || key == '4')
+	else if(key == '1' || key == '2' || (this->difficulty > 2 && (key == '3' || key == '4')))
 	{
 		RectSprite* laserSprite = (RectSprite*)SpriteArrayList_getWithId(this->gameSprites, PLAYER_LASER_SPRITE_ID);
 		if (laserSprite == NULL && isUpEvent == 0 /* && check if key enabled*/)
@@ -459,10 +459,21 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 				EnemyHandler_enemyShot((ImgSprite*)enemySprite);
 				// set audio to play shooting effects
 				AudioHandler_playHit();
+				int val;
 				if (enemySprite->spriteId == 10)
-					this->current += 10;
+					val = 10;
 				else
-					this->current += enemySprite->spriteId - 10;
+					val = enemySprite->spriteId - 10;
+				this->current;
+				int laserColour = ((RectSprite*)laserSprite)->colour;
+				if (laserColour == LASER_ADD_COLOUR)
+					this->current = this->current + val;
+				else if (laserColour == LASER_SUB_COLOUR)
+					this->current = this->current - val;
+				else if (laserColour == LASER_MUL_COLOUR)
+					this->current = this->current * val;
+				else if (laserColour == LASER_DIV_COLOUR)
+					this->current = this->current / val;
 			}
 			// Removes enemy sprite if moved to the very bottom
 			if ( (enemySprite->yPos + enemySprite->height) >= 240) {
@@ -499,6 +510,11 @@ void GameStateMachine_NextLevelPerformLogic(GameStateMachine* this)
 	sprintf(targetString, "%i", this->target);
 	char* levelString = ((AlphaSprite*)SpriteArrayList_getWithId(this->scorebarSprites, SCOREBAR_LEVEL_ID))->string;
 	sprintf(levelString, "%i", this->level);
+
+	if (this->difficulty > 2)
+		((AlphaSprite*)SpriteArrayList_getWithId(this->scorebarSprites, SCOREBAR_MUL_HINT_ID))->string = SCOREBAR_MUL_HINT_STRING;
+	else
+		((AlphaSprite*)SpriteArrayList_getWithId(this->scorebarSprites, SCOREBAR_MUL_HINT_ID))->string = "         ";
 
 	// Delete all on-screen enemies
 	BaseSprite* enemySprite;
