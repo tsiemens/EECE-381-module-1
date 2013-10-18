@@ -351,7 +351,7 @@ void GameStateMachine_LevelMenuProcessKey(GameStateMachine* this, alt_u8 key, in
 
 void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
-	static MenuSelection mainMenuSelection = SEL_INSTRUCTIONS;
+	static MenuSelection mainMenuSelection = SEL_NEWGAME;
 
 	BaseSprite* selSprite = SpriteArrayList_getAt(this->menuSprites, 3);
 	if(isUpEvent == 0)
