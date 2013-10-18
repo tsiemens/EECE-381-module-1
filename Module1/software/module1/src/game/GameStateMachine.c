@@ -205,7 +205,7 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 		this->state = PAUSED;
 	}
 	else if(key == 'e' && isUpEvent == 0) {
-		ImgSprite* newEnemy = EnemyHandler_getNewRandomEnemy();
+		ImgSprite* newEnemy = EnemyHandler_getNewRandomEnemy((this->level)%3);
 		if (newEnemy != NULL){
 			SpriteArrayList_insert(this->gameSprites, (BaseSprite*)newEnemy, 0);
 		}
@@ -246,68 +246,69 @@ void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int i
 
 void GameStateMachine_LevelMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
-	static int selectLevel = 1;
+	static GameLevel selectedLevel = 1;
 	BaseSprite* selSprite = SpriteArrayList_getAt(this->levelSprites, 5);
 	if(isUpEvent == 0)
 	{
-		if(key == KEY_DOWN && selectLevel != 6) {
-			if(selectLevel == 1) // addeasy to addmedium
+		if(key == KEY_DOWN && selectedLevel != MUL_HARD) {
+			if(selectedLevel == ADD_EASY) // addeasy to addmedium
 			{
-				selectLevel = 2;
+				selectedLevel = ADD_MEDIUM;
 				selSprite->yPos = LEVELMENU_SELECTOR_MEDIUM_YPOS;
 			}
-			else if(selectLevel == 2) // addMedium to addHard
+			else if(selectedLevel == ADD_MEDIUM) // addMedium to addHard
 			{
-				selectLevel = 3;
+				selectedLevel = ADD_HARD;
 				selSprite->yPos = LEVELMENU_SELECTOR_HARD_YPOS;
 			}
-			else if(selectLevel == 3) //addHard to mulEasy
+			else if(selectedLevel == ADD_HARD) //addHard to mulEasy
 			{
-				selectLevel = 4;
+				selectedLevel = MUL_EASY;
 				selSprite->yPos = LEVELMENU_SELECTOR_MUL_EASY_YPOS;
 			}
-			else if(selectLevel == 4) //mulEasy to mulMedium
+			else if(selectedLevel == MUL_EASY) //mulEasy to mulMedium
 			{
-				selectLevel = 5;
+				selectedLevel  = MUL_MEDIUM;
 				selSprite->yPos = LEVELMENU_SELECTOR_MUL_MEDIUM_YPOS;
 			}
-			else if(selectLevel == 5) //mulMedium to mulHard
+			else if(selectedLevel == MUL_MEDIUM) //mulMedium to mulHard
 			{
-				selectLevel = 6;
+				selectedLevel = MUL_HARD;
 				selSprite->yPos = LEVELMENU_SELECTOR_MUL_HARD_YPOS;
 			}
 		}
-		else if(key == KEY_UP && selectLevel != 1)
+		else if(key == KEY_UP && selectedLevel != ADD_EASY)
 		{
-			if(selectLevel == 2) // addMedium to addEasy
+			if(selectedLevel == ADD_MEDIUM) // addMedium to addEasy
 			{
-				selectLevel = 1;
+				selectedLevel = ADD_EASY;
 				selSprite->yPos = LEVELMENU_SELECTOR_EASY_YPOS;
 			}
-			else if(selectLevel == 3) // addHard to addMedium
+			else if(selectedLevel == ADD_HARD) // addHard to addMedium
 			{
+				selectedLevel = ADD_MEDIUM;
 				selSprite->yPos = LEVELMENU_SELECTOR_MEDIUM_YPOS;
-				selectLevel = 2;
 			}
-			else if(selectLevel == 4) // mulEasy to addHard
+			else if(selectedLevel == ADD_EASY) // mulEasy to addHard
 			{
+				selectedLevel = ADD_HARD;
 				selSprite->yPos = LEVELMENU_SELECTOR_HARD_YPOS;
-				selectLevel = 3;
 			}
-			else if(selectLevel == 5) // mulMedium to mulEasy
+			else if(selectedLevel == ADD_MEDIUM) // mulMedium to mulEasy
 			{
+				selectedLevel = MUL_EASY;
 				selSprite->yPos = LEVELMENU_SELECTOR_MUL_EASY_YPOS;
-				selectLevel = 4;
 			}
-			else if(selectLevel == 6) // mulHard to mulMedium
+			else if(selectedLevel == MUL_HARD) // mulHard to mulMedium
 			{
+				selectedLevel = MUL_MEDIUM;
 				selSprite->yPos = LEVELMENU_SELECTOR_MUL_MEDIUM_YPOS;
-				selectLevel = 5;
 			}
 		}
 		else if(key == '\n')
 		{
 			clearChar();
+			this->level = selectedLevel;
 			this->state = PLAYING;
 		}
 		else if(key == KEY_ESC)

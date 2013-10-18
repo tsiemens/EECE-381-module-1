@@ -19,6 +19,6 @@
 void EnemyHandler_init();
 void EnemyHandler_notifyEnemyDestroyed(BaseSprite* enemy);
 void EnemyHandler_enemyShot(ImgSprite* enemy);
-ImgSprite* EnemyHandler_getNewRandomEnemy();
+ImgSprite* EnemyHandler_getNewRandomEnemy(EnemyLevel enemyLevel);
 
 #endif /* ENEMYHANDLER_H_ */
