@@ -444,6 +444,9 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 			// Check if shield hits, if so, remove and perform operation on value
 			if (laserSprite->xPos > enemySprite->xPos && laserSprite->xPos < (enemySprite->xPos + enemySprite->width) ) {
 				EnemyHandler_enemyShot((ImgSprite*)enemySprite);
+
+				// set audio to play shooting effects
+				AudioHandler_playHit();
 			}
 			// Removes enemy sprite if moved to the very bottom
 			if ( (enemySprite->yPos + enemySprite->height) >= 240) {
