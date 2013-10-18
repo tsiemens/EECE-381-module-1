@@ -508,7 +508,7 @@ void GameStateMachine_NextLevelPerformLogic(GameStateMachine* this)
 {
 	// Set values for a new game
 	this->level++;
-	this->target = rand()%((this->level*10)+10);
+	this->target = rand()%(this->level*10)+10;
 	this->current = 0;
 
 	// Throw values up on the scorebar
