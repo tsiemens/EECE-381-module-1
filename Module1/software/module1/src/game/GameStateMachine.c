@@ -235,8 +235,14 @@ void GameStateMachine_WonProcessKey(GameStateMachine* this, alt_u8 key, int isUp
 {
 	if(isUpEvent == 0)
 	{
-		clearChar();
-		this->state = MAIN_MENU;
+		if(key == 'z') {
+			while(1)
+				lzrPrty(rand());
+		}
+		else {
+			clearChar();
+			this->state = MAIN_MENU;
+		}
 	}
 }
 
@@ -492,6 +498,11 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 					this->current = this->current * val;
 				else if (laserColour == LASER_DIV_COLOUR)
 					this->current = this->current / val;
+
+				if (this->current > 1000)
+					this->current = 1000;
+				else if (this->current < -1000)
+					this->current = -1000;
 			}
 			// Removes enemy sprite if moved to the very bottom
 			if ( (enemySprite->yPos + enemySprite->height) >= 240) {
