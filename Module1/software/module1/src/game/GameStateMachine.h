@@ -24,7 +24,7 @@
 #define LASER_DURATION 200
 
 
-typedef enum {START, MAIN_MENU, LEVEL_MENU, INSTRUCTIONS, PLAYING, NEXT_LEVEL, PAUSED, GAME_OVER} GameState;
+typedef enum {START, MAIN_MENU, LEVEL_MENU, INSTRUCTIONS, PLAYING, NEXT_LEVEL, WON, PAUSED, GAME_OVER} GameState;
 typedef enum {ADD_EASY, ADD_MEDIUM, ADD_HARD, MUL_EASY, MUL_MEDIUM, MUL_HARD} GameLevel;
 
 typedef struct GameStateMachine
@@ -45,6 +45,8 @@ typedef struct GameStateMachine
 
 	SpriteArrayList* levelSprites;
 
+	SpriteArrayList* winSprites;
+
 	Timer* frameTimer;
 	double lastFrameDuration;
 
@@ -61,6 +63,8 @@ void GameStateMachine_PerformLogic(GameStateMachine* this);
 void GameStateMachine_ProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_StartProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
+void GameStateMachine_NextLevelProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
+void GameStateMachine_WonProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_LevelMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
@@ -68,6 +72,8 @@ void GameStateMachine_InstructionsProcessKey(GameStateMachine* this, alt_u8 key,
 void GameStateMachine_GameOverProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_StartPerformLogic(GameStateMachine* this);
 void GameStateMachine_PlayingPerformLogic(GameStateMachine* this);
+void GameStateMachine_NextLevelPerformLogic(GameStateMachine* this);
+void GameStateMachine_WonPerformLogic(GameStateMachine* this);
 void GameStateMachine_PausedPerformLogic(GameStateMachine* this);
 void GameStateMachine_LevelMenuPerformLogic(GameStateMachine* this);
 void GameStateMachine_MainMenuPerformLogic(GameStateMachine* this);

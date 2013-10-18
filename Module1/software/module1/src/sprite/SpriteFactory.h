@@ -16,6 +16,7 @@ SpriteArrayList* SpriteFactory_generateInstructions();
 SpriteArrayList* SpriteFactory_generateScoreBar();
 SpriteArrayList* SpriteFactory_generateMenu(int isMainMenu);
 SpriteArrayList* SpriteFactory_generateLevelMenu();
+SpriteArrayList* SpriteFactory_generateWinScreen();
 char intToChar(int val);
 
 #define PLAYER_SPRITE_ID 1
