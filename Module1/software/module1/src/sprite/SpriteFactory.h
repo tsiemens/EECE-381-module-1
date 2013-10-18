@@ -8,8 +8,9 @@
 #include "../sprite/BaseSprite.h"
 #include "../sprite/SpriteArrayList.h"
 
+typedef enum {EASY, MEDIUM, HARD} EnemyLevel;
 ImgSprite* SpriteFactory_generatePlayerSprite();
-ImgSprite* SpriteFactory_generateEnemySprite();
+ImgSprite* SpriteFactory_generateEnemySprite(int value, int col, EnemyLevel enemyLevel);
 RectSprite* SpriteFactory_generateLaserSprite(BaseSprite* player, int colour);
 SpriteArrayList* SpriteFactory_generateInstructions();
 SpriteArrayList* SpriteFactory_generateScoreBar();

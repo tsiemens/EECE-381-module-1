@@ -23,7 +23,9 @@
 #define PLAYER_SPEED 0.3
 #define LASER_DURATION 200
 
+
 typedef enum {START, MAIN_MENU, LEVEL_MENU, INSTRUCTIONS, PLAYING, NEXT_LEVEL, PAUSED, GAME_OVER} GameState;
+typedef enum {ADD_EASY, ADD_MEDIUM, ADD_HARD, MUL_EASY, MUL_MEDIUM, MUL_HARD} GameLevel;
 
 typedef struct GameStateMachine
 {
@@ -47,6 +49,7 @@ typedef struct GameStateMachine
 	double lastFrameDuration;
 
 	int level;
+	GameLevel difficulty;
 	int target;
 	int current;
 

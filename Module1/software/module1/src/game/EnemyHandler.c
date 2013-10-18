@@ -40,7 +40,7 @@ void EnemyHandler_enemyShot(ImgSprite* enemy)
 	Timer_start(((BaseSprite*)enemy)->animTimer);
 }
 
-ImgSprite* EnemyHandler_getNewRandomEnemy()
+ImgSprite* EnemyHandler_getNewRandomEnemy(EnemyLevel enemyLevel)
 {
 	ImgSprite* enemy = NULL;
 	if ((ENEMY_COLS - s_numOpenCols) < MAX_ENEMIES)
@@ -48,7 +48,7 @@ ImgSprite* EnemyHandler_getNewRandomEnemy()
 		int col = getRandomOpenCol();
 		s_occupiedCols[col] = 1;
 		s_numOpenCols--;
-		enemy = SpriteFactory_generateEnemySprite(rand() % 10 + 1, col);
+		enemy = SpriteFactory_generateEnemySprite(rand() % 10 + 1, col, enemyLevel);
 	}
 	return enemy;
 }
