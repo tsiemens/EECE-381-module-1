@@ -38,7 +38,7 @@ ImgSprite* SpriteFactory_generateEnemySprite(int value, int col)
 	//Assign sprite properties;
 	((BaseSprite*)sprite)->spriteId = ENEMY_SPRITE_ID_BASE + value;
 	BaseSprite_setPosition((BaseSprite*)sprite, col*ENEMY_COL_WIDTH, 0);
-	sprite->baseSprite.yVel = ENEMY_SPEED;
+	sprite->baseSprite.yVel = ENEMY_SPEED_EASY;
 	sprite->baseSprite.xVel = 0;
 	return sprite;
 }

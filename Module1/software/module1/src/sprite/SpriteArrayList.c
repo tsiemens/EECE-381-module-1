@@ -80,12 +80,12 @@ void SpriteArrayList_insert(SpriteArrayList* this, BaseSprite* sprite, int index
 		SpriteArrayList_reallocate(this, 2*this->size);
 	}
 
-	if(index > this->last){
+	if(index > this->last+1 || index < 0){
 		index = this->last+1;
 	}
 
-	for(i = this->last; i > index; i--){
-		this->sprites[i] = this->sprites[i-1];
+	for(i = this->last; i >= index; i--){
+		this->sprites[i+1] = this->sprites[i];
 	}
 	this->sprites[index] = sprite;
 	this->last++;

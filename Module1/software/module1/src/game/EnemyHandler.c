@@ -8,6 +8,9 @@
 #include "EnemyHandler.h"
 #include <stdlib.h>
 
+static char s_occupiedCols[ENEMY_COLS];
+static int s_numOpenCols;
+
 int getRandomOpenCol();
 
 void EnemyHandler_init()
@@ -30,19 +33,22 @@ void EnemyHandler_notifyEnemyDestroyed(BaseSprite* enemy)
 
 void EnemyHandler_enemyShot(ImgSprite* enemy)
 {
-	SpriteParser_parse("enemy", enemy); // TODO change image to something else
-	enemy->baseSprite.animTimer = Timer_init(Timer_alloc(), ENEMY_DEATH_TIME);
+	free(enemy->colours);
+	SpriteParser_parse("ymene", enemy);
+	enemy->baseSprite.yVel = 0;
+	((BaseSprite*)enemy)->animTimer = Timer_init(Timer_alloc(), ENEMY_DEATH_TIME);
+	Timer_start(((BaseSprite*)enemy)->animTimer);
 }
 
 ImgSprite* EnemyHandler_getNewRandomEnemy()
 {
 	ImgSprite* enemy = NULL;
-	if (s_numOpenCols < MAX_ENEMIES)
+	if ((ENEMY_COLS - s_numOpenCols) < MAX_ENEMIES)
 	{
 		int col = getRandomOpenCol();
 		s_occupiedCols[col] = 1;
 		s_numOpenCols--;
-		enemy = SpriteFactory_generateEnemySprite(rand() % 10, col);
+		enemy = SpriteFactory_generateEnemySprite(rand() % 10 + 1, col);
 	}
 	return enemy;
 }

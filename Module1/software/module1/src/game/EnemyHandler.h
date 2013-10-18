@@ -10,13 +10,11 @@
 
 #include "../sprite/SpriteFactory.h"
 #include "../sprite/SpriteArrayList.h"
+#include "../sprite/BaseSprite.h"
 #include "../sprite/ImgSprite.h"
 
 #define MAX_ENEMIES 3
 #define ENEMY_DEATH_TIME 400.0
-
-static char s_occupiedCols[ENEMY_COLS];
-static int s_numOpenCols;
 
 void EnemyHandler_init();
 void EnemyHandler_notifyEnemyDestroyed(BaseSprite* enemy);
