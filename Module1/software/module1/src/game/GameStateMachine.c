@@ -391,15 +391,15 @@ void GameStateMachine_InstructionsProcessKey(GameStateMachine* this, alt_u8 key,
 		{
 			insPage = INS_SECONDPAGE;
 			BaseSprite* line1 = SpriteArrayList_getAt(this->instructionSprites, 2);
-			((AlphaSprite*)line1)->setString(((AlphaSprite*)line1), "Aim your spaceship under the falling burgers and shoot");
+			((AlphaSprite*)line1)->setString(((AlphaSprite*)line1), "them down with an OPERATION LASER. Different");
 			BaseSprite* line2 = SpriteArrayList_getAt(this->instructionSprites, 3);
-			((AlphaSprite*)line2)->setString(((AlphaSprite*)line2), "them down with an OPERATION LASER. You can see what");
+			((AlphaSprite*)line2)->setString(((AlphaSprite*)line2), "lasers change your current burger count differently.");
 			BaseSprite* line3 = SpriteArrayList_getAt(this->instructionSprites, 4);
-			((AlphaSprite*)line3)->setString(((AlphaSprite*)line3), "key uses which operation at the top of the screen when");
+			((AlphaSprite*)line3)->setString(((AlphaSprite*)line3), "You can see what keyboard key uses which mathematical.");
 			BaseSprite* line4 = SpriteArrayList_getAt(this->instructionSprites, 5);
-			((AlphaSprite*)line4)->setString(((AlphaSprite*)line4), "playing. The current and maximum amounts of burgers is");
+			((AlphaSprite*)line4)->setString(((AlphaSprite*)line4), "operation at the top of the screen when you are playing.");
 			BaseSprite* line5 = SpriteArrayList_getAt(this->instructionSprites, 6);
-			((AlphaSprite*)line5)->setString(((AlphaSprite*)line5), "also shown at the top. Good luck!");
+			((AlphaSprite*)line5)->setString(((AlphaSprite*)line5), "Good luck on your Mission to Planet Math!");
 			BaseSprite* left = SpriteArrayList_getAt(this->instructionSprites, 7);
 			((AlphaSprite*)left)->setString(((AlphaSprite*)left), "<");
 			clearChar();
@@ -552,7 +552,7 @@ void GameStateMachine_NextLevelPerformLogic(GameStateMachine* this)
 	}
 
 	clearChar();
-	if(this->level == 2) //TODO: change it to 11
+	if(this->level == 3)
 		this->state = WON;
 	else
 		this->state = PLAYING;

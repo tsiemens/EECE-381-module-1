@@ -90,10 +90,10 @@ typedef enum {
 #define INSTRUCTIONITEM_ESC_XPOS (INSTRUCTIONITEM_TITLE_XPOS-10)
 
 #define INSTRUCTIONITEM_P1_L1 "You are on a journey to Planet Math. Your goal is to"
-#define INSTRUCTIONITEM_P1_L2 "eat an exact amount of space burgers. Too few and"
-#define INSTRUCTIONITEM_P1_L3 "you won't make it. Too many, you will fall asleep."
-#define INSTRUCTIONITEM_P1_L4 "Grab the burger with desired number & use different"
-#define INSTRUCTIONITEM_P1_L5 "lasers to use different operators. Good luck!"
+#define INSTRUCTIONITEM_P1_L2 "eat an exact amount of space burgers. When you hit the"
+#define INSTRUCTIONITEM_P1_L3 "target amount, you will advance to the next sub-level."
+#define INSTRUCTIONITEM_P1_L4 "When you pass 3 sub-levels, you will reach Planet Math."
+#define INSTRUCTIONITEM_P1_L5 "Aim your spaceship under the falling burgers and shoot"
 
 typedef enum {
 	INS_FIRSTPAGE,
