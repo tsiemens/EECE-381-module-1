@@ -70,6 +70,8 @@ void GameStateMachine_performFrameLogic(GameStateMachine* this)
 	}
 	else if (this->state == PAUSED)
 	{
+		VideoHandler_drawSprites(this->gameSprites);
+		VideoHandler_drawSprites(this->scorebarSprites);
 		VideoHandler_drawSprites(this->pausedSprites);
 	}
 	else if (this->state == INSTRUCTIONS)
@@ -248,13 +250,13 @@ void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int i
 		if(key == KEY_DOWN)
 		{
 			pauseMenuSelection = SEL_QUIT;
-			selSprite->yPos = MENU_SELECTOR_CONTINUE_YPOS;
+			selSprite->yPos = MENU_SELECTOR_OPTION_2_YPOS;
 
 		}
 		else if(key == KEY_UP)
 		{
 			pauseMenuSelection = SEL_RESUME;
-			selSprite->yPos = MENU_SELECTOR_NEWGAME_YPOS;
+			selSprite->yPos = MENU_SELECTOR_OPTION_1_YPOS;
 		}
 		else if(key == '\n' && pauseMenuSelection == SEL_RESUME)
 		{
@@ -349,17 +351,17 @@ void GameStateMachine_LevelMenuProcessKey(GameStateMachine* this, alt_u8 key, in
 
 void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
-	static MenuSelection mainMenuSelection = SEL_INSTRUCTIONS;
+	static MenuSelection mainMenuSelection = SEL_NEWGAME;
 
 	BaseSprite* selSprite = SpriteArrayList_getAt(this->menuSprites, 3);
 	if(isUpEvent == 0)
 	{
 		if(key == KEY_DOWN) {
-			selSprite->yPos = MENU_SELECTOR_CONTINUE_YPOS;
+			selSprite->yPos = MENU_SELECTOR_OPTION_2_YPOS;
 			mainMenuSelection = SEL_INSTRUCTIONS;
 		}
 		else if(key == KEY_UP) {
-			selSprite->yPos = MENU_SELECTOR_NEWGAME_YPOS;
+			selSprite->yPos = MENU_SELECTOR_OPTION_1_YPOS;
 			mainMenuSelection = SEL_NEWGAME;
 		}
 		else if(key == '\n' && mainMenuSelection == SEL_NEWGAME) {
