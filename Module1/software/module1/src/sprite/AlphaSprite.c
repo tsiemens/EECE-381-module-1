@@ -23,11 +23,11 @@ AlphaSprite* AlphaSprite_init(AlphaSprite* this)
 	char* defaultString = "Please Set A String";
 	this->prev_x = 0;
 	this->prev_y = 0;
-	this->prev_str = "          ";
 	this->baseSprite.classType = ALPHASPRITE_CLASS_TYPE;
 	this->baseSprite.draw = &AlphaSprite_draw;
 	this->setString = &AlphaSprite_setString;
 	this->string = defaultString;
+	this->prev_str = string;
 
 	return this;
 }
@@ -42,12 +42,14 @@ void AlphaSprite_draw(BaseSprite* super)
 	AlphaSprite* this = (AlphaSprite*) super;
 
 	//Erase previous string
-	AlphaSprite_Clear(this);
+	if (super->spriteId == SCOREBAR_CURRENT_ID || super->spriteId == SCOREBAR_TARGET_ID || super->spriteId == SCOREBAR_LEVEL_ID) {
+		AlphaSprite_Clear(this);
+		//Assign previous values
+		this->prev_x = this->baseSprite.xPos;
+		this->prev_y = this->baseSprite.yPos;
+		this->prev_str = AlphaSprite_EmptyString(this->string);
+	}
 
-	//Assign previous values
-	this->prev_x = this->baseSprite.xPos;
-	this->prev_y = this->baseSprite.yPos;
-	this->prev_str = AlphaSprite_EmptyString(this->string);
 	//Print current string
 	printString(this->string, (unsigned int)this->baseSprite.xPos, (unsigned int)this->baseSprite.yPos);
 }
