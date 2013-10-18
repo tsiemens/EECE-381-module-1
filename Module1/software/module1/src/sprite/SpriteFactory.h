@@ -92,7 +92,7 @@ typedef enum {
 #define INSTRUCTIONITEM_P1_L1 "You are on a journey to Planet Math. Your goal is to"
 #define INSTRUCTIONITEM_P1_L2 "eat an exact amount of space burgers. When you hit the"
 #define INSTRUCTIONITEM_P1_L3 "target amount, you will advance to the next sub-level."
-#define INSTRUCTIONITEM_P1_L4 "When you pass 3 sub-levels, you will reach Planet Math."
+#define INSTRUCTIONITEM_P1_L4 "When you pass 2 sub-levels, you will reach Planet Math."
 #define INSTRUCTIONITEM_P1_L5 "Aim your spaceship under the falling burgers and shoot"
 
 typedef enum {
