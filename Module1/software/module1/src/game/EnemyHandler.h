@@ -17,8 +17,11 @@
 #define ENEMY_DEATH_TIME 400.0
 
 void EnemyHandler_init();
+
 void EnemyHandler_notifyEnemyDestroyed(BaseSprite* enemy);
+
 void EnemyHandler_enemyShot(ImgSprite* enemy);
+
 ImgSprite* EnemyHandler_getNewRandomEnemy();
 
 #endif /* ENEMYHANDLER_H_ */

@@ -24,7 +24,7 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 	this->menuSprites = SpriteFactory_generateMenu(1);
 	this->pausedSprites = SpriteFactory_generateMenu(0);
 	this->levelSprites = SpriteFactory_generateLevelMenu();
-	this->level = 1;
+	this->level = 0;
 	this->current = 0;
 	this->target = 0;
 	this->scorebarSprites = SpriteFactory_generateScoreBar();
@@ -105,13 +105,15 @@ void GameStateMachine_ProcessKey(GameStateMachine* this, alt_u8 key, int isUpEve
 	    case PLAYING:
 	    	GameStateMachine_PlayingProcessKey(this, key, isUpEvent);
 	    	break;
+	    case NEXT_LEVEL:
+	    	GameStateMachine_NextLevelProcessKey(this, key, isUpEvent);
+	    	break;
 	    case PAUSED:
 	    	GameStateMachine_PausedProcessKey(this, key, isUpEvent);
 	    	break;
 	    case GAME_OVER:
 	    	GameStateMachine_GameOverProcessKey(this, key, isUpEvent);
 	    	break;
-
 	}
 }
 
@@ -134,6 +136,9 @@ void GameStateMachine_PerformLogic(GameStateMachine* this)
 	    case PLAYING:
 	    	GameStateMachine_PlayingPerformLogic(this);
 	    	break;
+	    case NEXT_LEVEL:
+			GameStateMachine_NextLevelPerformLogic(this);
+			break;
 	    case PAUSED:
 	    	GameStateMachine_PausedPerformLogic(this);
 	    	break;
@@ -210,6 +215,11 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 			SpriteArrayList_insert(this->gameSprites, (BaseSprite*)newEnemy, 0);
 		}
 	}
+}
+
+void GameStateMachine_NextLevelProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
+{
+
 }
 
 void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
@@ -308,7 +318,7 @@ void GameStateMachine_LevelMenuProcessKey(GameStateMachine* this, alt_u8 key, in
 		else if(key == '\n')
 		{
 			clearChar();
-			this->state = PLAYING;
+			this->state = NEXT_LEVEL;
 		}
 		else if(key == KEY_ESC)
 		{
@@ -442,11 +452,14 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 			BaseSprite_updatePos(enemySprite, this->lastFrameDuration);
 
 			// Check if shield hits, if so, remove and perform operation on value
-			if (laserSprite->xPos > enemySprite->xPos && laserSprite->xPos < (enemySprite->xPos + enemySprite->width) ) {
+			if (enemySprite->animTimer == NULL && laserSprite->xPos > enemySprite->xPos && laserSprite->xPos < (enemySprite->xPos + enemySprite->width) ) {
 				EnemyHandler_enemyShot((ImgSprite*)enemySprite);
-
 				// set audio to play shooting effects
 				AudioHandler_playHit();
+				if (enemySprite->spriteId == 10)
+					this->current += 10;
+				else
+					this->current += enemySprite->spriteId - 10;
 			}
 			// Removes enemy sprite if moved to the very bottom
 			if ( (enemySprite->yPos + enemySprite->height) >= 240) {
@@ -461,6 +474,41 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 			}
 		}
 	}
+
+	char* currentString = ((AlphaSprite*)SpriteArrayList_getWithId(this->scorebarSprites, SCOREBAR_CURRENT_ID))->string;
+	sprintf(currentString, "%i", this->current);
+
+	if (this->current == this->target)
+		this->state = NEXT_LEVEL;
+}
+
+// Called on New Game or when win condition met
+// Increments level and sets a new target value
+void GameStateMachine_NextLevelPerformLogic(GameStateMachine* this)
+{
+	// Set values for a new game
+	this->level++;
+	this->target = rand()%((this->level*10)+10);
+	this->current = 0;
+
+	// Throw values up on the scorebar
+	char* targetString = ((AlphaSprite*)SpriteArrayList_getWithId(this->scorebarSprites, SCOREBAR_TARGET_ID))->string;
+	sprintf(targetString, "%i", this->target);
+	char* levelString = ((AlphaSprite*)SpriteArrayList_getWithId(this->scorebarSprites, SCOREBAR_LEVEL_ID))->string;
+	sprintf(levelString, "%i", this->level);
+
+	// Delete all on-screen enemies
+	BaseSprite* enemySprite;
+	int i;
+	for(i=0; i <= this->gameSprites->last; i++){
+		enemySprite = SpriteArrayList_getAt(this->gameSprites, i);
+		if (enemySprite != NULL && enemySprite->spriteId > ENEMY_SPRITE_ID_BASE){
+			enemySprite->animTimer = Timer_init(Timer_alloc(), 0);
+		}
+	}
+
+	clearChar();
+	this->state = PLAYING;
 }
 
 void GameStateMachine_PausedPerformLogic(GameStateMachine* this)

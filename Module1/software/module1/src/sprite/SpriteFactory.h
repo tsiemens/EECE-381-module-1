@@ -19,6 +19,9 @@ char intToChar(int val);
 
 #define PLAYER_SPRITE_ID 1
 #define PLAYER_LASER_SPRITE_ID 2
+#define SCOREBAR_CURRENT_ID 3
+#define SCOREBAR_TARGET_ID 4
+#define SCOREBAR_LEVEL_ID 5
 #define ENEMY_SPRITE_ID_BASE 10
 
 /****************ENEMY GENERATION****************/
@@ -94,7 +97,7 @@ typedef enum {
 } InstuctionPage;
 
 /****************SCOREBAR DEFINITIONS****************/
-#define SCOREBAR_TOP_PADDING CHAR_TO_PIXEL_HEIGHT + 2
+#define SCOREBAR_TOP_PADDING CHAR_TO_PIXEL_HEIGHT + 1
 #define SCOREBAR_SPACING 2
 #define SCOREBAR_WORD_WIDTH 8
 #define SCOREBAR_VAL_WIDTH 3
@@ -109,11 +112,8 @@ typedef enum {
 #define SCOREBAR_LEVEL_VAL_XPOS (SCOREBAR_LEVEL_WORD_XPOS + SCOREBAR_SPACING + SCOREBAR_WORD_WIDTH)
 
 #define SCOREBAR_CURRENT_STRING "Current:"
-#define SCOREBAR_CURRENT_VAL "0"
 #define SCOREBAR_TARGET_STRING "Target:"
-#define SCOREBAR_TARGET_VAL "0"
 #define SCOREBAR_LEVEL_STRING "Level:"
-#define SCOREBAR_LEVEL_VAL "0"
 
 typedef enum {
 	SCOREBAR_
