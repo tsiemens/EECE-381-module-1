@@ -44,5 +44,5 @@ void RectSprite_draw(BaseSprite* super/*, VideoBuffer* */)
 	if(this->isFilledRect == 0)
 		drawRect(this->baseSprite.xPos, this->baseSprite.yPos, this->baseSprite.xPos+this->baseSprite.width, this->baseSprite.yPos+this->baseSprite.height, this->colour);
 	else
-		drawBox((this->baseSprite.xPos, this->baseSprite.yPos, this->baseSprite.xPos+this->baseSprite.width, this->baseSprite.yPos+this->baseSprite.height, this->colour);
+		drawBox(this->baseSprite.xPos, this->baseSprite.yPos, this->baseSprite.xPos+this->baseSprite.width, this->baseSprite.yPos+this->baseSprite.height, this->colour);
 }
