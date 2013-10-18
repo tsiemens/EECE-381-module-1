@@ -27,6 +27,12 @@ char intToChar(int val);
 #define ENEMY_SPEED_NORMAL 0.02
 #define ENEMY_SPEED_HARD 0.05
 
+/****************LASER GENERATION****************/
+#define LASER_ADD_COLOUR 0x07FF
+#define LASER_SUB_COLOUR 0xF800
+#define LASER_MUL_COLOUR 0x07E0
+#define LASER_DIV_COLOUR 0xF81F
+
 /****************CHAR AND PIXEL CONVERSIONS****************/
 #define CHAR_TO_PIXEL_HEIGHT ((float)SCREEN_HEIGHT/CHARBUFFER_HEIGHT)
 #define PIXEL_TO_CHAR_HEIGHT ((float)CHARBUFFER_HEIGHT/SCREEN_HEIGHT)

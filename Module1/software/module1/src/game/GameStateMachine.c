@@ -172,13 +172,13 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 			BaseSprite* player = SpriteArrayList_getWithId(this->gameSprites, PLAYER_SPRITE_ID);
 			int laserColour = 0;
 			if (key == '1')
-				laserColour = 0x07FF; // Add
+				laserColour = LASER_ADD_COLOUR;
 			else if (key == '2')
-				laserColour = 0xF800; // Subtract
+				laserColour = LASER_SUB_COLOUR;
 			else if (key == '3')
-				laserColour = 0x07E0; // Mult
+				laserColour = LASER_MUL_COLOUR;
 			else if (key == '4')
-				laserColour = 0xF81F; // Div
+				laserColour = LASER_DIV_COLOUR;
 
 			// set audio to play shooting effects
 			AudioHandler_playShoot();
