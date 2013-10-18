@@ -210,7 +210,7 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 		this->state = PAUSED;
 	}
 	else if(key == 'e' && isUpEvent == 0) {
-		ImgSprite* newEnemy = EnemyHandler_getNewRandomEnemy((this->level)%3);
+		ImgSprite* newEnemy = EnemyHandler_getNewRandomEnemy((this->difficulty)%3);
 		if (newEnemy != NULL){
 			SpriteArrayList_insert(this->gameSprites, (BaseSprite*)newEnemy, 0);
 		}
@@ -249,6 +249,7 @@ void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int i
 		{
 			clearChar();
 			this->state = MAIN_MENU;
+			this->level = 0;
 		}
 	}
 
@@ -320,8 +321,7 @@ void GameStateMachine_LevelMenuProcessKey(GameStateMachine* this, alt_u8 key, in
 			clearChar();
 
 			this->state = NEXT_LEVEL;
-			this->dificulty = selectedLevel;
-			this->state = PLAYING;
+			this->difficulty = selectedLevel;
 		}
 		else if(key == KEY_ESC)
 		{

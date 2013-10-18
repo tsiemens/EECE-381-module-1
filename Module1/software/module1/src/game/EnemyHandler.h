@@ -21,11 +21,7 @@ void EnemyHandler_init();
 void EnemyHandler_notifyEnemyDestroyed(BaseSprite* enemy);
 
 void EnemyHandler_enemyShot(ImgSprite* enemy);
-<<<<<<< HEAD
 
-ImgSprite* EnemyHandler_getNewRandomEnemy();
-=======
 ImgSprite* EnemyHandler_getNewRandomEnemy(EnemyLevel enemyLevel);
->>>>>>> 5a3f4ad71f79a2bf4d44e528b39ad643fea059b5
 
 #endif /* ENEMYHANDLER_H_ */
