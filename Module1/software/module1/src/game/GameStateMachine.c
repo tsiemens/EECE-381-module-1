@@ -246,7 +246,7 @@ void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int i
 
 void GameStateMachine_LevelMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
-	static GameLevel selectedLevel = 1;
+	static GameLevel selectedLevel = ADD_EASY;
 	BaseSprite* selSprite = SpriteArrayList_getAt(this->levelSprites, 5);
 	if(isUpEvent == 0)
 	{
@@ -289,12 +289,12 @@ void GameStateMachine_LevelMenuProcessKey(GameStateMachine* this, alt_u8 key, in
 				selectedLevel = ADD_MEDIUM;
 				selSprite->yPos = LEVELMENU_SELECTOR_MEDIUM_YPOS;
 			}
-			else if(selectedLevel == ADD_EASY) // mulEasy to addHard
+			else if(selectedLevel == MUL_EASY) // mulEasy to addHard
 			{
 				selectedLevel = ADD_HARD;
 				selSprite->yPos = LEVELMENU_SELECTOR_HARD_YPOS;
 			}
-			else if(selectedLevel == ADD_MEDIUM) // mulMedium to mulEasy
+			else if(selectedLevel == MUL_MEDIUM) // mulMedium to mulEasy
 			{
 				selectedLevel = MUL_EASY;
 				selSprite->yPos = LEVELMENU_SELECTOR_MUL_EASY_YPOS;
