@@ -249,7 +249,6 @@ void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int i
 		{
 			clearChar();
 			this->state = MAIN_MENU;
-			this->level = 0;
 		}
 	}
 
@@ -350,6 +349,7 @@ void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int
 		else if(key == '\n' && mainMenuSelection == SEL_NEWGAME) {
 			//clearChar() to be replaced by clearing individual strings
 			clearChar();
+			this->level = 0;
 			this->state = LEVEL_MENU;
 		}
 		else if(key == '\n' && mainMenuSelection == SEL_INSTRUCTIONS) {
