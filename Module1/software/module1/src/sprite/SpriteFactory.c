@@ -22,7 +22,7 @@ ImgSprite* SpriteFactory_generatePlayerSprite()
  * EFFECTS: Returns a pointer to an initialized enemy sprite based on the value given.
  * 			Returns null if value not 1 <= value <= 10
  */
-ImgSprite* SpriteFactory_generateEnemySprite(int value, int col)
+ImgSprite* SpriteFactory_generateEnemySprite(int value, int col, EnemyLevel enemyLevel)
 {
 	char* image = "enemy ";
 
@@ -38,7 +38,19 @@ ImgSprite* SpriteFactory_generateEnemySprite(int value, int col)
 	//Assign sprite properties;
 	((BaseSprite*)sprite)->spriteId = ENEMY_SPRITE_ID_BASE + value;
 	BaseSprite_setPosition((BaseSprite*)sprite, col*ENEMY_COL_WIDTH, 0);
-	sprite->baseSprite.yVel = ENEMY_SPEED_EASY;
+
+	switch(enemyLevel)
+		{
+			case EASY:
+				sprite->baseSprite.yVel = ENEMY_SPEED_EASY;
+				break;
+			case MEDIUM:
+				sprite->baseSprite.yVel = ENEMY_SPEED_NORMAL;
+				break;
+			case HARD:
+				sprite->baseSprite.yVel = ENEMY_SPEED_HARD;
+				break;
+		}
 	sprite->baseSprite.xVel = 0;
 	return sprite;
 }
@@ -93,22 +105,25 @@ SpriteArrayList* SpriteFactory_generateMenu(int isMainMenu)
 	AlphaSprite* menuOption1 = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)menuOption1, MENUITEM_START_XPOS, MENUITEM_START_YPOS);
 
-	if(isMainMenu == 1)
-		menuOption1->setString(menuOption1, "Start");
-	else
-		menuOption1->setString(menuOption1, "Resume");
-
 	AlphaSprite* menuOption2 = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)menuOption2, MENUITEM_START_XPOS, MENUITEM_CONTINUE_YPOS);
-	if(isMainMenu == 1)
-		menuOption2->setString(menuOption2, "Instructions");
-	else
-		menuOption2->setString(menuOption2, "Quit Game");
 
 	RectSprite* menuSelectorFrame = RectSprite_init(RectSprite_alloc());
 	BaseSprite_setSize((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_WIDTH, MENU_SELECTOR_HEIGHT);
 	BaseSprite_setPosition((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_XPOS, MENU_SELECTOR_CONTINUE_YPOS);
 	menuSelectorFrame->colour = MENU_SELECTOR_COLOR;
+
+	if(isMainMenu == 1)
+	{
+		menuOption1->setString(menuOption1, "Start");
+		menuOption2->setString(menuOption2, "Instructions");
+	}
+	else
+	{
+		menuOption1->setString(menuOption1, "Resume");
+		menuOption2->setString(menuOption2, "Quit Game");
+		BaseSprite_setPosition((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_XPOS, MENU_SELECTOR_NEWGAME_YPOS);
+	}
 
 	SpriteArrayList_insert(menuSprites, (BaseSprite*)menuOuterFrame, 0);
 	SpriteArrayList_insert(menuSprites, (BaseSprite*)menuOption1, 1);
