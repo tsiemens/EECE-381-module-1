@@ -76,8 +76,13 @@ int main()
 
 		AudioHandler_play();
 
-		sprintf(debugFreqStr, "FPS:%2.1f", 1000/Timer_timeElapsed(loopTimer));
-		printString(debugFreqStr, 70, 0);
+		if (IORD_8DIRECT(SWITCHES_BASE, 0)&1 == 1) {
+			sprintf(debugFreqStr, "FPS:%2.1f", 1000/Timer_timeElapsed(loopTimer));
+			printString(debugFreqStr, 70, 0);
+		}
+		else {
+			printString("         ", 70, 0);
+		}
 
 		AudioHandler_play();
 

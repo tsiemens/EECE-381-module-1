@@ -27,7 +27,7 @@ AlphaSprite* AlphaSprite_init(AlphaSprite* this)
 	this->baseSprite.draw = &AlphaSprite_draw;
 	this->setString = &AlphaSprite_setString;
 	this->string = defaultString;
-	this->prev_str = string;
+	this->prev_str = this->string;
 
 	return this;
 }

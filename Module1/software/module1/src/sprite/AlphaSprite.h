@@ -9,6 +9,7 @@
 #define ALPHASPRITE_H_
 
 #include "BaseSprite.h"
+#include "SpriteFactory.h"
 
 typedef struct AlphaSprite
 {
