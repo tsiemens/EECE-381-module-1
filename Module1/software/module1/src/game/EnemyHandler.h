@@ -13,7 +13,7 @@
 #include "../sprite/BaseSprite.h"
 #include "../sprite/ImgSprite.h"
 
-#define MAX_ENEMIES 3
+#define MAX_ENEMIES 5
 #define ENEMY_DEATH_TIME 400.0
 
 void EnemyHandler_init();

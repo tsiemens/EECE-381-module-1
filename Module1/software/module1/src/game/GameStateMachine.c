@@ -510,7 +510,13 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 	char* currentString = ((AlphaSprite*)SpriteArrayList_getWithId(this->scorebarSprites, SCOREBAR_CURRENT_ID))->string;
 	sprintf(currentString, "%i", this->current);
 
-
+	// Spawn new enemy, maybe
+	if (rand() % 20 == 0){
+		ImgSprite* newEnemy = EnemyHandler_getNewRandomEnemy((this->difficulty)%3);
+		if (newEnemy != NULL){
+			SpriteArrayList_insert(this->gameSprites, (BaseSprite*)newEnemy, 0);
+		}
+	}
 }
 
 // Called on New Game or when win condition met
