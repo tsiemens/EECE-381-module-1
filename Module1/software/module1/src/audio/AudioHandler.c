@@ -4,7 +4,6 @@ static const int BUFFER_SIZE = 128;
 static const int SILENCE = 0;
 static const int SHOOT = 1;
 static const int HIT = 2;
-static const int MENU = 3;
 static const double delay = 1.35;
 
 static Audio* audioDev;
@@ -29,9 +28,6 @@ void AudioHandlerInit() {
 	// get hit sound effect
 	hit_audio = sdcard_read_audio("hit.wav");
 	printf("SD Card: Read hit.wav %d bytes\n", hit_audio->size);
-	// get menu sound
-	menu_audio = sdcard_read_audio("menu.wav");
-	printf("SD Card: Read menu.wav %d bytes\n", menu_audio->size);
 	// initialize to beginning of audio array
 	begin = 0;
 	end = 0;
@@ -56,9 +52,7 @@ void AudioHandler_play() {
 		ShortIntPtr* audio_all;
 
 		// get audio to output
-		if (playing == MENU) {
-			audio_all = menu_audio;
-		} else if (playing == HIT) {
+		if (playing == HIT) {
 			audio_all = hit_audio;
 		} else {
 			audio_all = shoot_audio;
@@ -98,12 +92,6 @@ void AudioHandler_playShoot() {
 
 void AudioHandler_playHit() {
 	playing = HIT;
-	begin = 0;
-	end = 0;
-}
-
-void AudioHandler_playMenu() {
-	playing = MENU;
 	begin = 0;
 	end = 0;
 }

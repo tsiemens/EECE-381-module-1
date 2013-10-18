@@ -95,7 +95,7 @@ RectSprite* SpriteFactory_generateLaserSprite(BaseSprite* player, int colour)
 
 SpriteArrayList* SpriteFactory_generateMenu(int isMainMenu)
 {
-	SpriteArrayList* menuSprites = SpriteArrayList_init(SpriteArrayList_alloc(), isMainMenu+4);
+	SpriteArrayList* menuSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 5);
 
 	RectSprite* menuOuterFrame = RectSprite_init(RectSprite_alloc());
 	BaseSprite_setSize((BaseSprite*)menuOuterFrame, MENUFRAME_WIDTH, MENUFRAME_HEIGHT);
@@ -103,40 +103,38 @@ SpriteArrayList* SpriteFactory_generateMenu(int isMainMenu)
 	menuOuterFrame->colour = MENUFRAME_COLOR;
 
 	AlphaSprite* menuOption1 = AlphaSprite_init(AlphaSprite_alloc());
-	BaseSprite_setPosition((BaseSprite*)menuOption1, MENUITEM_START_XPOS, MENUITEM_START_YPOS);
+	BaseSprite_setPosition((BaseSprite*)menuOption1, MENUITEM_START_XPOS, MENUITEM_OPTION_1_YPOS);
 
 	AlphaSprite* menuOption2 = AlphaSprite_init(AlphaSprite_alloc());
-	BaseSprite_setPosition((BaseSprite*)menuOption2, MENUITEM_START_XPOS, MENUITEM_CONTINUE_YPOS);
+	BaseSprite_setPosition((BaseSprite*)menuOption2, MENUITEM_START_XPOS, MENUITEM_OPTION_2_YPOS);
 
 	RectSprite* menuSelectorFrame = RectSprite_init(RectSprite_alloc());
 	BaseSprite_setSize((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_WIDTH, MENU_SELECTOR_HEIGHT);
-	BaseSprite_setPosition((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_XPOS, MENU_SELECTOR_CONTINUE_YPOS);
+	BaseSprite_setPosition((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_XPOS, MENU_SELECTOR_OPTION_1_YPOS);
 	menuSelectorFrame->colour = MENU_SELECTOR_COLOR;
+
+	ImgSprite* menu = ImgSprite_init(ImgSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)menu, 90, 60);
 
 	if(isMainMenu == 1)
 	{
 		menuOption1->setString(menuOption1, "Start");
 		menuOption2->setString(menuOption2, "Instructions");
+		SpriteParser_parse("title", menu);
 	}
 	else
 	{
 		menuOption1->setString(menuOption1, "Resume");
 		menuOption2->setString(menuOption2, "Quit Game");
-		BaseSprite_setPosition((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_XPOS, MENU_SELECTOR_NEWGAME_YPOS);
+		BaseSprite_setPosition((BaseSprite*)menu, 119, 110);
+		SpriteParser_parse("paused", menu);
 	}
 
 	SpriteArrayList_insert(menuSprites, (BaseSprite*)menuOuterFrame, 0);
 	SpriteArrayList_insert(menuSprites, (BaseSprite*)menuOption1, 1);
 	SpriteArrayList_insert(menuSprites, (BaseSprite*)menuOption2, 2);
 	SpriteArrayList_insert(menuSprites, (BaseSprite*)menuSelectorFrame, 3);
-
-	if(isMainMenu == 1)
-	{
-		ImgSprite* menu = ImgSprite_init(ImgSprite_alloc());
-		SpriteParser_parse("title", menu);
-		BaseSprite_setPosition((BaseSprite*)menu, 90, 60);
-		SpriteArrayList_insert(menuSprites, (BaseSprite*)menu, 4);
-	}
+	SpriteArrayList_insert(menuSprites, (BaseSprite*)menu, 4);
 	return menuSprites;
 }
 
@@ -186,7 +184,6 @@ SpriteArrayList* SpriteFactory_generateLevelMenu()
 	BaseSprite_setSize((BaseSprite*)levelSelectFrame, MENU_SELECTOR_WIDTH, MENU_SELECTOR_HEIGHT);
 	BaseSprite_setPosition((BaseSprite*)levelSelectFrame, LEVELMENU_SELECTOR_XPOS, LEVELMENU_SELECTOR_EASY_YPOS);
 	levelSelectFrame->colour = MENU_SELECTOR_COLOR;
-
 
 	SpriteArrayList_insert(levelSprites, (BaseSprite*)levelMenuTitle, 0);
 	SpriteArrayList_insert(levelSprites, (BaseSprite*)addSubtractTitle, 1);
@@ -238,7 +235,7 @@ SpriteArrayList* SpriteFactory_generateInstructions()
 	instructionsAlphaRight->setString(instructionsAlphaRight, ">");
 
 	AlphaSprite* instructionsBackToMenu= AlphaSprite_init(AlphaSprite_alloc());
-	BaseSprite_setPosition((BaseSprite*)instructionsBackToMenu, INSTRUCTIONITEM_ESC_XPOS, MENUITEM_CONTINUE_YPOS+CHAR_TO_PIXEL_HEIGHT*2);
+	BaseSprite_setPosition((BaseSprite*)instructionsBackToMenu, INSTRUCTIONITEM_ESC_XPOS, MENUITEM_OPTION_2_YPOS+CHAR_TO_PIXEL_HEIGHT*2);
 	instructionsAlpha5->setString(instructionsBackToMenu, "Press ESC to return to menu");
 
 	SpriteArrayList_insert(instructionSprites, (BaseSprite*)menu, 0);
@@ -266,29 +263,53 @@ SpriteArrayList* SpriteFactory_generateScoreBar()
 	BaseSprite_setPosition((BaseSprite*)scorebarCurrentWord, SCOREBAR_CURRENT_WORD_XPOS, SCOREBAR_WORD_YPOS);
 	scorebarCurrentWord->setString(scorebarCurrentWord, SCOREBAR_CURRENT_STRING);
 
+	char* currentString = (char*)malloc(sizeof(char)*3);
+	currentString[0] = ' ';
+	currentString[1] = ' ';
+	currentString[2] = ' ';
 	AlphaSprite* scorebarCurrentVal = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)scorebarCurrentVal, SCOREBAR_CURRENT_VAL_XPOS, SCOREBAR_WORD_YPOS);
-	scorebarCurrentVal->setString(scorebarCurrentVal, SCOREBAR_CURRENT_VAL);
+	scorebarCurrentVal->setString(scorebarCurrentVal, currentString);
+	scorebarCurrentVal->baseSprite.spriteId = SCOREBAR_CURRENT_ID;
 
 	AlphaSprite* scorebarTargetWord = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)scorebarTargetWord, SCOREBAR_TARGET_WORD_XPOS, SCOREBAR_WORD_YPOS);
 	scorebarTargetWord->setString(scorebarTargetWord, SCOREBAR_TARGET_STRING);
 
+	char* targetString = (char*)malloc(sizeof(char)*3);
+	targetString[0] = ' ';
+	targetString[1] = ' ';
+	targetString[2] = ' ';
 	AlphaSprite* scorebarTargetVal = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)scorebarTargetVal, SCOREBAR_TARGET_VAL_XPOS, SCOREBAR_WORD_YPOS);
-	scorebarTargetVal->setString(scorebarTargetVal, SCOREBAR_TARGET_VAL);
+	scorebarTargetVal->setString(scorebarTargetVal, targetString);
+	scorebarTargetVal->baseSprite.spriteId = SCOREBAR_TARGET_ID;
 
 	AlphaSprite* scorebarLevelWord = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)scorebarLevelWord, SCOREBAR_LEVEL_WORD_XPOS, SCOREBAR_WORD_YPOS);
 	scorebarLevelWord->setString(scorebarLevelWord, SCOREBAR_LEVEL_STRING);
 
+	char* levelString = (char*)malloc(sizeof(char)*3);
+	levelString[0] = ' ';
+	levelString[1] = ' ';
+	levelString[2] = ' ';
 	AlphaSprite* scorebarLevelVal = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)scorebarLevelVal, SCOREBAR_LEVEL_VAL_XPOS, SCOREBAR_WORD_YPOS);
-	scorebarLevelVal->setString(scorebarLevelVal, SCOREBAR_LEVEL_VAL);
+	scorebarLevelVal->setString(scorebarLevelVal, levelString);
+	scorebarLevelVal->baseSprite.spriteId = SCOREBAR_LEVEL_ID;
+
+	AlphaSprite* scorebarAddHint = AlphaSprite_init(AlphaSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)scorebarAddHint, SCOREBAR_ADD_HINT_XPOS, SCOREBAR_WORD_YPOS);
+	scorebarAddHint->setString(scorebarAddHint, SCOREBAR_ADD_HINT_STRING);
+
+	AlphaSprite* scorebarMulHint = AlphaSprite_init(AlphaSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)scorebarMulHint, SCOREBAR_MUL_HINT_XPOS, SCOREBAR_WORD_YPOS);
+	//scorebarMulHint->setString(scorebarLevelWord, SCOREBAR_MUL_HINT_STRING);
+	scorebarMulHint->baseSprite.spriteId = SCOREBAR_MUL_HINT_ID;
 
 	RectSprite* scorebarUnderline = RectSprite_init(RectSprite_alloc());
-	BaseSprite_setPosition((BaseSprite*)scorebarUnderline, 0, SCOREBAR_TOP_PADDING);
-	BaseSprite_setSize((BaseSprite*)scorebarUnderline, CHAR_TO_PIXEL_WIDTH*(SCOREBAR_LEVEL_VAL_XPOS+SCOREBAR_VAL_WIDTH), CHAR_TO_PIXEL_HEIGHT*2);
+	BaseSprite_setPosition((BaseSprite*)scorebarUnderline, 3, SCOREBAR_TOP_PADDING);
+	BaseSprite_setSize((BaseSprite*)scorebarUnderline, SCREEN_WIDTH - 4, CHAR_TO_PIXEL_HEIGHT*2);
 	scorebarUnderline->colour = SCOREBAR_COLOR;
 
 	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarCurrentWord, 0);
@@ -297,8 +318,26 @@ SpriteArrayList* SpriteFactory_generateScoreBar()
 	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarTargetVal, 3);
 	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarLevelWord, 4);
 	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarLevelVal, 5);
-	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarUnderline, 6);
+	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarAddHint, 6);
+	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarMulHint, 7);
+	SpriteArrayList_insert(scorebarSprites, (BaseSprite*)scorebarUnderline, 8);
 
 	return scorebarSprites;
+}
+
+SpriteArrayList* SpriteFactory_generateWinScreen()
+{
+	SpriteArrayList* winScreenSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 2);
+	ImgSprite* winSprite = ImgSprite_init(ImgSprite_alloc());
+	SpriteParser_parse("win", winSprite);
+	BaseSprite_setPosition((BaseSprite*)winSprite, 82, 50);
+
+	AlphaSprite* continueSprite = AlphaSprite_init(AlphaSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)continueSprite, INSTRUCTIONITEM_TITLE_XPOS-CHAR_TO_PIXEL_WIDTH, CHAR_TO_PIXEL_HEIGHT*14);
+	AlphaSprite_setString(continueSprite, "Press any key...");
+
+	SpriteArrayList_insert(winScreenSprites, (BaseSprite*)winSprite, 0);
+	SpriteArrayList_insert(winScreenSprites, (BaseSprite*)continueSprite, 1);
+	return winScreenSprites;
 }
 
