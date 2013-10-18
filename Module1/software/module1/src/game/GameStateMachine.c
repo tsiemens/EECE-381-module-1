@@ -29,6 +29,7 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 	this->target = 0;
 	this->scorebarSprites = SpriteFactory_generateScoreBar();
 	this->instructionSprites = SpriteFactory_generateInstructions();
+	this->winSprites = SpriteFactory_generateWinScreen();
 
 	this->gameSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 2);
 
@@ -79,9 +80,9 @@ void GameStateMachine_performFrameLogic(GameStateMachine* this)
 	{
 		VideoHandler_drawSprites(this->menuSprites);
 	}
-	else
+	else if (this->state == WON)
 	{
-
+		VideoHandler_drawSprites(this->winSprites);
 	}
 }
 
@@ -107,6 +108,9 @@ void GameStateMachine_ProcessKey(GameStateMachine* this, alt_u8 key, int isUpEve
 	    	break;
 	    case NEXT_LEVEL:
 	    	GameStateMachine_NextLevelProcessKey(this, key, isUpEvent);
+	    	break;
+	    case WON:
+	    	GameStateMachine_WonProcessKey(this, key, isUpEvent);
 	    	break;
 	    case PAUSED:
 	    	GameStateMachine_PausedProcessKey(this, key, isUpEvent);
@@ -139,6 +143,9 @@ void GameStateMachine_PerformLogic(GameStateMachine* this)
 	    case NEXT_LEVEL:
 			GameStateMachine_NextLevelPerformLogic(this);
 			break;
+	    case WON:
+	    	GameStateMachine_WonPerformLogic(this);
+	    	break;
 	    case PAUSED:
 	    	GameStateMachine_PausedPerformLogic(this);
 	    	break;
@@ -220,6 +227,15 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 void GameStateMachine_NextLevelProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
 
+}
+
+void GameStateMachine_WonProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
+{
+	if(isUpEvent == 0)
+	{
+		clearChar();
+		this->state = MAIN_MENU;
+	}
 }
 
 void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
@@ -474,6 +490,8 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 				EnemyHandler_notifyEnemyDestroyed(enemySprite);
 				SpriteArrayList_removeObject(this->gameSprites, enemySprite);
 				ImgSprite_free((ImgSprite*)enemySprite);
+				if (this->current == this->target)
+					this->state = NEXT_LEVEL;
 			}
 		}
 	}
@@ -481,8 +499,7 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 	char* currentString = ((AlphaSprite*)SpriteArrayList_getWithId(this->scorebarSprites, SCOREBAR_CURRENT_ID))->string;
 	sprintf(currentString, "%i", this->current);
 
-	if (this->current == this->target)
-		this->state = NEXT_LEVEL;
+
 }
 
 // Called on New Game or when win condition met
@@ -511,7 +528,10 @@ void GameStateMachine_NextLevelPerformLogic(GameStateMachine* this)
 	}
 
 	clearChar();
-	this->state = PLAYING;
+	if(this->level == 2) //TODO: change it to 11
+		this->state = WON;
+	else
+		this->state = PLAYING;
 }
 
 void GameStateMachine_PausedPerformLogic(GameStateMachine* this)
@@ -530,6 +550,11 @@ void GameStateMachine_MainMenuPerformLogic(GameStateMachine* this)
 }
 
 void GameStateMachine_GameOverPerformLogic(GameStateMachine* this)
+{
+
+}
+
+void GameStateMachine_WonPerformLogic(GameStateMachine* this)
 {
 
 }

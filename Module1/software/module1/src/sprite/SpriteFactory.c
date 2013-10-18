@@ -310,3 +310,19 @@ SpriteArrayList* SpriteFactory_generateScoreBar()
 	return scorebarSprites;
 }
 
+SpriteArrayList* SpriteFactory_generateWinScreen()
+{
+	SpriteArrayList* winScreenSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 2);
+	ImgSprite* winSprite = ImgSprite_init(ImgSprite_alloc());
+	SpriteParser_parse("win", winSprite);
+	BaseSprite_setPosition((BaseSprite*)winSprite, 82, 50);
+
+	AlphaSprite* continueSprite = AlphaSprite_init(AlphaSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)continueSprite, INSTRUCTIONITEM_TITLE_XPOS-CHAR_TO_PIXEL_WIDTH, CHAR_TO_PIXEL_HEIGHT*14);
+	AlphaSprite_setString(continueSprite, "Press any key...");
+
+	SpriteArrayList_insert(winScreenSprites, (BaseSprite*)winSprite, 0);
+	SpriteArrayList_insert(winScreenSprites, (BaseSprite*)continueSprite, 1);
+	return winScreenSprites;
+}
+
