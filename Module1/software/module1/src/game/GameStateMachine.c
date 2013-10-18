@@ -23,6 +23,7 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 	this->keyboard = keyboard;
 	this->menuSprites = SpriteFactory_generateMenu(1);
 	this->pausedSprites = SpriteFactory_generateMenu(0);
+	this->levelSprites = SpriteFactory_generateLevelMenu();
 	this->level = 1;
 	this->current = 0;
 	this->target = 0;
@@ -62,6 +63,10 @@ void GameStateMachine_performFrameLogic(GameStateMachine* this)
 		VideoHandler_drawSprites(this->gameSprites);
 		VideoHandler_drawSprites(this->scorebarSprites);
 	}
+	else if(this->state == LEVEL_MENU)
+	{
+		VideoHandler_drawSprites(this->levelSprites);
+	}
 	else if (this->state == PAUSED)
 	{
 		VideoHandler_drawSprites(this->pausedSprites);
@@ -90,6 +95,9 @@ void GameStateMachine_ProcessKey(GameStateMachine* this, alt_u8 key, int isUpEve
 	    case MAIN_MENU:
 	    	GameStateMachine_MainMenuProcessKey(this, key, isUpEvent);
 	    	break;
+	    case LEVEL_MENU:
+	    	GameStateMachine_LevelMenuProcessKey(this, key, isUpEvent);
+	    	break;
 	    case INSTRUCTIONS:
 	    	GameStateMachine_InstructionsProcessKey(this, key, isUpEvent);
 	    	break;
@@ -115,6 +123,9 @@ void GameStateMachine_PerformLogic(GameStateMachine* this)
 	        break;
 	    case MAIN_MENU:
 	    	GameStateMachine_MainMenuPerformLogic(this);
+	    	break;
+	    case LEVEL_MENU:
+	    	GameStateMachine_LevelMenuPerformLogic(this);
 	    	break;
 	    case INSTRUCTIONS:
 	    	GameStateMachine_InstructionsPerformLogic(this);
@@ -229,6 +240,81 @@ void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int i
 
 }
 
+void GameStateMachine_LevelMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
+{
+	static int selectLevel = 1;
+	BaseSprite* selSprite = SpriteArrayList_getAt(this->levelSprites, 5);
+	if(isUpEvent == 0)
+	{
+		if(key == KEY_DOWN && selectLevel != 6) {
+			if(selectLevel == 1) // addeasy to addmedium
+			{
+				selectLevel = 2;
+				selSprite->yPos = LEVELMENU_SELECTOR_MEDIUM_YPOS;
+			}
+			else if(selectLevel == 2) // addMedium to addHard
+			{
+				selectLevel = 3;
+				selSprite->yPos = LEVELMENU_SELECTOR_HARD_YPOS;
+			}
+			else if(selectLevel == 3) //addHard to mulEasy
+			{
+				selectLevel = 4;
+				selSprite->yPos = LEVELMENU_SELECTOR_MUL_EASY_YPOS;
+			}
+			else if(selectLevel == 4) //mulEasy to mulMedium
+			{
+				selectLevel = 5;
+				selSprite->yPos = LEVELMENU_SELECTOR_MUL_MEDIUM_YPOS;
+			}
+			else if(selectLevel == 5) //mulMedium to mulHard
+			{
+				selectLevel = 6;
+				selSprite->yPos = LEVELMENU_SELECTOR_MUL_HARD_YPOS;
+			}
+		}
+		else if(key == KEY_UP && selectLevel != 1)
+		{
+			if(selectLevel == 2) // addMedium to addEasy
+			{
+				selectLevel = 1;
+				selSprite->yPos = LEVELMENU_SELECTOR_EASY_YPOS;
+			}
+			else if(selectLevel == 3) // addHard to addMedium
+			{
+				selSprite->yPos = LEVELMENU_SELECTOR_MEDIUM_YPOS;
+				selectLevel = 2;
+			}
+			else if(selectLevel == 4) // mulEasy to addHard
+			{
+				selSprite->yPos = LEVELMENU_SELECTOR_HARD_YPOS;
+				selectLevel = 3;
+			}
+			else if(selectLevel == 5) // mulMedium to mulEasy
+			{
+				selSprite->yPos = LEVELMENU_SELECTOR_MUL_EASY_YPOS;
+				selectLevel = 4;
+			}
+			else if(selectLevel == 6) // mulHard to mulMedium
+			{
+				selSprite->yPos = LEVELMENU_SELECTOR_MUL_MEDIUM_YPOS;
+				selectLevel = 5;
+			}
+		}
+		else if(key == '\n')
+		{
+			clearChar();
+			this->state = PLAYING;
+		}
+		else if(key == KEY_ESC)
+		{
+			clearChar();
+			this->state = MAIN_MENU;
+		}
+	}
+
+}
+
 void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
 	static MenuSelection mainMenuSelection = SEL_INSTRUCTIONS;
@@ -247,7 +333,7 @@ void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int
 		else if(key == '\n' && mainMenuSelection == SEL_NEWGAME) {
 			//clearChar() to be replaced by clearing individual strings
 			clearChar();
-			this->state = PLAYING;
+			this->state = LEVEL_MENU;
 		}
 		else if(key == '\n' && mainMenuSelection == SEL_INSTRUCTIONS) {
 			clearChar();
@@ -372,6 +458,11 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 }
 
 void GameStateMachine_PausedPerformLogic(GameStateMachine* this)
+{
+
+}
+
+void GameStateMachine_LevelMenuPerformLogic(GameStateMachine* this)
 {
 
 }
