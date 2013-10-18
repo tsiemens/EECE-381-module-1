@@ -160,6 +160,7 @@ C_SRCS += src/sprite/AlphaSprite.c
 C_SRCS += src/game/GameStateMachine.c
 C_SRCS += src/sprite/SpriteFactory.c
 C_SRCS += src/audio/AudioHandler.c
+C_SRCS += src/game/EnemyHandler.c
 CXX_SRCS :=
 ASM_SRCS :=
 

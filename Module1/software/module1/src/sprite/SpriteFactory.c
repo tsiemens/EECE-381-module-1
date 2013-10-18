@@ -22,7 +22,7 @@ ImgSprite* SpriteFactory_generatePlayerSprite()
  * EFFECTS: Returns a pointer to an initialized enemy sprite based on the value given.
  * 			Returns null if value not 1 <= value <= 10
  */
-ImgSprite* SpriteFactory_generateEnemySprite(int value, int col)
+ImgSprite* SpriteFactory_generateEnemySprite(int value, int col, EnemyLevel enemyLevel)
 {
 	char* image = "enemy ";
 
@@ -38,7 +38,19 @@ ImgSprite* SpriteFactory_generateEnemySprite(int value, int col)
 	//Assign sprite properties;
 	((BaseSprite*)sprite)->spriteId = ENEMY_SPRITE_ID_BASE + value;
 	BaseSprite_setPosition((BaseSprite*)sprite, col*ENEMY_COL_WIDTH, 0);
-	sprite->baseSprite.yVel = ENEMY_SPEED;
+
+	switch(enemyLevel)
+		{
+			case EASY:
+				sprite->baseSprite.yVel = ENEMY_SPEED_EASY;
+				break;
+			case MEDIUM:
+				sprite->baseSprite.yVel = ENEMY_SPEED_NORMAL;
+				break;
+			case HARD:
+				sprite->baseSprite.yVel = ENEMY_SPEED_HARD;
+				break;
+		}
 	sprite->baseSprite.xVel = 0;
 	return sprite;
 }
@@ -93,22 +105,25 @@ SpriteArrayList* SpriteFactory_generateMenu(int isMainMenu)
 	AlphaSprite* menuOption1 = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)menuOption1, MENUITEM_START_XPOS, MENUITEM_START_YPOS);
 
-	if(isMainMenu == 1)
-		menuOption1->setString(menuOption1, "Start");
-	else
-		menuOption1->setString(menuOption1, "Resume");
-
 	AlphaSprite* menuOption2 = AlphaSprite_init(AlphaSprite_alloc());
 	BaseSprite_setPosition((BaseSprite*)menuOption2, MENUITEM_START_XPOS, MENUITEM_CONTINUE_YPOS);
-	if(isMainMenu == 1)
-		menuOption2->setString(menuOption2, "Instructions");
-	else
-		menuOption2->setString(menuOption2, "Quit Game");
 
 	RectSprite* menuSelectorFrame = RectSprite_init(RectSprite_alloc());
 	BaseSprite_setSize((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_WIDTH, MENU_SELECTOR_HEIGHT);
 	BaseSprite_setPosition((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_XPOS, MENU_SELECTOR_CONTINUE_YPOS);
 	menuSelectorFrame->colour = MENU_SELECTOR_COLOR;
+
+	if(isMainMenu == 1)
+	{
+		menuOption1->setString(menuOption1, "Start");
+		menuOption2->setString(menuOption2, "Instructions");
+	}
+	else
+	{
+		menuOption1->setString(menuOption1, "Resume");
+		menuOption2->setString(menuOption2, "Quit Game");
+		BaseSprite_setPosition((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_XPOS, MENU_SELECTOR_NEWGAME_YPOS);
+	}
 
 	SpriteArrayList_insert(menuSprites, (BaseSprite*)menuOuterFrame, 0);
 	SpriteArrayList_insert(menuSprites, (BaseSprite*)menuOption1, 1);
@@ -123,6 +138,67 @@ SpriteArrayList* SpriteFactory_generateMenu(int isMainMenu)
 		SpriteArrayList_insert(menuSprites, (BaseSprite*)menu, 4);
 	}
 	return menuSprites;
+}
+
+SpriteArrayList* SpriteFactory_generateLevelMenu()
+{
+	SpriteArrayList* levelSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 10);
+
+	ImgSprite* levelMenuTitle = ImgSprite_init(ImgSprite_alloc());
+	SpriteParser_parse("level", levelMenuTitle);
+	BaseSprite_setPosition((BaseSprite*)levelMenuTitle, LEVELMENU_TITLE_XPOS, LEVELMENU_TITLE_YPOS);
+
+	ImgSprite* addSubtractTitle = ImgSprite_init(ImgSprite_alloc());
+	SpriteParser_parse("addsub", addSubtractTitle);
+	BaseSprite_setPosition((BaseSprite*)addSubtractTitle, 30, LEVELMENU_ADDLEVEL_TITLE_YPOS);
+
+	AlphaSprite* addEasy = AlphaSprite_init(AlphaSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)addEasy, LEVELMENU_A_LEVEL_XPOS, LEVELMENU_ADDEASY_YPOS);
+	addEasy->setString(addEasy, "Easy");
+
+	AlphaSprite* addMedium = AlphaSprite_init(AlphaSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)addMedium, LEVELMENU_A_LEVEL_XPOS, LEVELMENU_ADDMEDIUM_YPOS);
+	addMedium->setString(addMedium, "Medium");
+
+	AlphaSprite* addHard = AlphaSprite_init(AlphaSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)addHard, LEVELMENU_A_LEVEL_XPOS, LEVELMENU_ADDHARD_YPOS);
+	addHard->setString(addHard, "Hard");
+
+	// MULTIPLY
+	ImgSprite* mulDivTitle = ImgSprite_init(ImgSprite_alloc());
+	SpriteParser_parse("muldiv", mulDivTitle);
+	BaseSprite_setPosition((BaseSprite*)mulDivTitle, 30, LEVELMENU_MULLEVEL_TITLE_YPOS);
+
+	AlphaSprite* multiplyEasy = AlphaSprite_init(AlphaSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)multiplyEasy, LEVELMENU_A_LEVEL_XPOS, LEVELMENU_MULEASY_YPOS);
+	multiplyEasy->setString(multiplyEasy, "Easy");
+
+	AlphaSprite* multiplyMedium = AlphaSprite_init(AlphaSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)multiplyMedium, LEVELMENU_A_LEVEL_XPOS, LEVELMENU_MULMEDIUM_YPOS);
+	multiplyMedium->setString(multiplyMedium, "Medium");
+
+	AlphaSprite* multiplyHard = AlphaSprite_init(AlphaSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)multiplyHard, LEVELMENU_A_LEVEL_XPOS, LEVELMENU_MULHARD_YPOS);
+	addHard->setString(multiplyHard, "Hard");
+
+	// SELECTOR
+	RectSprite* levelSelectFrame = RectSprite_init(RectSprite_alloc());
+	BaseSprite_setSize((BaseSprite*)levelSelectFrame, MENU_SELECTOR_WIDTH, MENU_SELECTOR_HEIGHT);
+	BaseSprite_setPosition((BaseSprite*)levelSelectFrame, LEVELMENU_SELECTOR_XPOS, LEVELMENU_SELECTOR_EASY_YPOS);
+	levelSelectFrame->colour = MENU_SELECTOR_COLOR;
+
+
+	SpriteArrayList_insert(levelSprites, (BaseSprite*)levelMenuTitle, 0);
+	SpriteArrayList_insert(levelSprites, (BaseSprite*)addSubtractTitle, 1);
+	SpriteArrayList_insert(levelSprites, (BaseSprite*)addEasy, 2);
+	SpriteArrayList_insert(levelSprites, (BaseSprite*)addMedium, 3);
+	SpriteArrayList_insert(levelSprites, (BaseSprite*)addHard, 4);
+	SpriteArrayList_insert(levelSprites, (BaseSprite*)levelSelectFrame, 5);
+	SpriteArrayList_insert(levelSprites, (BaseSprite*)mulDivTitle, 6);
+	SpriteArrayList_insert(levelSprites, (BaseSprite*)multiplyEasy, 7);
+	SpriteArrayList_insert(levelSprites, (BaseSprite*)multiplyMedium, 8);
+	SpriteArrayList_insert(levelSprites, (BaseSprite*)multiplyHard, 9);
+	return levelSprites;
 }
 
 SpriteArrayList* SpriteFactory_generateInstructions()

@@ -23,6 +23,7 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 	this->keyboard = keyboard;
 	this->menuSprites = SpriteFactory_generateMenu(1);
 	this->pausedSprites = SpriteFactory_generateMenu(0);
+	this->levelSprites = SpriteFactory_generateLevelMenu();
 	this->level = 1;
 	this->current = 0;
 	this->target = 0;
@@ -37,7 +38,7 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 	ImgSprite* playerSprite = SpriteFactory_generatePlayerSprite();
 	SpriteArrayList_insert(this->gameSprites, (BaseSprite*)playerSprite, 0);
 
-	//EnemyHandler_init();
+	EnemyHandler_init();
 
 	return this;
 }
@@ -62,6 +63,10 @@ void GameStateMachine_performFrameLogic(GameStateMachine* this)
 		VideoHandler_drawSprites(this->gameSprites);
 		VideoHandler_drawSprites(this->scorebarSprites);
 	}
+	else if(this->state == LEVEL_MENU)
+	{
+		VideoHandler_drawSprites(this->levelSprites);
+	}
 	else if (this->state == PAUSED)
 	{
 		VideoHandler_drawSprites(this->pausedSprites);
@@ -82,6 +87,7 @@ void GameStateMachine_performFrameLogic(GameStateMachine* this)
 
 void GameStateMachine_ProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
+	srand(alt_timestamp());
 	switch( this->state )
 	{
 	    case START:
@@ -89,6 +95,9 @@ void GameStateMachine_ProcessKey(GameStateMachine* this, alt_u8 key, int isUpEve
 	        break;
 	    case MAIN_MENU:
 	    	GameStateMachine_MainMenuProcessKey(this, key, isUpEvent);
+	    	break;
+	    case LEVEL_MENU:
+	    	GameStateMachine_LevelMenuProcessKey(this, key, isUpEvent);
 	    	break;
 	    case INSTRUCTIONS:
 	    	GameStateMachine_InstructionsProcessKey(this, key, isUpEvent);
@@ -115,6 +124,9 @@ void GameStateMachine_PerformLogic(GameStateMachine* this)
 	        break;
 	    case MAIN_MENU:
 	    	GameStateMachine_MainMenuPerformLogic(this);
+	    	break;
+	    case LEVEL_MENU:
+	    	GameStateMachine_LevelMenuPerformLogic(this);
 	    	break;
 	    case INSTRUCTIONS:
 	    	GameStateMachine_InstructionsPerformLogic(this);
@@ -171,13 +183,13 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 			BaseSprite* player = SpriteArrayList_getWithId(this->gameSprites, PLAYER_SPRITE_ID);
 			int laserColour = 0;
 			if (key == '1')
-				laserColour = 0x07FF; // Add
+				laserColour = LASER_ADD_COLOUR;
 			else if (key == '2')
-				laserColour = 0xF800; // Subtract
+				laserColour = LASER_SUB_COLOUR;
 			else if (key == '3')
-				laserColour = 0x07E0; // Mult
+				laserColour = LASER_MUL_COLOUR;
 			else if (key == '4')
-				laserColour = 0xF81F; // Div
+				laserColour = LASER_DIV_COLOUR;
 
 			// set audio to play shooting effects
 			AudioHandler_playShoot();
@@ -192,8 +204,11 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 		clearChar();
 		this->state = PAUSED;
 	}
-	else if(key == 'e') {
-		SpriteArrayList_insert(this->gameSprites, SpriteFactory_generateEnemySprite(21, 5), 0);
+	else if(key == 'e' && isUpEvent == 0) {
+		ImgSprite* newEnemy = EnemyHandler_getNewRandomEnemy((this->level)%3);
+		if (newEnemy != NULL){
+			SpriteArrayList_insert(this->gameSprites, (BaseSprite*)newEnemy, 0);
+		}
 	}
 }
 
@@ -229,6 +244,82 @@ void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int i
 
 }
 
+void GameStateMachine_LevelMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
+{
+	static GameLevel selectedLevel = ADD_EASY;
+	BaseSprite* selSprite = SpriteArrayList_getAt(this->levelSprites, 5);
+	if(isUpEvent == 0)
+	{
+		if(key == KEY_DOWN && selectedLevel != MUL_HARD) {
+			if(selectedLevel == ADD_EASY) // addeasy to addmedium
+			{
+				selectedLevel = ADD_MEDIUM;
+				selSprite->yPos = LEVELMENU_SELECTOR_MEDIUM_YPOS;
+			}
+			else if(selectedLevel == ADD_MEDIUM) // addMedium to addHard
+			{
+				selectedLevel = ADD_HARD;
+				selSprite->yPos = LEVELMENU_SELECTOR_HARD_YPOS;
+			}
+			else if(selectedLevel == ADD_HARD) //addHard to mulEasy
+			{
+				selectedLevel = MUL_EASY;
+				selSprite->yPos = LEVELMENU_SELECTOR_MUL_EASY_YPOS;
+			}
+			else if(selectedLevel == MUL_EASY) //mulEasy to mulMedium
+			{
+				selectedLevel  = MUL_MEDIUM;
+				selSprite->yPos = LEVELMENU_SELECTOR_MUL_MEDIUM_YPOS;
+			}
+			else if(selectedLevel == MUL_MEDIUM) //mulMedium to mulHard
+			{
+				selectedLevel = MUL_HARD;
+				selSprite->yPos = LEVELMENU_SELECTOR_MUL_HARD_YPOS;
+			}
+		}
+		else if(key == KEY_UP && selectedLevel != ADD_EASY)
+		{
+			if(selectedLevel == ADD_MEDIUM) // addMedium to addEasy
+			{
+				selectedLevel = ADD_EASY;
+				selSprite->yPos = LEVELMENU_SELECTOR_EASY_YPOS;
+			}
+			else if(selectedLevel == ADD_HARD) // addHard to addMedium
+			{
+				selectedLevel = ADD_MEDIUM;
+				selSprite->yPos = LEVELMENU_SELECTOR_MEDIUM_YPOS;
+			}
+			else if(selectedLevel == MUL_EASY) // mulEasy to addHard
+			{
+				selectedLevel = ADD_HARD;
+				selSprite->yPos = LEVELMENU_SELECTOR_HARD_YPOS;
+			}
+			else if(selectedLevel == MUL_MEDIUM) // mulMedium to mulEasy
+			{
+				selectedLevel = MUL_EASY;
+				selSprite->yPos = LEVELMENU_SELECTOR_MUL_EASY_YPOS;
+			}
+			else if(selectedLevel == MUL_HARD) // mulHard to mulMedium
+			{
+				selectedLevel = MUL_MEDIUM;
+				selSprite->yPos = LEVELMENU_SELECTOR_MUL_MEDIUM_YPOS;
+			}
+		}
+		else if(key == '\n')
+		{
+			clearChar();
+			this->level = selectedLevel;
+			this->state = PLAYING;
+		}
+		else if(key == KEY_ESC)
+		{
+			clearChar();
+			this->state = MAIN_MENU;
+		}
+	}
+
+}
+
 void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
 	static MenuSelection mainMenuSelection = SEL_INSTRUCTIONS;
@@ -247,7 +338,7 @@ void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int
 		else if(key == '\n' && mainMenuSelection == SEL_NEWGAME) {
 			//clearChar() to be replaced by clearing individual strings
 			clearChar();
-			this->state = PLAYING;
+			this->state = LEVEL_MENU;
 		}
 		else if(key == '\n' && mainMenuSelection == SEL_INSTRUCTIONS) {
 			clearChar();
@@ -353,17 +444,19 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 
 			// Check if shield hits, if so, remove and perform operation on value
 			if (laserSprite->xPos > enemySprite->xPos && laserSprite->xPos < (enemySprite->xPos + enemySprite->width) ) {
-				//TODO: EnemyHandler_shot(enemySprite);
-				enemySprite->animTimer = Timer_init(Timer_alloc(), ENEMY_SHOT_DURATION);
+				EnemyHandler_enemyShot((ImgSprite*)enemySprite);
+
+				// set audio to play shooting effects
+				AudioHandler_playHit();
 			}
 			// Removes enemy sprite if moved to the very bottom
-			if ( (enemySprite->yPos + enemySprite->height) >= 240) {;
-				//TODO: EnemyHandler_notifyEnemyDestroyed(BaseSprite* ememySprite);
-				enemySprite->animTimer = Timer_init(Timer_alloc(), ENEMY_SHOT_DURATION);
+			if ( (enemySprite->yPos + enemySprite->height) >= 240) {
+				enemySprite->animTimer = Timer_init(Timer_alloc(), 0);
 			}
 
 			// Check for timer duration, destroy enemy if times up
 			if (Timer_isDone(enemySprite->animTimer) == 1) {
+				EnemyHandler_notifyEnemyDestroyed(enemySprite);
 				SpriteArrayList_removeObject(this->gameSprites, enemySprite);
 				ImgSprite_free((ImgSprite*)enemySprite);
 			}
@@ -372,6 +465,11 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 }
 
 void GameStateMachine_PausedPerformLogic(GameStateMachine* this)
+{
+
+}
+
+void GameStateMachine_LevelMenuPerformLogic(GameStateMachine* this)
 {
 
 }
