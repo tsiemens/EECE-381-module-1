@@ -23,7 +23,7 @@
 #define PLAYER_SPEED 0.3
 #define LASER_DURATION 200
 
-typedef enum {START, MAIN_MENU, INSTRUCTIONS, PLAYING, PAUSED, GAME_OVER} GameState;
+typedef enum {START, MAIN_MENU, LEVEL_MENU, INSTRUCTIONS, PLAYING, PAUSED, GAME_OVER} GameState;
 
 typedef struct GameStateMachine
 {
@@ -41,6 +41,8 @@ typedef struct GameStateMachine
 
 	SpriteArrayList* pausedSprites;
 
+	SpriteArrayList* levelSprites;
+
 	Timer* frameTimer;
 	double lastFrameDuration;
 
@@ -57,12 +59,14 @@ void GameStateMachine_ProcessKey(GameStateMachine* this, alt_u8 key, int isUpEve
 void GameStateMachine_StartProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_PausedProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
+void GameStateMachine_LevelMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_MainMenuProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_InstructionsProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_GameOverProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent);
 void GameStateMachine_StartPerformLogic(GameStateMachine* this);
 void GameStateMachine_PlayingPerformLogic(GameStateMachine* this);
 void GameStateMachine_PausedPerformLogic(GameStateMachine* this);
+void GameStateMachine_LevelMenuPerformLogic(GameStateMachine* this);
 void GameStateMachine_MainMenuPerformLogic(GameStateMachine* this);
 void GameStateMachine_InstructionsPerformLogic(GameStateMachine* this);
 void GameStateMachine_GameOverPerformLogic(GameStateMachine* this);
