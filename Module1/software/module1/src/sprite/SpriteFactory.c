@@ -95,7 +95,7 @@ RectSprite* SpriteFactory_generateLaserSprite(BaseSprite* player, int colour)
 
 SpriteArrayList* SpriteFactory_generateMenu(int isMainMenu)
 {
-	SpriteArrayList* menuSprites = SpriteArrayList_init(SpriteArrayList_alloc(), isMainMenu+4);
+	SpriteArrayList* menuSprites = SpriteArrayList_init(SpriteArrayList_alloc(), 5);
 
 	RectSprite* menuOuterFrame = RectSprite_init(RectSprite_alloc());
 	BaseSprite_setSize((BaseSprite*)menuOuterFrame, MENUFRAME_WIDTH, MENUFRAME_HEIGHT);
@@ -103,40 +103,38 @@ SpriteArrayList* SpriteFactory_generateMenu(int isMainMenu)
 	menuOuterFrame->colour = MENUFRAME_COLOR;
 
 	AlphaSprite* menuOption1 = AlphaSprite_init(AlphaSprite_alloc());
-	BaseSprite_setPosition((BaseSprite*)menuOption1, MENUITEM_START_XPOS, MENUITEM_START_YPOS);
+	BaseSprite_setPosition((BaseSprite*)menuOption1, MENUITEM_START_XPOS, MENUITEM_OPTION_1_YPOS);
 
 	AlphaSprite* menuOption2 = AlphaSprite_init(AlphaSprite_alloc());
-	BaseSprite_setPosition((BaseSprite*)menuOption2, MENUITEM_START_XPOS, MENUITEM_CONTINUE_YPOS);
+	BaseSprite_setPosition((BaseSprite*)menuOption2, MENUITEM_START_XPOS, MENUITEM_OPTION_2_YPOS);
 
 	RectSprite* menuSelectorFrame = RectSprite_init(RectSprite_alloc());
 	BaseSprite_setSize((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_WIDTH, MENU_SELECTOR_HEIGHT);
-	BaseSprite_setPosition((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_XPOS, MENU_SELECTOR_CONTINUE_YPOS);
+	BaseSprite_setPosition((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_XPOS, MENU_SELECTOR_OPTION_1_YPOS);
 	menuSelectorFrame->colour = MENU_SELECTOR_COLOR;
+
+	ImgSprite* menu = ImgSprite_init(ImgSprite_alloc());
+	BaseSprite_setPosition((BaseSprite*)menu, 90, 60);
 
 	if(isMainMenu == 1)
 	{
 		menuOption1->setString(menuOption1, "Start");
 		menuOption2->setString(menuOption2, "Instructions");
+		SpriteParser_parse("title", menu);
 	}
 	else
 	{
 		menuOption1->setString(menuOption1, "Resume");
 		menuOption2->setString(menuOption2, "Quit Game");
-		BaseSprite_setPosition((BaseSprite*)menuSelectorFrame, MENU_SELECTOR_XPOS, MENU_SELECTOR_NEWGAME_YPOS);
+		BaseSprite_setPosition((BaseSprite*)menu, 119, 110);
+		SpriteParser_parse("paused", menu);
 	}
 
 	SpriteArrayList_insert(menuSprites, (BaseSprite*)menuOuterFrame, 0);
 	SpriteArrayList_insert(menuSprites, (BaseSprite*)menuOption1, 1);
 	SpriteArrayList_insert(menuSprites, (BaseSprite*)menuOption2, 2);
 	SpriteArrayList_insert(menuSprites, (BaseSprite*)menuSelectorFrame, 3);
-
-	if(isMainMenu == 1)
-	{
-		ImgSprite* menu = ImgSprite_init(ImgSprite_alloc());
-		SpriteParser_parse("title", menu);
-		BaseSprite_setPosition((BaseSprite*)menu, 90, 60);
-		SpriteArrayList_insert(menuSprites, (BaseSprite*)menu, 4);
-	}
+	SpriteArrayList_insert(menuSprites, (BaseSprite*)menu, 4);
 	return menuSprites;
 }
 
@@ -237,7 +235,7 @@ SpriteArrayList* SpriteFactory_generateInstructions()
 	instructionsAlphaRight->setString(instructionsAlphaRight, ">");
 
 	AlphaSprite* instructionsBackToMenu= AlphaSprite_init(AlphaSprite_alloc());
-	BaseSprite_setPosition((BaseSprite*)instructionsBackToMenu, INSTRUCTIONITEM_ESC_XPOS, MENUITEM_CONTINUE_YPOS+CHAR_TO_PIXEL_HEIGHT*2);
+	BaseSprite_setPosition((BaseSprite*)instructionsBackToMenu, INSTRUCTIONITEM_ESC_XPOS, MENUITEM_OPTION_2_YPOS+CHAR_TO_PIXEL_HEIGHT*2);
 	instructionsAlpha5->setString(instructionsBackToMenu, "Press ESC to return to menu");
 
 	SpriteArrayList_insert(instructionSprites, (BaseSprite*)menu, 0);

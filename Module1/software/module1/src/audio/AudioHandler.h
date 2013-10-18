@@ -16,7 +16,6 @@ void AudioHandlerInit();
 void AudioHandler_play();
 
 void AudioHandler_playShoot();
-void AudioHandler_playHit();
 void AudioHandler_playMenu();
 
 #endif
