@@ -37,7 +37,7 @@ GameStateMachine* GameStateMachine_init(GameStateMachine* this, PS2Keyboard* key
 	ImgSprite* playerSprite = SpriteFactory_generatePlayerSprite();
 	SpriteArrayList_insert(this->gameSprites, (BaseSprite*)playerSprite, 0);
 
-	//EnemyHandler_init();
+	EnemyHandler_init();
 
 	return this;
 }
@@ -82,6 +82,7 @@ void GameStateMachine_performFrameLogic(GameStateMachine* this)
 
 void GameStateMachine_ProcessKey(GameStateMachine* this, alt_u8 key, int isUpEvent)
 {
+	srand(alt_timestamp());
 	switch( this->state )
 	{
 	    case START:
@@ -192,8 +193,11 @@ void GameStateMachine_PlayingProcessKey(GameStateMachine* this, alt_u8 key, int 
 		clearChar();
 		this->state = PAUSED;
 	}
-	else if(key == 'e') {
-		SpriteArrayList_insert(this->gameSprites, SpriteFactory_generateEnemySprite(21, 5), 0);
+	else if(key == 'e' && isUpEvent == 0) {
+		ImgSprite* newEnemy = EnemyHandler_getNewRandomEnemy();
+		if (newEnemy != NULL){
+			SpriteArrayList_insert(this->gameSprites, (BaseSprite*)newEnemy, 0);
+		}
 	}
 }
 
@@ -353,17 +357,16 @@ void GameStateMachine_PlayingPerformLogic(GameStateMachine* this)
 
 			// Check if shield hits, if so, remove and perform operation on value
 			if (laserSprite->xPos > enemySprite->xPos && laserSprite->xPos < (enemySprite->xPos + enemySprite->width) ) {
-				//TODO: EnemyHandler_shot(enemySprite);
-				enemySprite->animTimer = Timer_init(Timer_alloc(), ENEMY_SHOT_DURATION);
+				EnemyHandler_enemyShot((ImgSprite*)enemySprite);
 			}
 			// Removes enemy sprite if moved to the very bottom
-			if ( (enemySprite->yPos + enemySprite->height) >= 240) {;
-				//TODO: EnemyHandler_notifyEnemyDestroyed(BaseSprite* ememySprite);
-				enemySprite->animTimer = Timer_init(Timer_alloc(), ENEMY_SHOT_DURATION);
+			if ( (enemySprite->yPos + enemySprite->height) >= 240) {
+				enemySprite->animTimer = Timer_init(Timer_alloc(), 0);
 			}
 
 			// Check for timer duration, destroy enemy if times up
 			if (Timer_isDone(enemySprite->animTimer) == 1) {
+				EnemyHandler_notifyEnemyDestroyed(enemySprite);
 				SpriteArrayList_removeObject(this->gameSprites, enemySprite);
 				ImgSprite_free((ImgSprite*)enemySprite);
 			}

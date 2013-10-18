@@ -23,7 +23,9 @@ char intToChar(int val);
 /****************ENEMY GENERATION****************/
 #define ENEMY_COL_WIDTH 32
 #define ENEMY_COLS 10
-#define ENEMY_SPEED 0.05
+#define ENEMY_SPEED_EASY 0.005
+#define ENEMY_SPEED_NORMAL 0.02
+#define ENEMY_SPEED_HARD 0.05
 
 /****************CHAR AND PIXEL CONVERSIONS****************/
 #define CHAR_TO_PIXEL_HEIGHT ((float)SCREEN_HEIGHT/CHARBUFFER_HEIGHT)

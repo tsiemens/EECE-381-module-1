@@ -25,4 +25,6 @@ ImgSprite* ImgSprite_alloc();
 
 ImgSprite* ImgSprite_init(ImgSprite* this);
 
+void ImgSprite_free(ImgSprite* this);
+
 #endif /* IMGSPRITE_H_ */

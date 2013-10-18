@@ -8,6 +8,7 @@
 #ifndef GAMESTATEMACHINE_H_
 #define GAMESTATEMACHINE_H_
 
+#include "../util/Timer.h"
 #include "../sprite/SpriteFactory.h"
 #include "../io/PS2Keyboard.h"
 #include "../video/VideoHandler.h"
@@ -17,10 +18,10 @@
 #include "../sprite/RectSprite.h"
 #include "../sprite/AlphaSprite.h"
 #include "../sprite/SpriteParser.h"
+#include "EnemyHandler.h"
 
 #define PLAYER_SPEED 0.3
 #define LASER_DURATION 200
-#define ENEMY_SHOT_DURATION 2000
 
 typedef enum {START, MAIN_MENU, INSTRUCTIONS, PLAYING, PAUSED, GAME_OVER} GameState;
 
